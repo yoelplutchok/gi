@@ -1,5 +1,5 @@
 # GI question pages
 
-Landing page for the GI module question pages (anatomy, histology, biochemistry, physiology).
+Landing page for the GI-exam question pages (anatomy, histology, biochemistry, physiology).
 
-Live: https://yoelplutchok.github.io/gi/
+https://yoelplutchok.github.io/gi/
