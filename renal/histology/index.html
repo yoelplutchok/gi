@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Renal Histology Slides</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700;8..60,800&display=swap">
+<style>
+/* Layout: a light box. Sticky bar on top with the lecture picker and filters, a rail of the lecture's
+   slides and quick checks under it, the slide on a quiet stage at left and its explanation in a
+   reading column at right (stacked on phones). A quick check takes the whole width. */
+:root {
+  --bg: #e9edf0;
+  --surface: #fbfcfc;
+  --stage: #dfe4e8;
+  --ink: #15202a;
+  --muted: #5b6975;
+  --line: #cfd6dc;
+  --accent: #1c5a86;
+  --star: #c98b00;
+  --star-soft: #f7ebc4;
+  --good: #1f7a4a;
+  --good-soft: #dcf1e4;
+  --bad: #b3362b;
+  --bad-soft: #f8dfdc;
+  --hl-y: #ffe36e; --hl-g: #bdebc4; --hl-p: #f8c8dc; --ul: #c0392b;
+  --ui: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --read: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --bar-h: 58px;
+  --rail-h: 30px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0d1216; --surface: #141c23; --stage: #0a0e12; --ink: #e2e9ef; --muted: #96a4b0;
+    --line: #25313b; --accent: #69abd8; --star: #f0be45; --star-soft: #3a2f12;
+    --good: #5fcf8f; --good-soft: #12301f; --bad: #f08a7f; --bad-soft: #3a1714;
+    --hl-y: rgba(240,196,107,.42); --hl-g: rgba(134,210,156,.36); --hl-p: rgba(241,154,190,.36); --ul: #f08a7f;
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 var(--ui); }
+button, select { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+.bar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px;
+  min-height: 58px; padding-block: 8px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  background: var(--surface); border-bottom: 1px solid var(--line);
+}
+.brand { display: flex; flex-direction: column; line-height: 1.1; margin-right: 2px; }
+.brand a { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); text-decoration: none; font-weight: 600; }
+.brand a:hover { color: var(--accent); }
+.brand h1 { margin: 2px 0 0; font-size: 17px; font-weight: 700; letter-spacing: -.01em; }
+.lec { min-width: 0; flex: 1 1 240px; max-width: 500px; }
+.lec select {
+  width: 100%; padding: 7px 30px 7px 10px; border: 1px solid var(--line); border-radius: 6px;
+  background: var(--bg); appearance: none; -webkit-appearance: none; font-weight: 500;
+  background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position: calc(100% - 16px) 52%, calc(100% - 11px) 52%; background-size: 5px 5px; background-repeat: no-repeat;
+}
+.nav { display: flex; align-items: center; gap: 6px; }
+.btn {
+  border: 1px solid var(--line); background: var(--bg); border-radius: 6px; padding: 6px 11px; cursor: pointer;
+  font-weight: 600; line-height: 1.2;
+}
+.btn:hover:not(:disabled) { border-color: var(--accent); }
+.btn:disabled { opacity: .45; cursor: default; }
+.arrow { font-size: 18px; padding: 3px 12px; }
+.count { font: 500 13px/1 var(--mono); color: var(--muted); min-width: 8.5em; text-align: center; font-variant-numeric: tabular-nums; }
+.toggle[aria-pressed="true"] { background: var(--star-soft); border-color: var(--star); }
+.toggle.qc[aria-pressed="true"] { background: var(--good-soft); border-color: var(--good); }
+.toggle .n { font-family: var(--mono); font-size: 12px; margin-left: 4px; color: var(--muted); }
+
+.rail {
+  display: flex; gap: 3px; align-items: center; overflow-x: auto; scrollbar-width: thin;
+  height: var(--rail-h); padding-block: 6px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.tick {
+  flex: 0 0 auto; width: 16px; height: 16px; border-radius: 3px; border: 1px solid var(--line);
+  background: var(--surface); padding: 0; cursor: pointer;
+}
+.tick.starred { background: var(--star); border-color: var(--star); }
+.tick.quiz { width: 12px; height: 12px; margin: 0 3px; border-radius: 50%; border: 2px solid var(--good); background: transparent; }
+.tick.quiz.done { background: var(--good); }
+.tick.cur { outline: 2px solid var(--accent); outline-offset: 1px; }
+.tick:disabled { opacity: .3; cursor: default; }
+
+.view {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(19rem, 27rem); gap: 14px;
+  height: calc(100dvh - var(--bar-h) - var(--rail-h) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+  min-height: 420px;
+  padding-block: 4px 14px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.stage {
+  margin: 0; min-width: 0; min-height: 0; display: flex; align-items: center; justify-content: center;
+  background: var(--stage); border-radius: 8px; padding: 14px;
+}
+.stage img {
+  max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: block;
+  background: #fff; border-radius: 3px; box-shadow: 0 1px 2px rgba(0,0,0,.12), 0 4px 18px rgba(0,0,0,.08);
+}
+.empty { color: var(--muted); text-align: center; max-width: 26rem; font-size: 15px; }
+.note {
+  min-width: 0; min-height: 0; display: flex; flex-direction: column;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow: hidden;
+}
+.note-head {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+  padding: 14px 16px 12px; border-bottom: 1px solid var(--line);
+}
+.eyebrow { font-size: 11.5px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); font-weight: 600; text-wrap: balance; }
+.slideno { font: 700 19px/1.2 var(--ui); margin-top: 3px; }
+.slideno span { font: 500 12.5px var(--mono); color: var(--muted); margin-left: 6px; }
+.star {
+  flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--bg);
+  border-radius: 20px; padding: 6px 13px 6px 10px; cursor: pointer; font-weight: 600; font-size: 14px;
+}
+.star .ic { font-size: 17px; line-height: 1; color: var(--muted); }
+.star[aria-pressed="true"] { background: var(--star-soft); border-color: var(--star); }
+.star[aria-pressed="true"] .ic { color: var(--star); }
+.note-body {
+  flex: 1 1 auto; overflow-y: auto; padding: 14px 18px 18px;
+  font: 17px/1.55 var(--read); max-width: 65ch;
+}
+.note-body p { margin: 0 0 .7em; }
+.note-body b, .note-body strong { font-weight: 700; }
+.note-body ul { margin: 0 0 .7em; padding-left: 1.2em; }
+.note-body .none { color: var(--muted); font-style: italic; }
+.foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0; padding: 8px 16px 10px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); }
+.foot kbd { font: 500 11px var(--mono); border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 0 5px; background: var(--bg); }
+.linkbtn { border: 0; background: none; padding: 0; color: var(--accent); font-weight: 600; font-size: 12px; cursor: pointer; white-space: nowrap; }
+.linkbtn:hover { text-decoration: underline; }
+
+/* marks the reader adds */
+mark.hl { background: var(--hl-y); color: inherit; border-radius: 2px; padding: 0 1px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+mark.hl.hg { background: var(--hl-g); }
+mark.hl.hp { background: var(--hl-p); }
+span.hlb { font-weight: 800; }
+span.hlu { text-decoration: underline; text-decoration-color: var(--ul); text-decoration-thickness: 2px; text-underline-offset: 2px; }
+#hltools { position: fixed; z-index: 70; display: flex; gap: 4px; padding: 5px; background: var(--ink); border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,.25); }
+#hltools button { font: 600 13px var(--ui); border: 0; border-radius: 5px; padding: 5px 9px; cursor: pointer; color: var(--ink); background: var(--surface); }
+#hltools button:hover { outline: 2px solid var(--accent); }
+#hltools .sw { width: 26px; padding: 5px 0; }
+#hltools .sw.y { background: #ffe36e; } #hltools .sw.g { background: #bdebc4; } #hltools .sw.p { background: #f8c8dc; }
+#hltools .b { font-weight: 800; }
+#hltools .u { text-decoration: underline; text-decoration-color: #c0392b; text-decoration-thickness: 2px; }
+
+/* quick check */
+.quiz { grid-column: 1 / -1; min-height: 0; overflow-y: auto; }
+.quiz-in { max-width: 46rem; margin: 0 auto; padding: 10px 0 30px; display: grid; gap: 14px; }
+.quiz-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 8px 16px; }
+.quiz-head h2 { margin: 2px 0 0; font-size: 24px; letter-spacing: -.01em; }
+.quiz-head .eyebrow { color: var(--good); }
+.score { font: 500 13px var(--mono); color: var(--muted); }
+.qcard { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px 18px; display: grid; gap: 10px; }
+.qstem { margin: 0; font: 600 17px/1.45 var(--read); }
+.qstem .qn { font: 500 12px var(--mono); color: var(--muted); margin-right: 8px; vertical-align: 2px; }
+.opts { display: grid; gap: 6px; }
+.opt {
+  display: grid; grid-template-columns: 26px minmax(0, 1fr) 20px; align-items: center; gap: 8px; text-align: left;
+  border: 1px solid var(--line); background: var(--bg); border-radius: 6px; padding: 8px 10px; cursor: pointer; font-size: 15px;
+}
+.opt:hover:not(:disabled) { border-color: var(--accent); }
+.opt:disabled { cursor: default; }
+.opt .l { font: 600 12px var(--mono); color: var(--muted); }
+.opt .mk { font-weight: 700; text-align: center; }
+.opt.right { border-color: var(--good); background: var(--good-soft); }
+.opt.right .mk { color: var(--good); }
+.opt.wrong { border-color: var(--bad); background: var(--bad-soft); }
+.opt.wrong .mk { color: var(--bad); }
+.why { margin: 0; font: 15.5px/1.5 var(--read); padding: 10px 12px; border-radius: 6px; background: var(--bg); border-left: 3px solid var(--good); }
+.why.miss { border-left-color: var(--bad); }
+.why b { font-family: var(--ui); font-size: 13px; letter-spacing: .02em; }
+.quiz-foot { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+
+@media (max-width: 900px) {
+  .view { grid-template-columns: minmax(0, 1fr); height: auto; min-height: 0; }
+  .stage { padding: 8px; }
+  .stage img { max-height: 70vh; }
+  .note-body { overflow: visible; }
+  .foot .keys { display: none; }
+  .count { min-width: 0; }
+  .quiz { overflow: visible; }
+}
+@media (prefers-reduced-motion: no-preference) { .stage img { transition: opacity .12s ease; } }
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="brand"><a href="../">Renal module</a><h1>Histology slides</h1></div>
+  <label class="lec"><span class="sr">Lecture</span><select id="lec"></select></label>
+  <div class="nav">
+    <button class="btn arrow" id="prev" aria-label="Previous">‹</button>
+    <span class="count" id="count" aria-live="polite"></span>
+    <button class="btn arrow" id="next" aria-label="Next">›</button>
+  </div>
+  <button class="btn toggle" id="only" aria-pressed="false" title="Show only the slides you starred (F)">★ Starred only<span class="n" id="nstar">0</span></button>
+  <button class="btn toggle qc" id="qc" aria-pressed="true" title="Show a few questions after every few slides (Q)">✓ Quick checks</button>
+</header>
+<nav class="rail" id="rail" aria-label="Slides and quick checks in this lecture"></nav>
+<main class="view" id="view">
+  <figure class="stage" id="stage"><img id="slide" alt=""><div class="empty" id="empty" hidden></div></figure>
+  <aside class="note" id="noteBox">
+    <div class="note-head">
+      <div><div class="eyebrow" id="lecname"></div><div class="slideno" id="slideno"></div></div>
+      <button class="star" id="star" aria-pressed="false"><span class="ic" aria-hidden="true">☆</span><span id="startxt">Star</span></button>
+    </div>
+    <div class="note-body" id="note"></div>
+    <div class="foot"><span class="keys"><kbd>←</kbd> <kbd>→</kbd> move · <kbd>S</kbd> star · select text to mark it</span><button class="linkbtn" id="clearNote" type="button">Clear my marks here</button></div>
+  </aside>
+  <section class="quiz" id="quiz" hidden aria-live="polite"></section>
+</main>
+<div id="hltools" hidden role="toolbar" aria-label="Mark the selected text">
+  <button type="button" class="sw y" data-a="y" title="Highlight yellow (H)" aria-label="Highlight yellow"></button>
+  <button type="button" class="sw g" data-a="g" title="Highlight green" aria-label="Highlight green"></button>
+  <button type="button" class="sw p" data-a="p" title="Highlight pink" aria-label="Highlight pink"></button>
+  <button type="button" class="b" data-a="b" title="Bold (B)">B</button>
+  <button type="button" class="u" data-a="u" title="Underline (U)">U</button>
+  <button type="button" data-a="x" title="Erase marks in the selection (E)">Erase</button>
+</div>
+<script>
+(() => {
+  const COURSE = "hist";
+  const K = s => `renal-${COURSE}-${s}`;
+  const $ = id => document.getElementById(id);
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch { return d; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
+  };
+  let LECS = [], FLAT = [], cur = 0;
+  let stars = new Set(store.get(K("stars"), []));
+  let only = !!store.get(K("only"), false);
+  let qcOn = store.get(K("qc"), true) !== false;
+  let ANS = store.get(K("ans"), {});   // question id -> chosen option index
+  let HL = store.get(K("hl"), {});     // block key -> [[start, end, type, text], ...]
+
+  const isQ = x => x.kind === "quiz";
+  const hashOf = x => `${x.lec.id.toLowerCase()}-${isQ(x) ? "q" + (x.ci + 1) : x.s.n}`;
+  const seq = () => only ? FLAT.filter(x => !isQ(x) && stars.has(x.key)) : FLAT.filter(x => qcOn || !isQ(x));
+  const starsIn = lec => lec.slides.filter(s => stars.has(`${lec.id}:${s.n}`)).length;
+  const esc = t => String(t).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+  function fillSelect() {
+    const sel = $("lec"), keep = sel.value;
+    sel.innerHTML = "";
+    LECS.forEach((l, i) => {
+      const o = document.createElement("option");
+      const n = starsIn(l);
+      o.value = i;
+      o.textContent = `${l.label} · ${l.title}${n ? `  (${n} ★)` : ""}`;
+      sel.appendChild(o);
+    });
+    if (keep !== "") sel.value = keep;
+  }
+
+  function moveTo(i) { if (i < 0 || i >= FLAT.length) return; cur = i; render(); }
+  function step(d) {
+    const s = seq();
+    if (!s.length) return;
+    const at = s.indexOf(FLAT[cur]);
+    if (at >= 0) { const j = at + d; if (j >= 0 && j < s.length) moveTo(FLAT.indexOf(s[j])); return; }
+    const cand = d > 0 ? s.find(x => FLAT.indexOf(x) > cur) : [...s].reverse().find(x => FLAT.indexOf(x) < cur);
+    if (cand) moveTo(FLAT.indexOf(cand));
+  }
+
+  // ---------- quick checks ----------
+  function quizDone(x) { return x.check.qs.every(q => ANS[q.id] !== undefined); }
+  function renderQuiz(x) {
+    const c = x.check, first = c.slides[0], last = c.slides[c.slides.length - 1];
+    const answered = c.qs.filter(q => ANS[q.id] !== undefined), right = answered.filter(q => ANS[q.id] === q.a).length;
+    let h = `<div class="quiz-in"><div class="quiz-head"><div><div class="eyebrow">Quick check ${x.ci + 1} of ${x.lec.checks.length} · ${esc(x.lec.label)}</div>`
+      + `<h2>Slides ${first}–${last}</h2></div><div class="score">${answered.length ? `${right} / ${answered.length} right` : `${c.qs.length} questions`}</div></div>`;
+    c.qs.forEach((q, k) => {
+      const ch = ANS[q.id], done = ch !== undefined;
+      h += `<div class="qcard" data-q="${q.id}"><p class="qstem" data-hk="${q.id}:q"><span class="qn nohl">${k + 1}</span>${esc(q.q)}</p><div class="opts">`;
+      q.opts.forEach((o, i) => {
+        const cls = done ? (i === q.a ? " right" : i === ch ? " wrong" : "") : "";
+        const mk = done ? (i === q.a ? "✓" : i === ch ? "✗" : "") : "";
+        h += `<button class="opt${cls}" data-i="${i}"${done ? " disabled" : ""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span><span class="mk" aria-hidden="true">${mk}</span></button>`;
+      });
+      h += `</div>`;
+      if (done) h += `<p class="why${ch === q.a ? "" : " miss"}" data-hk="${q.id}:w"><b class="nohl">${ch === q.a ? "Right. " : `Answer: ${"ABCD"[q.a]}. `}</b>${esc(q.why)}</p>`;
+      h += `</div>`;
+    });
+    h += `<div class="quiz-foot"><button class="btn" data-go="${FLAT.findIndex(y => y.lec === x.lec && !isQ(y) && y.s.n === first)}">‹ Review slides ${first}–${last}</button>`
+      + `<span><button class="linkbtn" data-reset="1">Try these again</button>&nbsp;&nbsp;<button class="linkbtn" data-clearq="1">Clear my marks here</button></span></div></div>`;
+    $("quiz").innerHTML = h;
+    $("quiz").querySelectorAll("[data-hk]").forEach(applyHL);
+  }
+  $("quiz").addEventListener("click", e => {
+    const x = FLAT[cur]; if (!isQ(x)) return;
+    const o = e.target.closest(".opt");
+    if (o && !o.disabled) {
+      const id = o.closest(".qcard").dataset.q; ANS[id] = +o.dataset.i; store.set(K("ans"), ANS);
+      const y = $("quiz").scrollTop; renderQuiz(x); $("quiz").scrollTop = y; renderRail(); return;
+    }
+    const g = e.target.closest("[data-go]"); if (g) { moveTo(+g.dataset.go); return; }
+    if (e.target.closest("[data-reset]")) { x.check.qs.forEach(q => delete ANS[q.id]); store.set(K("ans"), ANS); renderQuiz(x); renderRail(); return; }
+    if (e.target.closest("[data-clearq]")) { x.check.qs.forEach(q => { delete HL[q.id + ":q"]; delete HL[q.id + ":w"]; }); store.set(K("hl"), HL); renderQuiz(x); }
+  });
+
+  // ---------- render ----------
+  function renderRail() {
+    const x = FLAT[cur], rail = $("rail"); rail.innerHTML = "";
+    FLAT.filter(y => y.lec === x.lec && (qcOn || !isQ(y))).forEach(y => {
+      const b = document.createElement("button");
+      if (isQ(y)) {
+        b.className = "tick quiz" + (quizDone(y) ? " done" : "") + (y === x ? " cur" : "");
+        b.title = `Quick check ${y.ci + 1}`;
+        b.disabled = only;
+      } else {
+        b.className = "tick" + (stars.has(y.key) ? " starred" : "") + (y === x ? " cur" : "");
+        b.title = `Slide ${y.s.n}${stars.has(y.key) ? " ★" : ""}`;
+        b.disabled = only && !stars.has(y.key) && y !== x;
+      }
+      b.setAttribute("aria-label", b.title);
+      b.onclick = () => moveTo(FLAT.indexOf(y));
+      rail.appendChild(b);
+    });
+    const c = rail.querySelector(".cur"); if (c) c.scrollIntoView({ block: "nearest", inline: "nearest" });
+  }
+
+  function render() {
+    $("hltools").hidden = true;
+    let x = FLAT[cur];
+    if (isQ(x) && (only || !qcOn)) { const s = seq(); const nx = s.find(y => FLAT.indexOf(y) > cur) || [...s].reverse()[0]; if (nx) { cur = FLAT.indexOf(nx); x = nx; } }
+    const s = seq(), q = isQ(x);
+    $("stage").hidden = q; $("noteBox").hidden = q; $("quiz").hidden = !q;
+    const showEmpty = only && !s.length;
+    $("slide").hidden = showEmpty; $("empty").hidden = !showEmpty;
+    if (showEmpty) $("empty").textContent = "No starred slides yet. Turn off “Starred only”, then tap ☆ Star on any slide you want to come back to.";
+    if (q) { renderQuiz(x); $("quiz").scrollTop = 0; }
+    else if (!showEmpty) {
+      const img = $("slide");
+      if (img.getAttribute("src") !== x.s.img) img.src = x.s.img;
+      img.width = x.s.w; img.height = x.s.h;
+      img.alt = `${x.lec.label}, slide ${x.s.n}`;
+      $("lecname").textContent = `${x.lec.label} · ${x.lec.title}`;
+      $("slideno").innerHTML = "";
+      $("slideno").append(`Slide ${x.s.n}`);
+      const sp = document.createElement("span"); sp.textContent = `of ${x.lec.total}`; $("slideno").append(sp);
+      const nb = $("note");
+      nb.innerHTML = x.s.note ? x.s.note : '<p class="none">This slide needs no extra explanation.</p>';
+      nb.dataset.hk = x.key; applyHL(nb); nb.scrollTop = 0;
+      const on = stars.has(x.key);
+      $("star").setAttribute("aria-pressed", on); $("star").querySelector(".ic").textContent = on ? "★" : "☆";
+      $("startxt").textContent = on ? "Starred" : "Star";
+    }
+    const at = s.indexOf(x);
+    const lecSlides = FLAT.filter(y => y.lec === x.lec && !isQ(y));
+    $("count").textContent = only ? (at >= 0 ? `★ ${at + 1} / ${s.length}` : `★ — / ${s.length}`)
+      : q ? `check ${x.ci + 1} / ${x.lec.checks.length}` : `${lecSlides.indexOf(x) + 1} / ${lecSlides.length}`;
+    $("prev").disabled = at >= 0 ? at === 0 : !s.some(y => FLAT.indexOf(y) < cur);
+    $("next").disabled = at >= 0 ? at === s.length - 1 : !s.some(y => FLAT.indexOf(y) > cur);
+    $("only").setAttribute("aria-pressed", only);
+    $("qc").setAttribute("aria-pressed", qcOn);
+    $("nstar").textContent = stars.size;
+    $("lec").value = LECS.indexOf(x.lec);
+    renderRail();
+    history.replaceState(null, "", "#" + hashOf(x));
+    store.set(K("pos"), hashOf(x));
+    [FLAT[cur + 1], FLAT[cur - 1], FLAT[cur + 2]].forEach(y => { if (y && !isQ(y)) { const p = new Image(); p.src = y.s.img; } });
+  }
+
+  function toggleStar() {
+    const x = FLAT[cur]; if (isQ(x)) return;
+    stars.has(x.key) ? stars.delete(x.key) : stars.add(x.key);
+    store.set(K("stars"), [...stars]); fillSelect(); render();
+  }
+  function toggleOnly() {
+    only = !only; store.set(K("only"), only);
+    if (only && (isQ(FLAT[cur]) || !stars.has(FLAT[cur].key))) {
+      const s = seq(); const nx = s.find(y => FLAT.indexOf(y) > cur) || s[0];
+      if (nx) cur = FLAT.indexOf(nx);
+    }
+    render();
+  }
+  function toggleQc() { qcOn = !qcOn; store.set(K("qc"), qcOn); render(); }
+
+  // ---------- highlighter: per block, [start, end, type, text] ranges of character offsets ----------
+  function tnodes(el) {
+    const out = [], w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, { acceptNode: n => n.parentElement && n.parentElement.closest(".nohl") ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
+    let n; while ((n = w.nextNode())) out.push(n); return out;
+  }
+  const blockText = b => tnodes(b).map(t => t.data).join("");
+  function offIn(b, cont, off) {
+    const r = document.createRange(); r.setStart(cont, off); r.collapse(true); let n = 0;
+    for (const t of tnodes(b)) { if (t === cont) return n + off; if (r.comparePoint(t, t.length) < 0) n += t.length; else return n; }
+    return n;
+  }
+  function unwrapHL(b) { b.querySelectorAll("mark.hl,span.hlu,span.hlb").forEach(m => m.replaceWith(...m.childNodes)); b.normalize(); }
+  function wrapRange(b, s, e, mk) {
+    let n = 0;
+    for (const t of tnodes(b)) {
+      const L = t.data.length, a = n, z = n + L; n = z; if (z <= s || a >= e) continue;
+      const st = Math.max(s, a) - a, en = Math.min(e, z) - a; if (en <= st) continue;
+      let node = t; if (st > 0) node = node.splitText(st); if (en - st < node.data.length) node.splitText(en - st);
+      const w = mk(); node.parentNode.insertBefore(w, node); w.appendChild(node);
+    }
+  }
+  const CAT = t => t === "u" ? "u" : t === "b" ? "b" : "h";
+  function mkMark(ty) {
+    if (ty === "u" || ty === "b") { const m = document.createElement("span"); m.className = ty === "u" ? "hlu" : "hlb"; return m; }
+    const m = document.createElement("mark"); m.className = "hl" + (ty === "g" ? " hg" : ty === "p" ? " hp" : ""); return m;
+  }
+  function applyHL(b) {
+    if (!b.dataset.hk) return; unwrapHL(b); const L = HL[b.dataset.hk]; if (!L || !L.length) return; const txt = blockText(b);
+    // order: highlights first, then bold, then underline (so nesting is stable)
+    for (const it of [...L].sort((p, q) => "hbu".indexOf(CAT(p[2])) - "hbu".indexOf(CAT(q[2])))) {
+      let s = it[0], e = it[1];
+      if (txt.slice(s, e) !== it[3]) { const j = txt.indexOf(it[3]); if (j < 0) continue; s = j; e = j + it[3].length; }
+      wrapRange(b, s, e, () => mkMark(it[2]));
+    }
+  }
+  function cut(L, s, e, pred) {
+    const out = [];
+    for (const it of L) { if (!pred(it) || it[1] <= s || it[0] >= e) { out.push(it); continue; } if (it[0] < s) out.push([it[0], s, it[2]]); if (it[1] > e) out.push([e, it[1], it[2]]); }
+    return out;
+  }
+  function addHL(k, s, e, ty, txt) {
+    let L = HL[k] || [];
+    if (ty === "x") L = cut(L, s, e, () => true);
+    else {
+      const c = CAT(ty); L = cut(L, s, e, it => CAT(it[2]) === c); let ns = s, ne = e;
+      L = L.filter(it => { if (it[2] === ty && it[1] >= ns && it[0] <= ne) { ns = Math.min(ns, it[0]); ne = Math.max(ne, it[1]); return false; } return true; });
+      L.push([ns, ne, ty]);
+    }
+    L = L.filter(it => it[1] > it[0]).sort((a, b) => a[0] - b[0]).map(it => [it[0], it[1], it[2], txt.slice(it[0], it[1])]);
+    if (L.length) HL[k] = L; else delete HL[k];
+    store.set(K("hl"), HL);
+  }
+  function selBlocks() {
+    const sel = getSelection(); if (!sel || sel.isCollapsed || !sel.rangeCount) return [];
+    const r = sel.getRangeAt(0), out = [];
+    document.querySelectorAll("[data-hk]").forEach(b => {
+      if (!r.intersectsNode(b) || !b.getClientRects().length) return;
+      const s = b.contains(r.startContainer) ? offIn(b, r.startContainer, r.startOffset) : 0;
+      const e = b.contains(r.endContainer) ? offIn(b, r.endContainer, r.endOffset) : blockText(b).length;
+      if (e > s && blockText(b).slice(s, e).trim()) out.push([b, s, e]);
+    });
+    return out;
+  }
+  function hlAct(ty) {
+    for (const [b, s, e] of selBlocks()) { addHL(b.dataset.hk, s, e, ty, blockText(b)); applyHL(b); }
+    const sel = getSelection(); if (sel) sel.removeAllRanges(); $("hltools").hidden = true;
+  }
+  function hlTools() {
+    const T = $("hltools"), bl = selBlocks(); if (!bl.length) { T.hidden = true; return; }
+    const rr = getSelection().getRangeAt(0).getBoundingClientRect(); T.hidden = false;
+    const w = T.offsetWidth, h = T.offsetHeight;
+    let top = rr.top - h - 8; if (top < 8) top = rr.bottom + 8;
+    T.style.top = top + "px"; T.style.left = Math.min(Math.max(8, rr.left + rr.width / 2 - w / 2), innerWidth - w - 8) + "px";
+  }
+  const T = $("hltools");
+  T.addEventListener("mousedown", e => e.preventDefault());
+  T.addEventListener("click", e => { const b = e.target.closest("button[data-a]"); if (b) hlAct(b.dataset.a); });
+  document.addEventListener("mouseup", e => { if (e.target.closest && e.target.closest("#hltools")) return; setTimeout(hlTools, 0); });
+  document.addEventListener("keyup", e => { if (e.shiftKey) hlTools(); });
+  let selT = null;
+  document.addEventListener("selectionchange", () => {
+    const sel = getSelection(); if (!sel || sel.isCollapsed) { T.hidden = true; return; }
+    clearTimeout(selT); selT = setTimeout(hlTools, 350);   // touch devices: no mouseup after a long-press selection
+  });
+  $("note").addEventListener("scroll", () => { if (!T.hidden) hlTools(); }, { passive: true });
+  $("quiz").addEventListener("scroll", () => { if (!T.hidden) hlTools(); }, { passive: true });
+  $("clearNote").onclick = () => { const x = FLAT[cur]; if (isQ(x)) return; delete HL[x.key]; store.set(K("hl"), HL); applyHL($("note")); };
+
+  // ---------- controls ----------
+  $("prev").onclick = () => step(-1);
+  $("next").onclick = () => step(1);
+  $("star").onclick = toggleStar;
+  $("only").onclick = toggleOnly;
+  $("qc").onclick = toggleQc;
+  $("lec").onchange = e => {
+    const lec = LECS[+e.target.value];
+    let first = FLAT.find(y => y.lec === lec && !isQ(y) && (!only || stars.has(y.key)));
+    if (!first) { if (only) { only = false; store.set(K("only"), false); } first = FLAT.find(y => y.lec === lec && !isQ(y)); }
+    moveTo(FLAT.indexOf(first));
+  };
+  document.addEventListener("keydown", e => {
+    if (e.target.tagName === "SELECT" || e.metaKey || e.ctrlKey || e.altKey) return;
+    const k = e.key.toLowerCase();
+    if (!T.hidden) { const a = { h: "y", b: "b", u: "u", e: "x" }[k]; if (a) { hlAct(a); e.preventDefault(); return; } }
+    if (e.key === "ArrowRight") { step(1); e.preventDefault(); }
+    else if (e.key === "ArrowLeft") { step(-1); e.preventDefault(); }
+    else if (k === "s") toggleStar();
+    else if (k === "f") toggleOnly();
+    else if (k === "q") toggleQc();
+    else if (isQ(FLAT[cur]) && "1234abcd".includes(k)) {
+      const i = "1234".includes(k) ? +k - 1 : "abcd".indexOf(k);
+      const card = [...$("quiz").querySelectorAll(".qcard")].find(c => !c.querySelector(".opt:disabled"));
+      const b = card && card.querySelectorAll(".opt")[i]; if (b) b.click();
+    }
+  });
+  let tx = null;
+  $("stage").addEventListener("touchstart", e => { tx = e.touches[0].clientX; }, { passive: true });
+  $("stage").addEventListener("touchend", e => {
+    if (tx === null) return; const dx = e.changedTouches[0].clientX - tx; tx = null;
+    if (Math.abs(dx) > 50) step(dx < 0 ? 1 : -1);
+  });
+  window.addEventListener("hashchange", () => {
+    const i = FLAT.findIndex(y => hashOf(y) === location.hash.slice(1));
+    if (i >= 0 && i !== cur) moveTo(i);
+  });
+  const bar = document.querySelector(".bar");
+  const setBar = () => { if (matchMedia("(min-width: 901px)").matches) document.documentElement.style.setProperty("--bar-h", bar.offsetHeight + "px"); };
+  if (window.ResizeObserver) new ResizeObserver(setBar).observe(bar); setBar();
+
+  fetch("data.json?v=1795463611").then(r => r.json()).then(d => {
+    LECS = d.lectures;
+    LECS.forEach(l => {
+      l.checks = l.checks || [];
+      const after = {}; l.checks.forEach((c, ci) => { after[c.slides[c.slides.length - 1]] = ci; });
+      l.slides.forEach(s => {
+        FLAT.push({ kind: "slide", lec: l, s, key: `${l.id}:${s.n}` });
+        if (after[s.n] !== undefined) FLAT.push({ kind: "quiz", lec: l, check: l.checks[after[s.n]], ci: after[s.n], key: `${l.id}:q${after[s.n] + 1}` });
+      });
+    });
+    fillSelect();
+    let i = FLAT.findIndex(y => hashOf(y) === location.hash.slice(1));
+    if (i < 0) i = FLAT.findIndex(y => hashOf(y) === store.get(K("pos"), ""));
+    cur = Math.max(0, i);
+    if (only && !seq().length) { only = false; store.set(K("only"), false); }
+    render();
+  }).catch(() => {
+    $("empty").hidden = false; $("slide").hidden = true;
+    $("empty").textContent = "The slides could not load. Check your connection and reload the page.";
+  });
+})();
+</script>
+</body>
+</html>
