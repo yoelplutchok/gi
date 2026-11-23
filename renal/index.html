@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Renal Module Slides</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one column of three course rows, each a link with its slide counts. */
+:root {
+  --bg: #e9edf0; --surface: #fbfcfc; --ink: #15202a; --muted: #5b6975; --line: #cfd6dc; --accent: #1c5a86; --star: #c98b00;
+  --ui: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif; --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #0d1216; --surface: #141c23; --ink: #e2e9ef; --muted: #96a4b0; --line: #25313b; --accent: #69abd8; --star: #f0be45; color-scheme: dark; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 var(--ui); }
+main { max-width: 760px; margin: 0 auto; padding-block: 48px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.eyebrow { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+h1 { margin: 6px 0 8px; font-size: 32px; letter-spacing: -.02em; text-wrap: balance; }
+.lede { margin: 0 0 28px; color: var(--muted); max-width: 60ch; }
+.list { display: grid; gap: 12px; }
+a.course { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 16px; align-items: center;
+  padding: 18px 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+  color: inherit; text-decoration: none; }
+a.course:hover { border-color: var(--accent); }
+a.course:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.name { font-size: 20px; font-weight: 700; }
+.what { grid-column: 1; color: var(--muted); font-size: 14.5px; }
+.n { grid-row: 1 / span 2; grid-column: 2; font: 500 13px var(--mono); color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+.n b { display: block; font-size: 22px; color: var(--ink); font-family: var(--ui); }
+.foot { margin-top: 28px; font-size: 13.5px; color: var(--muted); }
+.foot .s { color: var(--star); }
+@media (max-width: 480px) { a.course { grid-template-columns: minmax(0, 1fr); } .n { grid-row: auto; grid-column: 1; text-align: left; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">Renal module · exam Wed Dec 9</div>
+  <h1>Lecture slides, explained</h1>
+  <p class="lede">Every content slide, one at a time, with a short explanation beside it. Star the slides you want to come back to, then turn on “Starred only” to review just those.</p>
+  <div class="list">
+    <a class="course" href="physiology/"><span class="name">Physiology</span><span class="what">Lectures 37–48: body fluids, clearance, GFR, Na⁺, K⁺, Ca²⁺, water &amp; ADH, acid–base</span><span class="n"><b>363</b>slides</span></a>
+    <a class="course" href="biochemistry/"><span class="name">Biochemistry</span><span class="what">Lectures 37–42: protein digestion, urea cycle, amino acid metabolism, inborn errors, purines &amp; pyrimidines, plus the gout vignette</span><span class="n"><b>225</b>slides</span></a>
+    <a class="course" href="anatomy/"><span class="name">Anatomy</span><span class="what">Kidneys, ureters &amp; suprarenal glands; posterior abdominal wall &amp; pelvic neurovasculature</span><span class="n"><b>121</b>slides</span></a>
+  </div>
+  <p class="foot"><span class="s">★</span> Stars are saved in this browser, separately for each course.</p>
+</main>
+</body>
+</html>

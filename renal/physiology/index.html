@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Renal Physiology Slides</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap">
+<style>
+/* Layout: a light box. Sticky bar on top with the lecture picker and stars filter, a rail of the
+   lecture's slides under it, the slide on a quiet stage at left and its explanation in a reading
+   column at right (stacked on phones). */
+:root {
+  --bg: #e9edf0;
+  --surface: #fbfcfc;
+  --stage: #dfe4e8;
+  --ink: #15202a;
+  --muted: #5b6975;
+  --line: #cfd6dc;
+  --accent: #1c5a86;
+  --accent-ink: #ffffff;
+  --star: #c98b00;
+  --star-soft: #f7ebc4;
+  --ui: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --read: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --bar-h: 58px;
+  --rail-h: 30px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0d1216; --surface: #141c23; --stage: #0a0e12; --ink: #e2e9ef; --muted: #96a4b0;
+    --line: #25313b; --accent: #69abd8; --accent-ink: #0a1015; --star: #f0be45; --star-soft: #3a2f12;
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 var(--ui); }
+button, select { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+.bar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px;
+  min-height: var(--bar-h); padding-block: 8px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  background: var(--surface); border-bottom: 1px solid var(--line);
+}
+.brand { display: flex; flex-direction: column; line-height: 1.1; margin-right: 4px; }
+.brand a { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); text-decoration: none; font-weight: 600; }
+.brand a:hover { color: var(--accent); }
+.brand h1 { margin: 2px 0 0; font-size: 17px; font-weight: 700; letter-spacing: -.01em; }
+.lec { min-width: 0; flex: 1 1 260px; max-width: 520px; }
+.lec select {
+  width: 100%; padding: 7px 30px 7px 10px; border: 1px solid var(--line); border-radius: 6px;
+  background: var(--bg); appearance: none; -webkit-appearance: none; font-weight: 500;
+  background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position: calc(100% - 16px) 52%, calc(100% - 11px) 52%; background-size: 5px 5px; background-repeat: no-repeat;
+}
+.nav { display: flex; align-items: center; gap: 6px; }
+.btn {
+  border: 1px solid var(--line); background: var(--bg); border-radius: 6px; padding: 6px 11px; cursor: pointer;
+  font-weight: 600; line-height: 1.2;
+}
+.btn:hover:not(:disabled) { border-color: var(--accent); }
+.btn:disabled { opacity: .45; cursor: default; }
+.arrow { font-size: 18px; padding: 3px 12px; }
+.count { font: 500 13px/1 var(--mono); color: var(--muted); min-width: 9.5em; text-align: center; font-variant-numeric: tabular-nums; }
+.toggle[aria-pressed="true"] { background: var(--star-soft); border-color: var(--star); }
+.toggle .n { font-family: var(--mono); font-size: 12px; margin-left: 4px; color: var(--muted); }
+
+.rail {
+  display: flex; gap: 3px; align-items: center; overflow-x: auto; scrollbar-width: thin;
+  height: var(--rail-h); padding-block: 6px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.tick {
+  flex: 0 0 auto; width: 16px; height: 16px; border-radius: 3px; border: 1px solid var(--line);
+  background: var(--surface); padding: 0; cursor: pointer; position: relative;
+}
+.tick.starred { background: var(--star); border-color: var(--star); }
+.tick.cur { outline: 2px solid var(--accent); outline-offset: 1px; }
+.tick:disabled { opacity: .3; cursor: default; }
+
+.view {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(19rem, 27rem); gap: 14px;
+  height: calc(100dvh - var(--bar-h) - var(--rail-h) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+  min-height: 420px;
+  padding-block: 4px 14px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.stage {
+  margin: 0; min-width: 0; min-height: 0; display: flex; align-items: center; justify-content: center;
+  background: var(--stage); border-radius: 8px; padding: 14px; position: relative;
+}
+.stage img {
+  max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: block;
+  background: #fff; border-radius: 3px; box-shadow: 0 1px 2px rgba(0,0,0,.12), 0 4px 18px rgba(0,0,0,.08);
+}
+.empty { color: var(--muted); text-align: center; max-width: 26rem; font-size: 15px; }
+.note {
+  min-width: 0; min-height: 0; display: flex; flex-direction: column;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow: hidden;
+}
+.note-head {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+  padding: 14px 16px 12px; border-bottom: 1px solid var(--line);
+}
+.eyebrow { font-size: 11.5px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); font-weight: 600; text-wrap: balance; }
+.slideno { font: 700 19px/1.2 var(--ui); margin-top: 3px; }
+.slideno span { font: 500 12.5px var(--mono); color: var(--muted); margin-left: 6px; }
+.star {
+  flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--bg);
+  border-radius: 20px; padding: 6px 13px 6px 10px; cursor: pointer; font-weight: 600; font-size: 14px;
+}
+.star .ic { font-size: 17px; line-height: 1; color: var(--muted); }
+.star[aria-pressed="true"] { background: var(--star-soft); border-color: var(--star); }
+.star[aria-pressed="true"] .ic { color: var(--star); }
+.note-body {
+  flex: 1 1 auto; overflow-y: auto; padding: 14px 18px 18px;
+  font: 17px/1.55 var(--read); max-width: 65ch;
+}
+.note-body p { margin: 0 0 .7em; }
+.note-body b, .note-body strong { font-weight: 700; }
+.note-body ul { margin: 0 0 .7em; padding-left: 1.2em; }
+.note-body .none { color: var(--muted); font-style: italic; }
+.keys { margin: 0; padding: 8px 16px 10px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); }
+.keys kbd { font: 500 11px var(--mono); border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 0 5px; background: var(--bg); }
+
+@media (max-width: 900px) {
+  :root { --bar-h: auto; }
+  .view { grid-template-columns: minmax(0, 1fr); height: auto; min-height: 0; }
+  .stage { padding: 8px; }
+  .stage img { max-height: 70vh; }
+  .note-body { overflow: visible; }
+  .keys { display: none; }
+  .count { min-width: 0; }
+}
+@media (prefers-reduced-motion: no-preference) { .stage img { transition: opacity .12s ease; } }
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="brand"><a href="../">Renal module</a><h1>Physiology slides</h1></div>
+  <label class="lec"><span class="sr">Lecture</span><select id="lec"></select></label>
+  <div class="nav">
+    <button class="btn arrow" id="prev" aria-label="Previous slide">‹</button>
+    <span class="count" id="count" aria-live="polite"></span>
+    <button class="btn arrow" id="next" aria-label="Next slide">›</button>
+  </div>
+  <button class="btn toggle" id="only" aria-pressed="false">★ Starred only<span class="n" id="nstar">0</span></button>
+</header>
+<nav class="rail" id="rail" aria-label="Slides in this lecture"></nav>
+<main class="view">
+  <figure class="stage" id="stage"><img id="slide" alt=""><div class="empty" id="empty" hidden></div></figure>
+  <aside class="note">
+    <div class="note-head">
+      <div><div class="eyebrow" id="lecname"></div><div class="slideno" id="slideno"></div></div>
+      <button class="star" id="star" aria-pressed="false"><span class="ic" aria-hidden="true">☆</span><span id="startxt">Star</span></button>
+    </div>
+    <div class="note-body" id="note"></div>
+    <p class="keys"><kbd>←</kbd> <kbd>→</kbd> move · <kbd>S</kbd> star this slide · <kbd>F</kbd> starred only</p>
+  </aside>
+</main>
+<script>
+(() => {
+  const COURSE = "phys";
+  const K_STARS = `renal-${COURSE}-stars`, K_POS = `renal-${COURSE}-pos`, K_ONLY = `renal-${COURSE}-only`;
+  const $ = id => document.getElementById(id);
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch { return d; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
+  };
+  let LECS = [], FLAT = [], cur = 0;
+  let stars = new Set(store.get(K_STARS, []));
+  let only = !!store.get(K_ONLY, false);
+
+  const keyOf = x => `${x.lec.id}:${x.s.n}`;
+  const hashOf = x => `${x.lec.id.toLowerCase()}-${x.s.n}`;
+  const seq = () => only ? FLAT.filter(x => stars.has(x.key)) : FLAT;
+  const starsIn = lec => lec.slides.filter(s => stars.has(`${lec.id}:${s.n}`)).length;
+
+  function saveStars() { store.set(K_STARS, [...stars]); }
+
+  function fillSelect() {
+    const sel = $("lec"), keep = sel.value;
+    sel.innerHTML = "";
+    LECS.forEach((l, i) => {
+      const o = document.createElement("option");
+      const n = starsIn(l);
+      o.value = i;
+      o.textContent = `${l.label} · ${l.title}${n ? `  (${n} ★)` : ""}`;
+      sel.appendChild(o);
+    });
+    if (keep !== "") sel.value = keep;
+  }
+
+  function moveTo(i) {
+    if (i < 0 || i >= FLAT.length) return;
+    cur = i; render();
+  }
+  function step(d) {
+    const s = seq();
+    if (!s.length) return;
+    const at = s.indexOf(FLAT[cur]);
+    if (at >= 0) { const j = at + d; if (j >= 0 && j < s.length) moveTo(FLAT.indexOf(s[j])); return; }
+    // current slide is not in the starred list: go to the nearest starred one in that direction
+    const cand = d > 0 ? s.find(x => FLAT.indexOf(x) > cur) : [...s].reverse().find(x => FLAT.indexOf(x) < cur);
+    if (cand) moveTo(FLAT.indexOf(cand));
+  }
+
+  function render() {
+    const x = FLAT[cur], s = seq();
+    const lecSlides = FLAT.filter(y => y.lec === x.lec);
+    const showEmpty = only && !s.length;
+    $("slide").hidden = showEmpty; $("empty").hidden = !showEmpty;
+    if (showEmpty) $("empty").textContent = "No starred slides yet. Turn off “Starred only”, then tap ☆ Star on any slide you want to come back to.";
+    if (!showEmpty) {
+      const img = $("slide");
+      if (img.getAttribute("src") !== x.s.img) { img.src = x.s.img; }
+      img.width = x.s.w; img.height = x.s.h;
+      img.alt = `${x.lec.label}, slide ${x.s.n}`;
+    }
+    $("lecname").textContent = `${x.lec.label} · ${x.lec.title}`;
+    $("slideno").innerHTML = "";
+    $("slideno").append(`Slide ${x.s.n}`);
+    const sp = document.createElement("span"); sp.textContent = `of ${x.lec.total}`; $("slideno").append(sp);
+    $("note").innerHTML = x.s.note ? x.s.note : '<p class="none">This slide needs no extra explanation.</p>';
+    $("note").scrollTop = 0;
+    const on = stars.has(x.key);
+    $("star").setAttribute("aria-pressed", on); $("star").querySelector(".ic").textContent = on ? "★" : "☆";
+    $("startxt").textContent = on ? "Starred" : "Star";
+    const at = s.indexOf(x);
+    $("count").textContent = only
+      ? (at >= 0 ? `★ ${at + 1} / ${s.length}` : `★ — / ${s.length}`)
+      : `${lecSlides.indexOf(x) + 1} / ${lecSlides.length}`;
+    $("prev").disabled = only ? (at >= 0 ? at === 0 : !s.some(y => FLAT.indexOf(y) < cur)) : cur === 0;
+    $("next").disabled = only ? (at >= 0 ? at === s.length - 1 : !s.some(y => FLAT.indexOf(y) > cur)) : cur === FLAT.length - 1;
+    $("only").setAttribute("aria-pressed", only);
+    $("nstar").textContent = stars.size;
+    $("lec").value = LECS.indexOf(x.lec);
+    // rail
+    const rail = $("rail"); rail.innerHTML = "";
+    lecSlides.forEach(y => {
+      const b = document.createElement("button");
+      b.className = "tick" + (stars.has(y.key) ? " starred" : "") + (y === x ? " cur" : "");
+      b.title = `Slide ${y.s.n}${stars.has(y.key) ? " ★" : ""}`;
+      b.setAttribute("aria-label", b.title);
+      b.disabled = only && !stars.has(y.key) && y !== x;
+      b.onclick = () => moveTo(FLAT.indexOf(y));
+      rail.appendChild(b);
+    });
+    const c = rail.querySelector(".cur"); if (c) c.scrollIntoView({ block: "nearest", inline: "nearest" });
+    // remember + preload neighbours
+    history.replaceState(null, "", "#" + hashOf(x));
+    store.set(K_POS, x.key);
+    [FLAT[cur + 1], FLAT[cur - 1]].forEach(y => { if (y) { const p = new Image(); p.src = y.s.img; } });
+  }
+
+  function toggleStar() {
+    const x = FLAT[cur];
+    stars.has(x.key) ? stars.delete(x.key) : stars.add(x.key);
+    saveStars(); fillSelect(); render();
+  }
+  function toggleOnly() {
+    only = !only; store.set(K_ONLY, only);
+    if (only && !stars.has(FLAT[cur].key)) {
+      const s = seq(); const nxt = s.find(y => FLAT.indexOf(y) > cur) || s[0];
+      if (nxt) cur = FLAT.indexOf(nxt);
+    }
+    render();
+  }
+
+  $("prev").onclick = () => step(-1);
+  $("next").onclick = () => step(1);
+  $("star").onclick = toggleStar;
+  $("only").onclick = toggleOnly;
+  $("lec").onchange = e => {
+    const lec = LECS[+e.target.value];
+    let first = FLAT.find(y => y.lec === lec && (!only || stars.has(y.key)));
+    if (!first) { if (only) { only = false; store.set(K_ONLY, false); } first = FLAT.find(y => y.lec === lec); }
+    moveTo(FLAT.indexOf(first));
+  };
+  document.addEventListener("keydown", e => {
+    if (e.target.tagName === "SELECT" || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === "ArrowRight") { step(1); e.preventDefault(); }
+    else if (e.key === "ArrowLeft") { step(-1); e.preventDefault(); }
+    else if (e.key === "s" || e.key === "S") toggleStar();
+    else if (e.key === "f" || e.key === "F") toggleOnly();
+  });
+  let tx = null;
+  $("stage").addEventListener("touchstart", e => { tx = e.touches[0].clientX; }, { passive: true });
+  $("stage").addEventListener("touchend", e => {
+    if (tx === null) return; const dx = e.changedTouches[0].clientX - tx; tx = null;
+    if (Math.abs(dx) > 50) step(dx < 0 ? 1 : -1);
+  });
+  window.addEventListener("hashchange", () => {
+    const h = location.hash.slice(1); const i = FLAT.findIndex(y => hashOf(y) === h);
+    if (i >= 0 && i !== cur) moveTo(i);
+  });
+
+  const bar = document.querySelector(".bar");
+  const setBar = () => { if (matchMedia("(min-width: 901px)").matches) document.documentElement.style.setProperty("--bar-h", bar.offsetHeight + "px"); else document.documentElement.style.removeProperty("--bar-h"); };
+  if (window.ResizeObserver) new ResizeObserver(setBar).observe(bar); setBar();
+  window.addEventListener("resize", setBar);
+
+  fetch("data.json").then(r => r.json()).then(d => {
+    LECS = d.lectures;
+    LECS.forEach(l => l.slides.forEach(s => FLAT.push({ lec: l, s, key: `${l.id}:${s.n}` })));
+    fillSelect();
+    const h = location.hash.slice(1);
+    let i = FLAT.findIndex(y => hashOf(y) === h);
+    if (i < 0) i = FLAT.findIndex(y => y.key === store.get(K_POS, ""));
+    cur = Math.max(0, i);
+    if (only && !seq().length) { only = false; store.set(K_ONLY, false); }
+    render();
+  }).catch(() => {
+    $("empty").hidden = false; $("slide").hidden = true;
+    $("empty").textContent = "The slides could not load. Check your connection and reload the page.";
+  });
+})();
+</script>
+</body>
+</html>
