@@ -519,7 +519,7 @@ span.hlu { text-decoration: underline; text-decoration-color: var(--ul); text-de
   const setBar = () => { if (matchMedia("(min-width: 901px)").matches) document.documentElement.style.setProperty("--bar-h", bar.offsetHeight + "px"); };
   if (window.ResizeObserver) new ResizeObserver(setBar).observe(bar); setBar();
 
-  fetch("data.json?v=1795461866").then(r => r.json()).then(d => {
+  fetch("data.json?v=1795492638").then(r => r.json()).then(d => {
     LECS = d.lectures;
     LECS.forEach(l => {
       l.checks = l.checks || [];
