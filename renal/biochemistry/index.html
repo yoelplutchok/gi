@@ -105,9 +105,14 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
 .stage {
-  margin: 0; min-width: 0; min-height: 0; display: flex; align-items: center; justify-content: center;
+  margin: 0; min-width: 0; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
   background: var(--stage); border-radius: 8px; padding: 14px;
 }
+.pics { flex: 1 1 auto; min-height: 0; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; }
+.pics.multi img { max-width: calc(50% - 5px); }
+.pics img.tbp { cursor: zoom-in; }
+.picsrc { flex: none; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px 12px; font-size: 12.5px; color: var(--muted); text-align: center; }
+.picsrc b { color: var(--ink, inherit); font-weight: 600; }
 .stage img {
   max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: block;
   background: #fff; border-radius: 3px; box-shadow: 0 1px 2px rgba(0,0,0,.12), 0 4px 18px rgba(0,0,0,.08);
@@ -150,6 +155,23 @@ mark.hl.hg { background: var(--hl-g); }
 mark.hl.hp { background: var(--hl-p); }
 span.hlb { font-weight: 800; }
 span.hlu { text-decoration: underline; text-decoration-color: var(--ul); text-decoration-thickness: 2px; text-underline-offset: 2px; }
+/* full-screen picture viewer: tap a picture; pinch / wheel to zoom, drag to move, double-tap to zoom, × / Esc / Back to close */
+.stage img { cursor: zoom-in; }
+.lb { position: fixed; inset: 0; z-index: 90; background: rgba(8,11,14,.94); overflow: hidden; touch-action: none;
+  -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; overscroll-behavior: contain; }
+.lb[hidden] { display: none; }
+.lb img { position: absolute; left: 0; top: 0; transform-origin: 0 0; max-width: none; max-height: none; background: #fff;
+  box-shadow: 0 6px 30px rgba(0,0,0,.5); cursor: grab; -webkit-user-drag: none; will-change: transform; }
+.lb img.drag { cursor: grabbing; }
+.lb-bar { position: absolute; top: 0; left: 0; right: 0; display: flex; align-items: center; justify-content: flex-end; gap: 8px;
+  padding: max(10px, env(safe-area-inset-top, 0px)) max(10px, env(safe-area-inset-right, 0px)) 10px 10px; pointer-events: none; }
+.lb-bar button { pointer-events: auto; min-width: 44px; height: 44px; border-radius: 22px; border: 1px solid rgba(255,255,255,.25); background: rgba(18,22,27,.82);
+  color: #fff; font: 600 22px/1 var(--ui); cursor: pointer; padding: 0 12px; }
+.lb-bar button:hover { background: rgba(48,56,64,.92); }
+.lb-bar .lb-zoom { font-size: 13px; color: #fff; background: rgba(18,22,27,.82); border-radius: 12px; padding: 4px 9px; text-align: center; pointer-events: none; font-variant-numeric: tabular-nums; }
+.lb-cap { position: absolute; left: 50%; bottom: max(10px, env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); max-width: calc(100% - 24px);
+  padding: 5px 12px; border-radius: 12px; background: rgba(18,22,27,.82); text-align: center; color: #fff; font-size: 12.5px; pointer-events: none; }
+.lb-cap:empty { display: none; }
 #hltools { position: fixed; z-index: 70; display: flex; gap: 4px; padding: 5px; background: var(--ink); border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,.25); }
 #hltools button { font: 600 13px var(--ui); border: 0; border-radius: 5px; padding: 5px 9px; cursor: pointer; color: var(--ink); background: var(--surface); }
 #hltools button:hover { outline: 2px solid var(--accent); }
@@ -212,7 +234,7 @@ span.hlu { text-decoration: underline; text-decoration-color: var(--ul); text-de
 </header>
 <nav class="rail" id="rail" aria-label="Slides and quick checks in this lecture"></nav>
 <main class="view" id="view">
-  <figure class="stage" id="stage"><img id="slide" alt=""><div class="empty" id="empty" hidden></div></figure>
+  <figure class="stage" id="stage"><div class="pics" id="pics"><img id="slide" alt=""></div><figcaption class="picsrc" id="picsrc" hidden><span id="picbook"></span><button class="linkbtn" id="origbtn" type="button"></button></figcaption><div class="empty" id="empty" hidden></div></figure>
   <aside class="note" id="noteBox">
     <div class="note-head">
       <div><div class="eyebrow" id="lecname"></div><div class="slideno" id="slideno"></div></div>
@@ -223,6 +245,11 @@ span.hlu { text-decoration: underline; text-decoration-color: var(--ul); text-de
   </aside>
   <section class="quiz" id="quiz" hidden aria-live="polite"></section>
 </main>
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Picture, full screen">
+  <img id="lbimg" alt="" draggable="false">
+  <div class="lb-bar"><span class="lb-zoom" id="lbzoom"></span><button type="button" id="lbout" aria-label="Zoom out">−</button><button type="button" id="lbin" aria-label="Zoom in">+</button><button type="button" id="lbclose" aria-label="Close">×</button></div>
+  <div class="lb-cap" id="lbcap"></div>
+</div>
 <div id="hltools" hidden role="toolbar" aria-label="Mark the selected text">
   <button type="button" class="sw y" data-a="y" title="Highlight yellow (H)" aria-label="Highlight yellow"></button>
   <button type="button" class="sw g" data-a="g" title="Highlight green" aria-label="Highlight green"></button>
@@ -340,14 +367,24 @@ span.hlu { text-decoration: underline; text-decoration-color: var(--ul); text-de
     const s = seq(), q = isQ(x);
     $("stage").hidden = q; $("noteBox").hidden = q; $("quiz").hidden = !q;
     const showEmpty = only && !s.length;
-    $("slide").hidden = showEmpty; $("empty").hidden = !showEmpty;
+    $("pics").hidden = showEmpty; $("picsrc").hidden = true; $("empty").hidden = !showEmpty;
     if (showEmpty) $("empty").textContent = "No starred slides yet. Turn off “Starred only”, then tap ☆ Star on any slide you want to come back to.";
     if (q) { renderQuiz(x); $("quiz").scrollTop = 0; }
     else if (!showEmpty) {
-      const img = $("slide");
-      if (img.getAttribute("src") !== x.s.img) img.src = x.s.img;
-      img.width = x.s.w; img.height = x.s.h;
-      img.alt = `${x.lec.label}, slide ${x.s.n}`;
+      const img = $("slide"), box = $("pics");
+      const pics = x.s.pic && !showOrig.has(x.key) ? x.s.pic : null;
+      const first = pics ? pics[0] : x.s;
+      box.querySelectorAll("img.xpic").forEach(e => e.remove());
+      if (img.getAttribute("src") !== first.img) img.src = first.img;
+      img.width = first.w; img.height = first.h; img.classList.toggle("tbp", !!pics);
+      img.alt = pics ? `${first.src} (replaces slide ${x.s.n})` : `${x.lec.label}, slide ${x.s.n}`;
+      if (pics) pics.slice(1).forEach(p => { const e = new Image(); e.className = "xpic tbp"; e.src = p.img; e.width = p.w; e.height = p.h; e.alt = p.src; box.append(e); });
+      box.classList.toggle("multi", !!pics && pics.length > 1);
+      if (x.s.pic) {
+        $("picsrc").hidden = false;
+        $("picbook").innerHTML = pics ? `<b>Textbook picture</b> · ${[...new Set(pics.map(p => p.src))].join(" + ")}` : "<b>Original lecture slide</b>";
+        $("origbtn").textContent = pics ? "Show original slide" : "Show textbook picture";
+      }
       $("lecname").textContent = `${x.lec.label} · ${x.lec.title}`;
       $("slideno").innerHTML = "";
       $("slideno").append(`Slide ${x.s.n}`);
@@ -372,8 +409,82 @@ span.hlu { text-decoration: underline; text-decoration-color: var(--ul); text-de
     renderRail();
     history.replaceState(null, "", "#" + hashOf(x));
     store.set(K("pos"), hashOf(x));
-    [FLAT[cur + 1], FLAT[cur - 1], FLAT[cur + 2]].forEach(y => { if (y && !isQ(y)) { const p = new Image(); p.src = y.s.img; } });
+    [FLAT[cur + 1], FLAT[cur - 1], FLAT[cur + 2]].forEach(y => { if (y && !isQ(y)) (y.s.pic || [y.s]).forEach(z => { const p = new Image(); p.src = z.img; }); });
   }
+
+  const showOrig = new Set();
+  $("origbtn").onclick = () => { const x = FLAT[cur]; if (isQ(x)) return; showOrig.has(x.key) ? showOrig.delete(x.key) : showOrig.add(x.key); render(); };
+  $("pics").addEventListener("click", e => { const t = e.target; if (t.tagName === "IMG" && t.getAttribute("src")) openLB(t); });
+
+  // ---------- full-screen picture viewer ----------
+  const LB = $("lb"), LI = $("lbimg");
+  let lbS = 1, lbX = 0, lbY = 0, fitW = 0, fitH = 0, maxS = 4, lbPushed = false;
+  const pts = new Map(); let pinch = null, panFrom = null, moved = false, lastTap = 0;
+  const vw = () => LB.clientWidth, vh = () => LB.clientHeight;
+  function lbFit() {
+    const nw = LI.naturalWidth || +LI.getAttribute("width") || 1, nh = LI.naturalHeight || +LI.getAttribute("height") || 1;
+    const pad = innerWidth < 600 ? 8 : 40, top = 60, bot = 40;
+    const k = Math.min((vw() - 2 * pad) / nw, (vh() - top - bot) / nh);
+    fitW = nw * k; fitH = nh * k; LI.style.width = fitW + "px"; LI.style.height = fitH + "px";
+    maxS = Math.max(4, 3 * nw / fitW);
+    lbS = 1; lbX = (vw() - fitW) / 2; lbY = top + (vh() - top - bot - fitH) / 2; lbApply();
+  }
+  function lbClamp() {
+    const W = fitW * lbS, H = fitH * lbS;
+    lbX = W <= vw() ? (vw() - W) / 2 : Math.min(0, Math.max(vw() - W, lbX));
+    lbY = H <= vh() ? (vh() - H) / 2 : Math.min(0, Math.max(vh() - H, lbY));
+  }
+  function lbApply() { lbClamp(); LI.style.transform = `translate(${lbX}px, ${lbY}px) scale(${lbS})`; $("lbzoom").textContent = Math.round(lbS * 100) + "%"; }
+  function lbZoomAt(ns, px, py) { ns = Math.min(maxS, Math.max(1, ns)); lbX = px - (px - lbX) * ns / lbS; lbY = py - (py - lbY) * ns / lbS; lbS = ns; lbApply(); }
+  function openLB(img) {
+    LI.src = img.currentSrc || img.src; LI.alt = img.alt || "";
+    const x = FLAT[cur]; const p = x && x.s && x.s.pic && !showOrig.has(x.key) ? x.s.pic.find(q => img.src.endsWith(q.img)) : null;
+    $("lbcap").textContent = p ? p.src : (x && x.s ? `${x.lec.label} · slide ${x.s.n}` : "");
+    LB.hidden = false; document.body.style.overflow = "hidden"; $("hltools").hidden = true;
+    if (LI.complete && LI.naturalWidth) lbFit(); else LI.onload = () => { LI.onload = null; lbFit(); };
+    if (!lbPushed) { history.pushState({ lb: 1 }, ""); lbPushed = true; }
+    $("lbclose").focus({ preventScroll: true });
+  }
+  function closeLB(fromPop) {
+    if (LB.hidden) return; LB.hidden = true; document.body.style.overflow = ""; pts.clear(); pinch = panFrom = null;
+    if (lbPushed && !fromPop) { lbPushed = false; history.back(); } else lbPushed = false;
+  }
+  window.addEventListener("popstate", () => { if (!LB.hidden) closeLB(true); });
+  window.addEventListener("resize", () => { if (!LB.hidden) lbFit(); });
+  $("lbclose").onclick = () => closeLB();
+  $("lbin").onclick = () => lbZoomAt(lbS * 1.6, vw() / 2, vh() / 2);
+  $("lbout").onclick = () => lbZoomAt(lbS / 1.6, vw() / 2, vh() / 2);
+  LB.addEventListener("wheel", e => { e.preventDefault(); lbZoomAt(lbS * Math.exp(-e.deltaY * (e.ctrlKey ? 0.01 : 0.0022)), e.clientX, e.clientY); }, { passive: false });
+  ["gesturestart", "gesturechange"].forEach(ev => LB.addEventListener(ev, e => e.preventDefault()));
+  LB.addEventListener("pointerdown", e => {
+    if (e.target.closest("button")) return;
+    LB.setPointerCapture(e.pointerId); pts.set(e.pointerId, { x: e.clientX, y: e.clientY }); moved = false;
+    if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = { d: Math.hypot(a.x - b.x, a.y - b.y) || 1, s: lbS, mx: (a.x + b.x) / 2, my: (a.y + b.y) / 2, x: lbX, y: lbY }; panFrom = null; }
+    else if (pts.size === 1) { panFrom = { px: e.clientX, py: e.clientY, x: lbX, y: lbY }; LI.classList.add("drag"); }
+  });
+  LB.addEventListener("pointermove", e => {
+    if (!pts.has(e.pointerId)) return; pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pinch && pts.size >= 2) {
+      const [a, b] = [...pts.values()]; const d = Math.hypot(a.x - b.x, a.y - b.y), mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+      const ns = Math.min(maxS, Math.max(1, pinch.s * d / pinch.d));
+      lbX = mx - (pinch.mx - pinch.x) * ns / pinch.s; lbY = my - (pinch.my - pinch.y) * ns / pinch.s; lbS = ns; moved = true; lbApply();
+    } else if (panFrom) {
+      const dx = e.clientX - panFrom.px, dy = e.clientY - panFrom.py; if (Math.abs(dx) + Math.abs(dy) > 6) moved = true;
+      lbX = panFrom.x + dx; lbY = panFrom.y + dy; lbApply();
+    }
+  });
+  function lbUp(e) {
+    if (!pts.has(e.pointerId)) return; pts.delete(e.pointerId); LI.classList.remove("drag");
+    if (pts.size === 1) { const [p] = [...pts.values()]; pinch = null; panFrom = { px: p.x, py: p.y, x: lbX, y: lbY }; return; }
+    if (pts.size) return; pinch = panFrom = null;
+    if (moved || e.type === "pointercancel") return;
+    const now = Date.now();
+    if (now - lastTap < 320) { lastTap = 0; lbS > 1.05 ? lbFit() : lbZoomAt(2.5, e.clientX, e.clientY); return; }
+    lastTap = now;
+    const onImg = e.target === LI;
+    if (!onImg && lbS <= 1.05) setTimeout(() => { if (lastTap === now) closeLB(); }, 330);  // single tap on the dark background closes
+  }
+  LB.addEventListener("pointerup", lbUp); LB.addEventListener("pointercancel", lbUp);
 
   function toggleStar() {
     const x = FLAT[cur]; if (isQ(x)) return;
@@ -491,6 +602,10 @@ span.hlu { text-decoration: underline; text-decoration-color: var(--ul); text-de
     moveTo(FLAT.indexOf(first));
   };
   document.addEventListener("keydown", e => {
+    if (!LB.hidden) {
+      if (e.key === "Escape") closeLB(); else if (e.key === "+" || e.key === "=") $("lbin").click(); else if (e.key === "-") $("lbout").click(); else if (e.key === "0") lbFit();
+      e.preventDefault(); return;
+    }
     if (e.target.tagName === "SELECT" || e.metaKey || e.ctrlKey || e.altKey) return;
     const k = e.key.toLowerCase();
     if (!T.hidden) { const a = { h: "y", b: "b", u: "u", e: "x" }[k]; if (a) { hlAct(a); e.preventDefault(); return; } }
@@ -519,7 +634,7 @@ span.hlu { text-decoration: underline; text-decoration-color: var(--ul); text-de
   const setBar = () => { if (matchMedia("(min-width: 901px)").matches) document.documentElement.style.setProperty("--bar-h", bar.offsetHeight + "px"); };
   if (window.ResizeObserver) new ResizeObserver(setBar).observe(bar); setBar();
 
-  fetch("data.json?v=1795461864").then(r => r.json()).then(d => {
+  fetch("data.json?v=1795494551").then(r => r.json()).then(d => {
     LECS = d.lectures;
     LECS.forEach(l => {
       l.checks = l.checks || [];
