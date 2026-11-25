@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Renal Physiology, Explained</title>
 <style>
-/* One reading column with a chapter list beside it. Colour carries meaning:
+/* One reading column. Colour carries meaning:
    red arrow = rises, blue arrow = falls, purple = drug, yellow box = equation, blue box = how to solve, green box = example. */
 :root {
   --bg: #f6f5f1; --paper: #ffffff; --ink: #1b232c; --muted: #5d6873; --line: #dcdfe3;
@@ -23,24 +23,20 @@ body { margin: 0; background: var(--bg); color: var(--ink); font: 18px/1.62 var(
 a { color: inherit; text-decoration-color: color-mix(in srgb, currentColor 35%, transparent); text-underline-offset: 2px; }
 a:hover { text-decoration-color: currentColor; }
 
-.shell { display: grid; grid-template-columns: 268px minmax(0, 1fr); max-width: 1180px; margin: 0 auto; }
-nav.toc { position: sticky; top: 0; align-self: start; height: 100vh; overflow-y: auto; padding: 26px 14px 30px 20px; font: 14px/1.35 var(--sans); }
-nav.toc .home { display: block; font-weight: 700; font-size: 15px; margin: 0 0 14px 8px; text-decoration: none; letter-spacing: -.01em; }
-nav.toc .grp { margin: 16px 0 4px 8px; font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--g); }
-nav.toc a.ch { display: grid; grid-template-columns: 22px 1fr; gap: 2px; padding: 5px 8px; border-radius: 6px; text-decoration: none; color: var(--muted); }
-nav.toc a.ch b { font-weight: 600; color: var(--g); font-variant-numeric: tabular-nums; }
-nav.toc a.ch:hover { background: #ebeae5; color: var(--ink); }
-nav.toc a.ch.on { background: var(--paper); color: var(--ink); font-weight: 600; box-shadow: inset 3px 0 0 var(--g); }
 
-main { min-width: 0; padding: 0 28px 120px 22px; }
-header.top { padding: 44px 0 6px; max-width: 760px; }
+main { max-width: 800px; margin: 0 auto; padding: 0 20px 120px; }
+header.top { padding: 44px 0 6px; }
 header.top h1 { margin: 0 0 8px; font: 700 38px/1.1 var(--sans); letter-spacing: -.025em; }
 header.top p { margin: 0 0 14px; color: var(--muted); font: 16px/1.5 var(--sans); max-width: 62ch; }
+.contents { columns: 2; column-gap: 28px; margin: 18px 0 0; padding: 14px 18px; background: var(--paper); border: 1px solid var(--line); border-radius: 10px; font: 15px/1.35 var(--sans); }
+.contents a { display: grid; grid-template-columns: 26px 1fr; padding: 4px 0; text-decoration: none; color: var(--ink); break-inside: avoid; }
+.contents a b { color: var(--g); font-variant-numeric: tabular-nums; }
+.contents a:hover span { text-decoration: underline; }
 .key { display: flex; flex-wrap: wrap; gap: 8px 10px; font: 13px/1.2 var(--sans); color: var(--muted); margin: 0 0 6px; }
 .key span { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; background: var(--paper); border: 1px solid var(--line); border-radius: 999px; }
 .key i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
 
-section.chap { max-width: 760px; background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 8px 40px 30px; margin: 26px 0 0; border-top: 5px solid var(--c); }
+section.chap { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 8px 40px 30px; margin: 26px 0 0; border-top: 5px solid var(--c); }
 .chead { display: flex; align-items: baseline; gap: 14px; margin: 22px 0 6px; }
 .chead .num { font: 700 15px/1 var(--sans); color: #fff; background: var(--c); border-radius: 6px; padding: 6px 9px; position: relative; top: -5px; font-variant-numeric: tabular-nums; }
 h2 { margin: 0; font: 700 30px/1.15 var(--sans); letter-spacing: -.02em; text-wrap: balance; }
@@ -108,47 +104,19 @@ figcaption b { color: var(--ink); }
 #lb.on { display: flex; }
 #lb img { max-width: 100%; max-height: 100%; background: #fff; border-radius: 6px; }
 
-.menu { display: none; }
-footer { max-width: 760px; margin: 30px 0 0; font: 13px/1.5 var(--sans); color: var(--muted); }
+footer { margin: 30px 0 0; font: 13px/1.5 var(--sans); color: var(--muted); }
 
 @media (max-width: 980px) {
-  .shell { display: block; }
-  nav.toc { position: fixed; inset: 0 auto 0 0; width: min(300px, 86vw); background: var(--bg); z-index: 40; transform: translateX(-102%); transition: transform .18s; box-shadow: 0 0 30px rgba(0,0,0,.25); }
-  nav.toc.open { transform: none; }
-  .menu { display: block; position: fixed; right: 14px; bottom: 14px; z-index: 41; font: 600 14px var(--sans); padding: 10px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); box-shadow: 0 3px 12px rgba(0,0,0,.18); }
   main { padding: 0 12px 100px; }
+  .contents { columns: 1; }
   section.chap { padding: 4px 18px 22px; }
   body { font-size: 17px; }
   h2 { font-size: 25px; }
   header.top h1 { font-size: 30px; }
 }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } nav.toc { transition: none; } }
-</style>
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } </style>
 </head>
 <body>
-<div class="shell">
-<nav class="toc" id="toc" aria-label="Chapters">
-<a class="home" href="#top">Renal Physiology, Explained</a>
-<div class="grp" style="--g:#0f766e">The basics</div>
-<a class="ch" href="#ch01" style="--g:#0f766e"><b>1</b><span>Body fluids</span></a>
-<a class="ch" href="#ch02" style="--g:#0f766e"><b>2</b><span>The kidney and the nephron</span></a>
-<div class="grp" style="--g:#1d4fbf">Filtering and measuring</div>
-<a class="ch" href="#ch03" style="--g:#1d4fbf"><b>3</b><span>Glomerular filtration and renal blood flow</span></a>
-<a class="ch" href="#ch04" style="--g:#1d4fbf"><b>4</b><span>Clearance and the kidney equations</span></a>
-<a class="ch" href="#ch05" style="--g:#1d4fbf"><b>5</b><span>How the tubule handles a solute</span></a>
-<div class="grp" style="--g:#b45309">Salt and minerals</div>
-<a class="ch" href="#ch06" style="--g:#b45309"><b>6</b><span>Sodium and diuretics</span></a>
-<a class="ch" href="#ch07" style="--g:#b45309"><b>7</b><span>Potassium</span></a>
-<a class="ch" href="#ch08" style="--g:#b45309"><b>8</b><span>Phosphate, calcium and magnesium</span></a>
-<div class="grp" style="--g:#0e7490">Water</div>
-<a class="ch" href="#ch09" style="--g:#0e7490"><b>9</b><span>Water, ADH and urine concentration</span></a>
-<div class="grp" style="--g:#b4233c">Acid and base</div>
-<a class="ch" href="#ch10" style="--g:#b4233c"><b>10</b><span>pH and buffers</span></a>
-<a class="ch" href="#ch11" style="--g:#b4233c"><b>11</b><span>How the kidney handles acid</span></a>
-<a class="ch" href="#ch12" style="--g:#b4233c"><b>12</b><span>Acid–base disorders</span></a>
-<div class="grp" style="--g:#4b5563">Reference</div>
-<a class="ch" href="#ch13" style="--g:#4b5563"><b>13</b><span>Every equation in one place</span></a>
-</nav>
 <main id="top">
 <header class="top">
 <h1>Renal Physiology, Explained</h1>
@@ -162,6 +130,21 @@ footer { max-width: 760px; margin: 30px 0 0; font: 13px/1.5 var(--sans); color: 
 <span><i style="background:var(--ex-bg);border:1px solid var(--ex-line)"></i> worked example</span>
 <span><abbr title="Like this: hover to see what an abbreviation stands for">GFR</abbr> hover for the meaning</span>
 </div>
+<nav class="contents" aria-label="Chapters">
+<a href="#ch01" style="--g:#0f766e"><b>1</b><span>Body fluids</span></a>
+<a href="#ch02" style="--g:#0f766e"><b>2</b><span>The kidney and the nephron</span></a>
+<a href="#ch03" style="--g:#1d4fbf"><b>3</b><span>Glomerular filtration and renal blood flow</span></a>
+<a href="#ch04" style="--g:#1d4fbf"><b>4</b><span>Clearance and the kidney equations</span></a>
+<a href="#ch05" style="--g:#1d4fbf"><b>5</b><span>How the tubule handles a solute</span></a>
+<a href="#ch06" style="--g:#b45309"><b>6</b><span>Sodium and diuretics</span></a>
+<a href="#ch07" style="--g:#b45309"><b>7</b><span>Potassium</span></a>
+<a href="#ch08" style="--g:#b45309"><b>8</b><span>Phosphate, calcium and magnesium</span></a>
+<a href="#ch09" style="--g:#0e7490"><b>9</b><span>Water, ADH and urine concentration</span></a>
+<a href="#ch10" style="--g:#b4233c"><b>10</b><span>pH and buffers</span></a>
+<a href="#ch11" style="--g:#b4233c"><b>11</b><span>How the kidney handles acid</span></a>
+<a href="#ch12" style="--g:#b4233c"><b>12</b><span>Acid–base disorders</span></a>
+<a href="#ch13" style="--g:#4b5563"><b>13</b><span>Every equation in one place</span></a>
+</nav>
 </header>
 <section class="chap" id="ch01" style="--c:#0f766e">
 <div class="chead"><span class="num">1</span><h2>Body fluids</h2></div>
@@ -1300,15 +1283,9 @@ footer { max-width: 760px; margin: 30px 0 0; font: 13px/1.5 var(--sans); color: 
 </section>
 <footer>Tap any picture to enlarge it.</footer>
 </main>
-</div>
-<button class="menu" id="menu" type="button">Chapters</button>
 <div id="lb" role="dialog" aria-label="Enlarged picture"><img alt=""></div>
 <script>
 (function () {
-  var toc = document.getElementById('toc'), menu = document.getElementById('menu');
-  menu.addEventListener('click', function () { toc.classList.toggle('open'); });
-  toc.addEventListener('click', function (e) { if (e.target.closest('a')) toc.classList.remove('open'); });
-
   // Enlarge a picture
   var lb = document.getElementById('lb'), lbi = lb.querySelector('img');
   document.addEventListener('click', function (e) {
@@ -1316,25 +1293,7 @@ footer { max-width: 760px; margin: 30px 0 0; font: 13px/1.5 var(--sans); color: 
     if (im) { lbi.src = im.currentSrc || im.src; lbi.alt = im.alt; lb.classList.add('on'); return; }
     if (e.target.closest('#lb')) lb.classList.remove('on');
   });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { lb.classList.remove('on'); toc.classList.remove('open'); } });
-
-  // Mark the current chapter in the chapter list (nothing opens, nothing scrolls by itself)
-  var chaps = [].slice.call(document.querySelectorAll('section.chap'));
-  var links = {};
-  [].forEach.call(toc.querySelectorAll('a.ch'), function (a) { links[a.getAttribute('href').slice(1)] = a; });
-  var ticking = false, last = null;
-  function mark() {
-    ticking = false;
-    var cur = null;
-    for (var i = 0; i < chaps.length; i++) { if (chaps[i].getBoundingClientRect().top <= 120) cur = chaps[i]; else break; }
-    var a = cur ? links[cur.id] : null;
-    if (a === last) return;
-    if (last) last.classList.remove('on');
-    if (a) a.classList.add('on');
-    last = a;
-  }
-  window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(mark); } }, { passive: true });
-  mark();
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') lb.classList.remove('on'); });
 })();
 </script>
 </body>
