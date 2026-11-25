@@ -275,6 +275,7 @@ span.hlu { text-decoration: underline; text-decoration-color: var(--ul); text-de
   let HL = store.get(K("hl"), {});     // block key -> [[start, end, type, text], ...]
 
   const isQ = x => x.kind === "quiz";
+  const slideName = s => s.from ? `${s.from} · slide ${s.sn}` : `Slide ${s.n}`;   // a slide mixed in from another deck names that deck
   const hashOf = x => `${x.lec.id.toLowerCase()}-${isQ(x) ? "q" + (x.ci + 1) : x.s.n}`;
   const seq = () => only ? FLAT.filter(x => !isQ(x) && stars.has(x.key)) : FLAT.filter(x => qcOn || !isQ(x));
   const starsIn = lec => lec.slides.filter(s => stars.has(`${lec.id}:${s.n}`)).length;
@@ -309,7 +310,7 @@ span.hlu { text-decoration: underline; text-decoration-color: var(--ul); text-de
     const c = x.check, first = c.slides[0], last = c.slides[c.slides.length - 1];
     const answered = c.qs.filter(q => ANS[q.id] !== undefined), right = answered.filter(q => ANS[q.id] === q.a).length;
     let h = `<div class="quiz-in"><div class="quiz-head"><div><div class="eyebrow">Quick check ${x.ci + 1} of ${x.lec.checks.length} · ${esc(x.lec.label)}</div>`
-      + `<h2>Slides ${first}–${last}</h2></div><div class="score">${answered.length ? `${right} / ${answered.length} right` : `${c.qs.length} questions`}</div></div>`;
+      + `<h2>${esc(c.t || `Slides ${first}–${last}`)}</h2></div><div class="score">${answered.length ? `${right} / ${answered.length} right` : `${c.qs.length} questions`}</div></div>`;
     c.qs.forEach((q, k) => {
       const ch = ANS[q.id], done = ch !== undefined;
       h += `<div class="qcard" data-q="${q.id}"><p class="qstem" data-hk="${q.id}:q"><span class="qn nohl">${k + 1}</span>${esc(q.q)}</p><div class="opts">`;
@@ -322,7 +323,7 @@ span.hlu { text-decoration: underline; text-decoration-color: var(--ul); text-de
       if (done) h += `<p class="why${ch === q.a ? "" : " miss"}" data-hk="${q.id}:w"><b class="nohl">${ch === q.a ? "Right. " : `Answer: ${"ABCD"[q.a]}. `}</b>${esc(q.why)}</p>`;
       h += `</div>`;
     });
-    h += `<div class="quiz-foot"><button class="btn" data-go="${FLAT.findIndex(y => y.lec === x.lec && !isQ(y) && y.s.n === first)}">‹ Review slides ${first}–${last}</button>`
+    h += `<div class="quiz-foot"><button class="btn" data-go="${FLAT.findIndex(y => y.lec === x.lec && !isQ(y) && y.s.n === first)}">‹ Review ${esc((c.t || `slides ${first}–${last}`).replace(/^S/, "s").replace(/^T/, "t"))}</button>`
       + `<span><button class="linkbtn" data-reset="1">Try these again</button>&nbsp;&nbsp;<button class="linkbtn" data-clearq="1">Clear my marks here</button></span></div></div>`;
     $("quiz").innerHTML = h;
     $("quiz").querySelectorAll("[data-hk]").forEach(applyHL);
@@ -350,7 +351,7 @@ span.hlu { text-decoration: underline; text-decoration-color: var(--ul); text-de
         b.disabled = only;
       } else {
         b.className = "tick" + (stars.has(y.key) ? " starred" : "") + (y === x ? " cur" : "");
-        b.title = `Slide ${y.s.n}${stars.has(y.key) ? " ★" : ""}`;
+        b.title = `${slideName(y.s)}${stars.has(y.key) ? " ★" : ""}`;
         b.disabled = only && !stars.has(y.key) && y !== x;
       }
       b.setAttribute("aria-label", b.title);
@@ -377,7 +378,7 @@ span.hlu { text-decoration: underline; text-decoration-color: var(--ul); text-de
       box.querySelectorAll("img.xpic").forEach(e => e.remove());
       if (img.getAttribute("src") !== first.img) img.src = first.img;
       img.width = first.w; img.height = first.h; img.classList.toggle("tbp", !!pics);
-      img.alt = pics ? `${first.src} (replaces slide ${x.s.n})` : `${x.lec.label}, slide ${x.s.n}`;
+      img.alt = pics ? `${first.src} (replaces ${slideName(x.s).toLowerCase()})` : `${x.lec.label}, ${slideName(x.s).toLowerCase()}`;
       if (pics) pics.slice(1).forEach(p => { const e = new Image(); e.className = "xpic tbp"; e.src = p.img; e.width = p.w; e.height = p.h; e.alt = p.src; box.append(e); });
       box.classList.toggle("multi", !!pics && pics.length > 1);
       if (x.s.pic) {
@@ -387,8 +388,8 @@ span.hlu { text-decoration: underline; text-decoration-color: var(--ul); text-de
       }
       $("lecname").textContent = `${x.lec.label} · ${x.lec.title}`;
       $("slideno").innerHTML = "";
-      $("slideno").append(`Slide ${x.s.n}`);
-      const sp = document.createElement("span"); sp.textContent = `of ${x.lec.total}`; $("slideno").append(sp);
+      $("slideno").append(slideName(x.s));
+      const sp = document.createElement("span"); sp.textContent = `of ${x.s.from ? x.s.of : x.lec.total}`; $("slideno").append(sp);
       const nb = $("note");
       nb.innerHTML = x.s.note ? x.s.note : '<p class="none">This slide needs no extra explanation.</p>';
       nb.dataset.hk = x.key; applyHL(nb); nb.scrollTop = 0;
@@ -439,7 +440,7 @@ span.hlu { text-decoration: underline; text-decoration-color: var(--ul); text-de
   function openLB(img) {
     LI.src = img.currentSrc || img.src; LI.alt = img.alt || "";
     const x = FLAT[cur]; const p = x && x.s && x.s.pic && !showOrig.has(x.key) ? x.s.pic.find(q => img.src.endsWith(q.img)) : null;
-    $("lbcap").textContent = p ? p.src : (x && x.s ? `${x.lec.label} · slide ${x.s.n}` : "");
+    $("lbcap").textContent = p ? p.src : (x && x.s ? `${x.lec.label} · ${slideName(x.s).toLowerCase()}` : "");
     LB.hidden = false; document.body.style.overflow = "hidden"; $("hltools").hidden = true;
     if (LI.complete && LI.naturalWidth) lbFit(); else LI.onload = () => { LI.onload = null; lbFit(); };
     if (!lbPushed) { history.pushState({ lb: 1 }, ""); lbPushed = true; }
@@ -634,14 +635,14 @@ span.hlu { text-decoration: underline; text-decoration-color: var(--ul); text-de
   const setBar = () => { if (matchMedia("(min-width: 901px)").matches) document.documentElement.style.setProperty("--bar-h", bar.offsetHeight + "px"); };
   if (window.ResizeObserver) new ResizeObserver(setBar).observe(bar); setBar();
 
-  fetch("data.json?v=1795494551").then(r => r.json()).then(d => {
+  fetch("data.json?v=1795624701").then(r => r.json()).then(d => {
     LECS = d.lectures;
     LECS.forEach(l => {
       l.checks = l.checks || [];
-      const after = {}; l.checks.forEach((c, ci) => { after[c.slides[c.slides.length - 1]] = ci; });
+      const after = {}; l.checks.forEach((c, ci) => { const k = c.slides[c.slides.length - 1]; (after[k] = after[k] || []).push(ci); });
       l.slides.forEach(s => {
         FLAT.push({ kind: "slide", lec: l, s, key: `${l.id}:${s.n}` });
-        if (after[s.n] !== undefined) FLAT.push({ kind: "quiz", lec: l, check: l.checks[after[s.n]], ci: after[s.n], key: `${l.id}:q${after[s.n] + 1}` });
+        (after[s.n] || []).forEach(ci => FLAT.push({ kind: "quiz", lec: l, check: l.checks[ci], ci, key: `${l.id}:q${ci + 1}` }));
       });
     });
     fillSelect();
