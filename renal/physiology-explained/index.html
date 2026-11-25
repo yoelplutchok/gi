@@ -31,11 +31,6 @@ nav.toc a.ch { display: grid; grid-template-columns: 22px 1fr; gap: 2px; padding
 nav.toc a.ch b { font-weight: 600; color: var(--g); font-variant-numeric: tabular-nums; }
 nav.toc a.ch:hover { background: #ebeae5; color: var(--ink); }
 nav.toc a.ch.on { background: var(--paper); color: var(--ink); font-weight: 600; box-shadow: inset 3px 0 0 var(--g); }
-nav.toc .subs { display: none; margin: 2px 0 6px 30px; border-left: 1px solid var(--line); }
-nav.toc .subs.on { display: block; }
-nav.toc .subs a { display: block; padding: 3px 8px 3px 10px; font-size: 13px; color: var(--muted); text-decoration: none; margin-left: -1px; border-left: 2px solid transparent; }
-nav.toc .subs a:hover { color: var(--ink); }
-nav.toc .subs a.on { color: var(--ink); border-left-color: var(--g); font-weight: 600; }
 
 main { min-width: 0; padding: 0 28px 120px 22px; }
 header.top { padding: 44px 0 6px; max-width: 760px; }
@@ -136,36 +131,23 @@ footer { max-width: 760px; margin: 30px 0 0; font: 13px/1.5 var(--sans); color: 
 <a class="home" href="#top">Renal Physiology, Explained</a>
 <div class="grp" style="--g:#0f766e">The basics</div>
 <a class="ch" href="#ch01" style="--g:#0f766e"><b>1</b><span>Body fluids</span></a>
-<div class="subs" style="--g:#0f766e"><a href="#ch01-how-much-water-and-where-it-sits">How much water, and where it sits</a><a href="#dilution">Measuring a compartment: the dilution method</a><a href="#osm">Plasma osmolarity</a><a href="#shifts">Fluid shifts between compartments</a></div>
 <a class="ch" href="#ch02" style="--g:#0f766e"><b>2</b><span>The kidney and the nephron</span></a>
-<div class="subs" style="--g:#0f766e"><a href="#ch02-what-the-kidneys-do">What the kidneys do</a><a href="#ch02-layout-of-the-kidney">Layout of the kidney</a><a href="#ch02-the-nephron">The nephron</a><a href="#ch02-blood-supply">Blood supply</a><a href="#jga">The juxtaglomerular apparatus</a><a href="#processes">The four processes</a></div>
 <div class="grp" style="--g:#1d4fbf">Filtering and measuring</div>
 <a class="ch" href="#ch03" style="--g:#1d4fbf"><b>3</b><span>Glomerular filtration and renal blood flow</span></a>
-<div class="subs" style="--g:#1d4fbf"><a href="#barrier">The filter</a><a href="#starling">Starling forces: what pushes fluid through</a><a href="#arterioles">Afferent versus efferent arteriole</a><a href="#rbf-control">Renal blood flow and what controls the arterioles</a><a href="#autoreg">Autoregulation</a></div>
 <a class="ch" href="#ch04" style="--g:#1d4fbf"><b>4</b><span>Clearance and the kidney equations</span></a>
-<div class="subs" style="--g:#1d4fbf"><a href="#load">Three measurements, three amounts</a><a href="#clearance">Clearance</a><a href="#inulin">Inulin clearance is the GFR</a><a href="#clr-ratio">Compare any clearance with inulin</a><a href="#creatinine">Creatinine: the GFR marker used in patients</a><a href="#pah">PAH clearance is the renal plasma flow</a><a href="#rbf-ff">Renal blood flow and filtration fraction</a></div>
 <a class="ch" href="#ch05" style="--g:#1d4fbf"><b>5</b><span>How the tubule handles a solute</span></a>
-<div class="subs" style="--g:#1d4fbf"><a href="#glucose-tm">Glucose: reabsorption with a ceiling</a><a href="#pah-tm">PAH: secretion with a ceiling</a><a href="#weak-acids">Weak acids and bases: urine pH decides</a><a href="#tfp">TF/P: following a solute along the tubule</a></div>
 <div class="grp" style="--g:#b45309">Salt and minerals</div>
 <a class="ch" href="#ch06" style="--g:#b45309"><b>6</b><span>Sodium and diuretics</span></a>
-<div class="subs" style="--g:#b45309"><a href="#na-segments">The plan of the nephron</a><a href="#ch06-proximal-tubule-two-thirds-with-water">Proximal tubule: two-thirds, with water</a><a href="#gt-balance">Glomerulotubular balance</a><a href="#ch06-thick-ascending-limb-and-early-distal-tubule-salt-without-water">Thick ascending limb and early distal tubule: salt without water</a><a href="#aldosterone">Late distal tubule and collecting duct: the final adjustment</a><a href="#ecf-control">How the body controls ECF volume</a><a href="#diuretics">Diuretics in one table</a></div>
 <a class="ch" href="#ch07" style="--g:#b45309"><b>7</b><span>Potassium</span></a>
-<div class="subs" style="--g:#b45309"><a href="#ch07-where-k-is-and-why-the-number-matters">Where K⁺ is, and why the number matters</a><a href="#k-shifts">Internal balance: K⁺ moving in and out of cells</a><a href="#ch07-external-balance-k-along-the-nephron">External balance: K⁺ along the nephron</a><a href="#k-secretion">Principal cells: how K⁺ is secreted</a></div>
 <a class="ch" href="#ch08" style="--g:#b45309"><b>8</b><span>Phosphate, calcium and magnesium</span></a>
-<div class="subs" style="--g:#b45309"><a href="#phosphate">Phosphate</a><a href="#calcium">Calcium</a><a href="#magnesium">Magnesium</a></div>
 <div class="grp" style="--g:#0e7490">Water</div>
 <a class="ch" href="#ch09" style="--g:#0e7490"><b>9</b><span>Water, ADH and urine concentration</span></a>
-<div class="subs" style="--g:#0e7490"><a href="#adh">ADH: the signal</a><a href="#ch09-how-adh-opens-the-collecting-duct">How ADH opens the collecting duct</a><a href="#gradient">The salty medulla: countercurrent multiplication</a><a href="#urea">Urea</a><a href="#vasa-recta">Vasa recta: keeping the gradient</a><a href="#conc-dilute">Concentrated or dilute urine</a><a href="#free-water">Free-water clearance</a><a href="#siadh-di">Too much ADH, too little ADH</a></div>
 <div class="grp" style="--g:#b4233c">Acid and base</div>
 <a class="ch" href="#ch10" style="--g:#b4233c"><b>10</b><span>pH and buffers</span></a>
-<div class="subs" style="--g:#b4233c"><a href="#ch10-ph-and-h">pH and H⁺</a><a href="#ch10-where-the-acid-comes-from">Where the acid comes from</a><a href="#buffers">Buffers</a><a href="#hh">The Henderson–Hasselbalch equation</a></div>
 <a class="ch" href="#ch11" style="--g:#b4233c"><b>11</b><span>How the kidney handles acid</span></a>
-<div class="subs" style="--g:#b4233c"><a href="#hco3-reabs">Job 1: taking back filtered HCO₃⁻</a><a href="#new-hco3">Job 2: excreting acid and making new HCO₃⁻</a></div>
 <a class="ch" href="#ch12" style="--g:#b4233c"><b>12</b><span>Acid–base disorders</span></a>
-<div class="subs" style="--g:#b4233c"><a href="#compensation">The four disorders and their compensation</a><a href="#gas-steps">Reading a blood gas</a><a href="#anion-gap">Metabolic acidosis and the anion gap</a><a href="#osm-gap">The osmolar gap</a><a href="#met-alk">Metabolic alkalosis</a><a href="#ch12-respiratory-acidosis-and-alkalosis">Respiratory acidosis and alkalosis</a></div>
 <div class="grp" style="--g:#4b5563">Reference</div>
 <a class="ch" href="#ch13" style="--g:#4b5563"><b>13</b><span>Every equation in one place</span></a>
-<div class="subs" style="--g:#4b5563"><a href="#ch13-numbers-worth-knowing">Numbers worth knowing</a></div>
 </nav>
 <main id="top">
 <header class="top">
@@ -1336,24 +1318,20 @@ footer { max-width: 760px; margin: 30px 0 0; font: 13px/1.5 var(--sans); color: 
   });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { lb.classList.remove('on'); toc.classList.remove('open'); } });
 
-  // Mark where the reader is in the chapter list
-  var heads = [].slice.call(document.querySelectorAll('section.chap, section.chap h3[id]'));
+  // Mark the current chapter in the chapter list (nothing opens, nothing scrolls by itself)
+  var chaps = [].slice.call(document.querySelectorAll('section.chap'));
   var links = {};
-  [].forEach.call(toc.querySelectorAll('a[href^="#"]'), function (a) { links[a.getAttribute('href').slice(1)] = a; });
-  var ticking = false;
+  [].forEach.call(toc.querySelectorAll('a.ch'), function (a) { links[a.getAttribute('href').slice(1)] = a; });
+  var ticking = false, last = null;
   function mark() {
     ticking = false;
-    var y = 90, cur = null, curCh = null;
-    for (var i = 0; i < heads.length; i++) {
-      var h = heads[i];
-      if (h.getBoundingClientRect().top <= y) { if (h.tagName === 'SECTION') { curCh = h; cur = null; } else cur = h; } else break;
-    }
-    [].forEach.call(toc.querySelectorAll('.on'), function (n) { n.classList.remove('on'); });
-    if (curCh) {
-      var a = links[curCh.id]; if (a) { a.classList.add('on'); var s = a.nextElementSibling; if (s && s.classList.contains('subs')) s.classList.add('on'); }
-      if (cur && links[cur.id]) links[cur.id].classList.add('on');
-      if (a && window.innerWidth > 980) { var r = a.getBoundingClientRect(); if (r.top < 60 || r.bottom > window.innerHeight - 60) a.scrollIntoView({ block: 'center' }); }
-    }
+    var cur = null;
+    for (var i = 0; i < chaps.length; i++) { if (chaps[i].getBoundingClientRect().top <= 120) cur = chaps[i]; else break; }
+    var a = cur ? links[cur.id] : null;
+    if (a === last) return;
+    if (last) last.classList.remove('on');
+    if (a) a.classList.add('on');
+    last = a;
   }
   window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(mark); } }, { passive: true });
   mark();
