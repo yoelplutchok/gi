@@ -1,0 +1,1363 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Renal Physiology, Explained</title>
+<style>
+/* One reading column with a chapter list beside it. Colour carries meaning:
+   red arrow = rises, blue arrow = falls, purple = drug, yellow box = equation, blue box = how to solve, green box = example. */
+:root {
+  --bg: #f6f5f1; --paper: #ffffff; --ink: #1b232c; --muted: #5d6873; --line: #dcdfe3;
+  --up: #c2262e; --down: #1c5fd1; --drug: #6d28d9;
+  --eq-bg: #fff7d6; --eq-line: #d9a400; --solve-bg: #edf4ff; --solve-line: #2f6fd6;
+  --ex-bg: #edf7f0; --ex-line: #2e8b57; --trap-line: #9aa3ad;
+  --c: #0f766e;
+  --serif: Charter, "Bitstream Charter", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 18px; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 18px/1.62 var(--serif); -webkit-text-size-adjust: 100%; }
+a { color: inherit; text-decoration-color: color-mix(in srgb, currentColor 35%, transparent); text-underline-offset: 2px; }
+a:hover { text-decoration-color: currentColor; }
+
+.shell { display: grid; grid-template-columns: 268px minmax(0, 1fr); max-width: 1180px; margin: 0 auto; }
+nav.toc { position: sticky; top: 0; align-self: start; height: 100vh; overflow-y: auto; padding: 26px 14px 30px 20px; font: 14px/1.35 var(--sans); }
+nav.toc .home { display: block; font-weight: 700; font-size: 15px; margin: 0 0 14px 8px; text-decoration: none; letter-spacing: -.01em; }
+nav.toc .grp { margin: 16px 0 4px 8px; font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--g); }
+nav.toc a.ch { display: grid; grid-template-columns: 22px 1fr; gap: 2px; padding: 5px 8px; border-radius: 6px; text-decoration: none; color: var(--muted); }
+nav.toc a.ch b { font-weight: 600; color: var(--g); font-variant-numeric: tabular-nums; }
+nav.toc a.ch:hover { background: #ebeae5; color: var(--ink); }
+nav.toc a.ch.on { background: var(--paper); color: var(--ink); font-weight: 600; box-shadow: inset 3px 0 0 var(--g); }
+nav.toc .subs { display: none; margin: 2px 0 6px 30px; border-left: 1px solid var(--line); }
+nav.toc .subs.on { display: block; }
+nav.toc .subs a { display: block; padding: 3px 8px 3px 10px; font-size: 13px; color: var(--muted); text-decoration: none; margin-left: -1px; border-left: 2px solid transparent; }
+nav.toc .subs a:hover { color: var(--ink); }
+nav.toc .subs a.on { color: var(--ink); border-left-color: var(--g); font-weight: 600; }
+
+main { min-width: 0; padding: 0 28px 120px 22px; }
+header.top { padding: 44px 0 6px; max-width: 760px; }
+header.top h1 { margin: 0 0 8px; font: 700 38px/1.1 var(--sans); letter-spacing: -.025em; }
+header.top p { margin: 0 0 14px; color: var(--muted); font: 16px/1.5 var(--sans); max-width: 62ch; }
+.key { display: flex; flex-wrap: wrap; gap: 8px 10px; font: 13px/1.2 var(--sans); color: var(--muted); margin: 0 0 6px; }
+.key span { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; background: var(--paper); border: 1px solid var(--line); border-radius: 999px; }
+.key i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+
+section.chap { max-width: 760px; background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 8px 40px 30px; margin: 26px 0 0; border-top: 5px solid var(--c); }
+.chead { display: flex; align-items: baseline; gap: 14px; margin: 22px 0 6px; }
+.chead .num { font: 700 15px/1 var(--sans); color: #fff; background: var(--c); border-radius: 6px; padding: 6px 9px; position: relative; top: -5px; font-variant-numeric: tabular-nums; }
+h2 { margin: 0; font: 700 30px/1.15 var(--sans); letter-spacing: -.02em; text-wrap: balance; }
+p.lead { font-size: 19px; color: #34404c; margin: 8px 0 4px; }
+h3 { margin: 36px 0 8px; font: 700 21px/1.25 var(--sans); letter-spacing: -.012em; color: var(--c); text-wrap: balance; }
+h4 { margin: 24px 0 4px; font: 700 16.5px/1.3 var(--sans); color: var(--ink); }
+p { margin: 10px 0; }
+strong { font-weight: 700; }
+sub, sup { font-size: .72em; line-height: 0; }
+abbr[title] { text-decoration: underline dotted #aab2bb; text-underline-offset: 3px; cursor: help; }
+ol, ul { margin: 8px 0; padding-left: 1.5em; }
+li { margin: 4px 0; }
+.vd { position: relative; }
+.vd::before { content: ""; position: absolute; left: 50%; top: .02em; width: .17em; height: .17em; margin-left: -.085em; border-radius: 50%; background: currentColor; }
+.up { color: var(--up); font-weight: 700; font-family: var(--sans); }
+.down { color: var(--down); font-weight: 700; font-family: var(--sans); }
+.drug { color: var(--drug); font-weight: 600; }
+a.x { font: 600 .78em var(--sans); color: var(--muted); white-space: nowrap; text-decoration: none; border: 1px solid var(--line); border-radius: 5px; padding: 1px 5px; vertical-align: 1px; }
+a.x:hover { color: var(--ink); border-color: var(--muted); }
+
+.tw { overflow-x: auto; margin: 14px 0 16px; }
+table { border-collapse: collapse; width: 100%; font: 15px/1.4 var(--sans); }
+th, td { text-align: left; vertical-align: top; padding: 7px 10px; border-bottom: 1px solid var(--line); }
+thead th { font-weight: 700; font-size: 13.5px; color: var(--ink); background: color-mix(in srgb, var(--c) 11%, #fff); border-bottom: 2px solid color-mix(in srgb, var(--c) 45%, #fff); }
+tbody tr:nth-child(even) td { background: #fafaf8; }
+tbody td:first-child { font-weight: 600; }
+table.plain tbody td:first-child { font-weight: 400; }
+table.c td:not(:first-child), table.c th:not(:first-child) { text-align: center; }
+table.ex2 td:nth-child(2), table.ex2 th:nth-child(2) { text-align: left; }
+
+.box { margin: 16px 0; padding: 12px 18px 12px; border-radius: 9px; border-left: 5px solid; font: 16px/1.5 var(--sans); }
+.box > .lab { font: 700 11.5px/1 var(--sans); letter-spacing: .09em; text-transform: uppercase; margin: 2px 0 8px; }
+.box p { margin: 6px 0; }
+.box ol { margin: 6px 0; }
+.eq { background: var(--eq-bg); border-color: var(--eq-line); }
+.eq > .lab { color: #8a6800; }
+.eq p.f { font: 600 20px/1.5 var(--sans); margin: 8px 0 8px; }
+.eq p.w { color: #4d4320; }
+.eq p.sym { font-size: 14.5px; color: #55492a; }
+.fr { display: inline-flex; flex-direction: column; text-align: center; vertical-align: middle; line-height: 1.25; margin: 2px 5px; }
+.fr > span { padding: 1px 6px; }
+.fr > span:first-child { border-bottom: 1.6px solid currentColor; }
+.solve { background: var(--solve-bg); border-color: var(--solve-line); }
+.solve > .lab { color: #2459b0; }
+.solve > .lab em { font-style: normal; text-transform: none; letter-spacing: 0; font-size: 15.5px; color: var(--ink); margin-left: 6px; }
+.ex { background: var(--ex-bg); border-color: var(--ex-line); }
+.ex > .lab { color: #24704a; }
+.trap { background: #fff; border: 1.5px dashed var(--trap-line); border-left: 5px solid #707a85; }
+.trap > .lab { color: #58626d; }
+.box .calc { font-variant-numeric: tabular-nums; }
+.solve p.calc { border-top: 1px solid rgba(47, 111, 214, .2); padding-top: 8px; margin-top: 9px; }
+.box b.n { color: #2459b0; }
+.box b.t { color: var(--up); }
+
+figure { margin: 20px auto 18px; text-align: center; }
+.pair, .trio { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 18px; align-items: start; margin: 18px 0; }
+.trio { grid-template-columns: 1fr 1fr 1fr; gap: 6px 12px; }
+.pair figure, .trio figure { margin: 0; }
+@media (max-width: 640px) { .pair, .trio { grid-template-columns: 1fr; } }
+figure img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; background: #fff; cursor: zoom-in; display: block; margin: 0 auto; }
+figcaption { font: 14px/1.45 var(--sans); color: var(--muted); margin: 8px auto 0; max-width: 60ch; text-align: left; }
+figcaption b { color: var(--ink); }
+
+#lb { position: fixed; inset: 0; background: rgba(15, 20, 26, .9); display: none; align-items: center; justify-content: center; z-index: 50; cursor: zoom-out; padding: 20px; }
+#lb.on { display: flex; }
+#lb img { max-width: 100%; max-height: 100%; background: #fff; border-radius: 6px; }
+
+.menu { display: none; }
+footer { max-width: 760px; margin: 30px 0 0; font: 13px/1.5 var(--sans); color: var(--muted); }
+
+@media (max-width: 980px) {
+  .shell { display: block; }
+  nav.toc { position: fixed; inset: 0 auto 0 0; width: min(300px, 86vw); background: var(--bg); z-index: 40; transform: translateX(-102%); transition: transform .18s; box-shadow: 0 0 30px rgba(0,0,0,.25); }
+  nav.toc.open { transform: none; }
+  .menu { display: block; position: fixed; right: 14px; bottom: 14px; z-index: 41; font: 600 14px var(--sans); padding: 10px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); box-shadow: 0 3px 12px rgba(0,0,0,.18); }
+  main { padding: 0 12px 100px; }
+  section.chap { padding: 4px 18px 22px; }
+  body { font-size: 17px; }
+  h2 { font-size: 25px; }
+  header.top h1 { font-size: 30px; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } nav.toc { transition: none; } }
+</style>
+</head>
+<body>
+<div class="shell">
+<nav class="toc" id="toc" aria-label="Chapters">
+<a class="home" href="#top">Renal Physiology, Explained</a>
+<div class="grp" style="--g:#0f766e">The basics</div>
+<a class="ch" href="#ch01" style="--g:#0f766e"><b>1</b><span>Body fluids</span></a>
+<div class="subs" style="--g:#0f766e"><a href="#ch01-how-much-water-and-where-it-sits">How much water, and where it sits</a><a href="#dilution">Measuring a compartment: the dilution method</a><a href="#osm">Plasma osmolarity</a><a href="#shifts">Fluid shifts between compartments</a></div>
+<a class="ch" href="#ch02" style="--g:#0f766e"><b>2</b><span>The kidney and the nephron</span></a>
+<div class="subs" style="--g:#0f766e"><a href="#ch02-what-the-kidneys-do">What the kidneys do</a><a href="#ch02-layout-of-the-kidney">Layout of the kidney</a><a href="#ch02-the-nephron">The nephron</a><a href="#ch02-blood-supply">Blood supply</a><a href="#jga">The juxtaglomerular apparatus</a><a href="#processes">The four processes</a></div>
+<div class="grp" style="--g:#1d4fbf">Filtering and measuring</div>
+<a class="ch" href="#ch03" style="--g:#1d4fbf"><b>3</b><span>Glomerular filtration and renal blood flow</span></a>
+<div class="subs" style="--g:#1d4fbf"><a href="#barrier">The filter</a><a href="#starling">Starling forces: what pushes fluid through</a><a href="#arterioles">Afferent versus efferent arteriole</a><a href="#rbf-control">Renal blood flow and what controls the arterioles</a><a href="#autoreg">Autoregulation</a></div>
+<a class="ch" href="#ch04" style="--g:#1d4fbf"><b>4</b><span>Clearance and the kidney equations</span></a>
+<div class="subs" style="--g:#1d4fbf"><a href="#load">Three measurements, three amounts</a><a href="#clearance">Clearance</a><a href="#inulin">Inulin clearance is the GFR</a><a href="#clr-ratio">Compare any clearance with inulin</a><a href="#creatinine">Creatinine: the GFR marker used in patients</a><a href="#pah">PAH clearance is the renal plasma flow</a><a href="#rbf-ff">Renal blood flow and filtration fraction</a></div>
+<a class="ch" href="#ch05" style="--g:#1d4fbf"><b>5</b><span>How the tubule handles a solute</span></a>
+<div class="subs" style="--g:#1d4fbf"><a href="#glucose-tm">Glucose: reabsorption with a ceiling</a><a href="#pah-tm">PAH: secretion with a ceiling</a><a href="#weak-acids">Weak acids and bases: urine pH decides</a><a href="#tfp">TF/P: following a solute along the tubule</a></div>
+<div class="grp" style="--g:#b45309">Salt and minerals</div>
+<a class="ch" href="#ch06" style="--g:#b45309"><b>6</b><span>Sodium and diuretics</span></a>
+<div class="subs" style="--g:#b45309"><a href="#na-segments">The plan of the nephron</a><a href="#ch06-proximal-tubule-two-thirds-with-water">Proximal tubule: two-thirds, with water</a><a href="#gt-balance">Glomerulotubular balance</a><a href="#ch06-thick-ascending-limb-and-early-distal-tubule-salt-without-water">Thick ascending limb and early distal tubule: salt without water</a><a href="#aldosterone">Late distal tubule and collecting duct: the final adjustment</a><a href="#ecf-control">How the body controls ECF volume</a><a href="#diuretics">Diuretics in one table</a></div>
+<a class="ch" href="#ch07" style="--g:#b45309"><b>7</b><span>Potassium</span></a>
+<div class="subs" style="--g:#b45309"><a href="#ch07-where-k-is-and-why-the-number-matters">Where K⁺ is, and why the number matters</a><a href="#k-shifts">Internal balance: K⁺ moving in and out of cells</a><a href="#ch07-external-balance-k-along-the-nephron">External balance: K⁺ along the nephron</a><a href="#k-secretion">Principal cells: how K⁺ is secreted</a></div>
+<a class="ch" href="#ch08" style="--g:#b45309"><b>8</b><span>Phosphate, calcium and magnesium</span></a>
+<div class="subs" style="--g:#b45309"><a href="#phosphate">Phosphate</a><a href="#calcium">Calcium</a><a href="#magnesium">Magnesium</a></div>
+<div class="grp" style="--g:#0e7490">Water</div>
+<a class="ch" href="#ch09" style="--g:#0e7490"><b>9</b><span>Water, ADH and urine concentration</span></a>
+<div class="subs" style="--g:#0e7490"><a href="#adh">ADH: the signal</a><a href="#ch09-how-adh-opens-the-collecting-duct">How ADH opens the collecting duct</a><a href="#gradient">The salty medulla: countercurrent multiplication</a><a href="#urea">Urea</a><a href="#vasa-recta">Vasa recta: keeping the gradient</a><a href="#conc-dilute">Concentrated or dilute urine</a><a href="#free-water">Free-water clearance</a><a href="#siadh-di">Too much ADH, too little ADH</a></div>
+<div class="grp" style="--g:#b4233c">Acid and base</div>
+<a class="ch" href="#ch10" style="--g:#b4233c"><b>10</b><span>pH and buffers</span></a>
+<div class="subs" style="--g:#b4233c"><a href="#ch10-ph-and-h">pH and H⁺</a><a href="#ch10-where-the-acid-comes-from">Where the acid comes from</a><a href="#buffers">Buffers</a><a href="#hh">The Henderson–Hasselbalch equation</a></div>
+<a class="ch" href="#ch11" style="--g:#b4233c"><b>11</b><span>How the kidney handles acid</span></a>
+<div class="subs" style="--g:#b4233c"><a href="#hco3-reabs">Job 1: taking back filtered HCO₃⁻</a><a href="#new-hco3">Job 2: excreting acid and making new HCO₃⁻</a></div>
+<a class="ch" href="#ch12" style="--g:#b4233c"><b>12</b><span>Acid–base disorders</span></a>
+<div class="subs" style="--g:#b4233c"><a href="#compensation">The four disorders and their compensation</a><a href="#gas-steps">Reading a blood gas</a><a href="#anion-gap">Metabolic acidosis and the anion gap</a><a href="#osm-gap">The osmolar gap</a><a href="#met-alk">Metabolic alkalosis</a><a href="#ch12-respiratory-acidosis-and-alkalosis">Respiratory acidosis and alkalosis</a></div>
+<div class="grp" style="--g:#4b5563">Reference</div>
+<a class="ch" href="#ch13" style="--g:#4b5563"><b>13</b><span>Every equation in one place</span></a>
+<div class="subs" style="--g:#4b5563"><a href="#ch13-numbers-worth-knowing">Numbers worth knowing</a></div>
+</nav>
+<main id="top">
+<header class="top">
+<h1>Renal Physiology, Explained</h1>
+<p>Everything in renal physiology, in the order that makes it easiest to learn. Each idea is explained once. Every equation comes with the steps for using it in a problem.</p>
+<div class="key">
+<span><b class="up">↑</b> rises</span>
+<span><b class="down">↓</b> falls</span>
+<span><b class="drug">drug</b></span>
+<span><i style="background:var(--eq-bg);border:1px solid var(--eq-line)"></i> equation</span>
+<span><i style="background:var(--solve-bg);border:1px solid var(--solve-line)"></i> how to solve the problem</span>
+<span><i style="background:var(--ex-bg);border:1px solid var(--ex-line)"></i> worked example</span>
+<span><abbr title="Like this: hover to see what an abbreviation stands for">GFR</abbr> hover for the meaning</span>
+</div>
+</header>
+<section class="chap" id="ch01" style="--c:#0f766e">
+<div class="chead"><span class="num">1</span><h2>Body fluids</h2></div>
+<p class="lead">Water is most of the body. Every fluid problem asks the same two things: which compartment changed size, and did its concentration change?</p>
+
+<h3 id="ch01-how-much-water-and-where-it-sits">How much water, and where it sits</h3>
+<p><strong>Total body water (<abbr title="total body water">TBW</abbr>)</strong> is about 60% of body weight in a man and 50% in a woman. Fat holds almost no water, so more fat means a lower percentage. It also falls with age: about 75–80% in a newborn, 60% in a young adult, 50% in the elderly. One liter of water weighs one kilogram, so a 70 kg man holds 0.6 × 70 = 42 L.</p>
+<p>Use the <strong>60–40–20 rule</strong>: water is 60% of body weight, of which 40% is inside cells and 20% is outside.</p>
+<div class="tw"><table>
+<thead><tr><th>Compartment</th><th>Size</th><th>Main solutes</th><th>Measured with</th></tr></thead>
+<tbody>
+<tr><td>Total body water</td><td>60% of weight</td><td>—</td><td>Tritiated water, D₂O (heavy water), antipyrine</td></tr>
+<tr><td>Intracellular fluid (<abbr title="intracellular fluid (inside cells)">ICF</abbr>)</td><td>⅔ of TBW (40% of weight)</td><td>K⁺, Mg²⁺, protein, organic phosphates</td><td>No marker: TBW − <abbr title="extracellular fluid (outside cells)">ECF</abbr></td></tr>
+<tr><td>Extracellular fluid (ECF)</td><td>⅓ of TBW (20% of weight)</td><td>Na⁺, Cl⁻, HCO₃⁻</td><td>Inulin, mannitol, sulfate</td></tr>
+<tr><td>Interstitial fluid</td><td>¾ of ECF</td><td>Same as plasma, minus protein</td><td>No marker: ECF − plasma</td></tr>
+<tr><td>Plasma</td><td>¼ of ECF</td><td>Na⁺, Cl⁻, HCO₃⁻, protein</td><td>Radioactive albumin, Evans blue (a dye that sticks to albumin)</td></tr>
+</tbody>
+</table></div>
+<p>A marker measures the space it can reach. Tritiated water crosses every membrane, so it fills all the water. Mannitol and inulin get out of capillaries but cannot enter cells, so they fill the ECF. Albumin is too big to leave the capillaries, so it stays in plasma.</p>
+<figure><img src="figs/compartments.webp" width="1316" height="1870" loading="lazy" alt="Two barriers make the compartments: the cell membrane and the capillary wall." style="max-width:46%"><figcaption>Two barriers make the compartments: the cell membrane and the capillary wall.</figcaption></figure>
+<p><strong>Interstitial fluid</strong> is the fluid that bathes the cells. It is plasma that has been filtered through the capillary wall, so it has the same small ions but almost no protein. Plasma proteins are negative and trapped in the vessels, so they hold a few extra positive ions with them. That leaves plasma with slightly more Na⁺ and interstitial fluid with slightly more Cl⁻. This small protein-driven imbalance is the <strong>Gibbs–Donnan effect</strong>.</p>
+
+<h3 id="dilution">Measuring a compartment: the dilution method</h3>
+<div class="box eq"><div class="lab">Equation</div>
+<p class="w">Inject a known amount of marker, let it spread, then measure its concentration.</p>
+<p class="f">Volume = <span class="fr"><span>amount injected − amount lost in urine</span><span>concentration in plasma</span></span></p>
+</div>
+<div class="box solve"><div class="lab">How to solve <em>volume of a compartment, or the dose to fill it</em></div>
+<p><strong>The problem gives you</strong> the marker, the amount injected and the plasma concentration after mixing. Or it gives a patient's weight and a target drug level.</p>
+<ol>
+<li>Name the compartment from the marker (table above). A drug with no protein binding spreads through all body water, like tritiated water. A drug stuck to plasma protein stays in plasma.</li>
+<li>Subtract any marker lost in the urine.</li>
+<li>Volume = amount ÷ concentration. Check that the units cancel to liters.</li>
+<li>For <abbr title="intracellular fluid (inside cells)">ICF</abbr> or interstitial fluid, measure the two neighbors and subtract.</li>
+<li>For a dose, turn it around: dose = volume × target concentration.</li>
+</ol>
+<p class="calc"><strong>Worked.</strong> 800 mCi of tritiated water is injected and plasma reads 20 mCi/L. <abbr title="total body water">TBW</abbr> = 800 ÷ 20 = <strong>40 L</strong>.</p>
+<p class="calc"><strong>Worked.</strong> A 100 kg woman needs a drug that fills total body water, at 5 µg/mL. TBW = 100 × 0.5 = 50 L. 5 µg/mL = 5 mg/L. Dose = 50 L × 5 mg/L = <strong>250 mg</strong>.</p>
+<p><b class="t">Trap:</b> dividing upside down (20 ÷ 800). The answer must be a believable number of liters.</p>
+</div>
+<p>A drug that binds plasma protein needs a <strong>larger dose</strong>, because the bound part is held in plasma and does nothing.</p>
+<div class="box eq"><div class="lab">Equation</div>
+<p class="w">Hematocrit (<abbr title="hematocrit: the fraction of blood that is red cells">Hct</abbr>) is the fraction of blood that is red cells, about 0.45. The rest, 1 − Hct, is plasma.</p>
+<p class="f">Blood volume = <span class="fr"><span>plasma volume</span><span>1 − Hct</span></span></p>
+<p class="sym">Plasma 3 L and Hct 0.40 give 3 ÷ 0.6 = 5 L of blood.</p>
+</div>
+
+<h3 id="osm">Plasma osmolarity</h3>
+<p><strong>Osmolarity</strong> is the number of dissolved particles per liter. Normal plasma is about 290 mOsm/L (round to 300).</p>
+<div class="box eq"><div class="lab">Equation</div>
+<p class="f">Plasma osmolarity = 2 × Na⁺ + <span class="fr"><span>glucose</span><span>18</span></span> + <span class="fr"><span><abbr title="blood urea nitrogen">BUN</abbr></span><span>2.8</span></span></p>
+<p class="sym">Na⁺ in mEq/L. It is doubled because every Na⁺ travels with a negative partner (Cl⁻ or HCO₃⁻). Glucose and <strong>BUN</strong> (blood urea nitrogen) are in mg/dL, and dividing by 18 and 2.8 converts them to mOsm/L.</p>
+</div>
+<p class="calc"><strong>Worked.</strong> Na⁺ 140, glucose 90, BUN 14: 280 + 5 + 5 = <strong>290 mOsm/L</strong>. Na⁺ does nearly all the work, so a quick estimate is 2 × Na⁺.</p>
+<p>This formula is an estimate. The lab measures the true value with an osmometer. A measured value far above the calculated one means some extra solute is in the blood <a class="x" href="#osm-gap">Ch 12</a>.</p>
+
+<h3 id="shifts">Fluid shifts between compartments</h3>
+<p>Three facts decide every shift.</p>
+<ol>
+<li>Every gain or loss happens first in the <abbr title="extracellular fluid (outside cells)">ECF</abbr>, because gut, skin, kidney and IV lines all connect to plasma.</li>
+<li>Water crosses cell membranes freely. So water moves until <abbr title="intracellular fluid (inside cells)">ICF</abbr> and ECF osmolarity are equal again.</li>
+<li>NaCl and mannitol cannot enter cells. They stay in the ECF and hold water there.</li>
+</ol>
+<div class="box solve"><div class="lab">How to solve <em>what happens to ECF, ICF and osmolarity?</em></div>
+<p><strong>The problem gives you</strong> a patient who lost or gained fluid, or a diagram to match.</p>
+<ol>
+<li><strong>ECF volume.</strong> Fluid lost is a <em>contraction</em>. Fluid gained is an <em>expansion</em>.</li>
+<li><strong>ECF osmolarity.</strong> Compare what was lost or gained with plasma. Same concentration as plasma: osmolarity unchanged (<em>isosmotic</em>). More water than salt lost, or salt gained: osmolarity rises (<em>hyperosmotic</em>). Salt lost, or water gained: osmolarity falls (<em>hyposmotic</em>).</li>
+<li><strong>ICF.</strong> Water moves toward the saltier side. If ECF osmolarity rose, cells shrink. If it fell, cells swell. If unchanged, nothing happens to cells.</li>
+</ol>
+<p>The name describes the <em>result</em>, not the fluid lost. Sweat is dilute, so losing it leaves the body <em>hyper</em>osmotic.</p>
+</div>
+<div class="tw"><table class="c ex2">
+<thead><tr><th>Type</th><th>Examples</th><th>ECF volume</th><th>ICF volume</th><th>Osmolarity</th><th>Hematocrit</th><th>Plasma protein</th></tr></thead>
+<tbody>
+<tr><td>Isosmotic contraction</td><td>Diarrhea, vomiting, burns, bleeding</td><td><span class="down">↓</span></td><td>same</td><td>same</td><td><span class="up">↑</span></td><td><span class="up">↑</span></td></tr>
+<tr><td>Hyperosmotic contraction</td><td>Sweating, fever, no water, diabetes insipidus</td><td><span class="down">↓</span></td><td><span class="down">↓</span></td><td><span class="up">↑</span></td><td>same</td><td><span class="up">↑</span></td></tr>
+<tr><td>Hyposmotic contraction</td><td>Adrenal insufficiency; salt and water lost, then replaced with water only</td><td><span class="down">↓</span></td><td><span class="up">↑</span></td><td><span class="down">↓</span></td><td><span class="up">↑</span></td><td><span class="up">↑</span></td></tr>
+<tr><td>Isosmotic expansion</td><td>IV normal saline</td><td><span class="up">↑</span></td><td>same</td><td>same</td><td><span class="down">↓</span></td><td><span class="down">↓</span></td></tr>
+<tr><td>Hyperosmotic expansion</td><td>Salt tablets, hypertonic saline, mannitol</td><td><span class="up">↑</span></td><td><span class="down">↓</span></td><td><span class="up">↑</span></td><td><span class="down">↓</span></td><td><span class="down">↓</span></td></tr>
+<tr><td>Hyposmotic expansion</td><td><abbr title="syndrome of inappropriate ADH: too much ADH">SIADH</abbr>, drinking plain water, D5W</td><td><span class="up">↑</span></td><td><span class="up">↑</span></td><td><span class="down">↓</span></td><td>same</td><td><span class="down">↓</span></td></tr>
+</tbody>
+</table></div>
+<p>The three that need a reason:</p>
+<p><strong>Sweating.</strong> Sweat has more water than salt. ECF osmolarity rises, water leaves the cells, and both compartments shrink.</p>
+<p><strong>Adrenal insufficiency.</strong> Without aldosterone the kidney loses NaCl. ECF osmolarity falls, water enters the cells. So the ECF shrinks while the ICF swells.</p>
+<p><strong>SIADH</strong> (too much antidiuretic hormone) and plain water. The kidney keeps water without salt. Water spreads over all compartments, ⅓ to ECF and ⅔ to ICF. D5W (5% dextrose in water) acts as plain water because the glucose is burned.</p>
+<p><strong>Plasma protein</strong> simply follows ECF volume: concentrated in a contraction, diluted in an expansion. <strong>Hematocrit</strong> has two inputs, because red cells are cells. ECF volume concentrates or dilutes them, and osmolarity shrinks or swells them. In hyperosmotic contraction the red cells are more concentrated but smaller, so the two effects cancel and hematocrit does not change. The same cancelling happens in hyposmotic expansion.</p>
+<figure><img src="figs/shifts.webp" width="1800" height="1607" loading="lazy" alt="Reading these diagrams. Width is volume (ICF left, ECF right). Height is osmolarity. The solid outline is normal. The shaded box with the dashed edge is after the change. Check the height first, then the ECF width." style="max-width:88%"><figcaption><b>Reading these diagrams.</b> Width is volume (ICF left, ECF right). Height is osmolarity. The solid outline is normal. The shaded box with the dashed edge is after the change. Check the height first, then the ECF width.</figcaption></figure>
+<div class="box ex"><div class="lab">Worked example</div><p>Only the ECF box gets narrower and the height does not change: an isosmotic loss, such as <strong>diarrhea</strong>. Both boxes get lower, the ECF narrower and the ICF wider: salt was lost, <strong>adrenal insufficiency</strong>. The ECF gets wider, the ICF narrower, and both get taller: salt was added, <strong>salt tablets</strong>.</p></div>
+<div class="box trap"><div class="lab">Don't confuse</div><p>"Contraction" and "expansion" describe the <strong>ECF only</strong>. The ICF can go the other way. Albumin and Evans blue measure plasma, not ECF. Inulin measures ECF volume here and <abbr title="glomerular filtration rate">GFR</abbr> in <a class="x" href="#inulin">Ch 4</a>.</p></div>
+
+</section>
+<section class="chap" id="ch02" style="--c:#0f766e">
+<div class="chead"><span class="num">2</span><h2>The kidney and the nephron</h2></div>
+<p class="lead">A nephron filters plasma at its start. Its tubule then takes back what the body needs and adds what the body must lose.</p>
+
+<h3 id="ch02-what-the-kidneys-do">What the kidneys do</h3>
+<p>The kidneys excrete water, salts, acid and wastes, which sets the volume and make-up of the body fluids. They also make three hormones.</p>
+<div class="tw"><table>
+<thead><tr><th>Hormone</th><th>What it does</th><th>Lost in chronic kidney failure</th></tr></thead>
+<tbody>
+<tr><td>Renin</td><td>Starts the system that keeps Na⁺ and raises blood pressure <a class="x" href="#ecf-control">Ch 6</a></td><td>—</td></tr>
+<tr><td>Erythropoietin (EPO)</td><td>Tells bone marrow to make red cells</td><td>Anemia</td></tr>
+<tr><td>1,25-dihydroxyvitamin D (active vitamin D)</td><td>Makes the gut absorb Ca²⁺ <a class="x" href="#calcium">Ch 8</a></td><td>Low Ca²⁺</td></tr>
+</tbody>
+</table></div>
+<div class="box ex"><div class="lab">Worked example</div><p><strong>Anemia plus low Ca²⁺ means the kidney failure is chronic.</strong> Both come from lost hormone production, which takes months to show. Fluid overload, high K⁺ and metabolic acidosis are failures of excretion, so they appear in acute failure too.</p></div>
+
+<h3 id="ch02-layout-of-the-kidney">Layout of the kidney</h3>
+<p>The kidneys lie behind the peritoneum (retroperitoneal). The outer layer is the <strong>cortex</strong>. The inner layer is the <strong>medulla</strong>, arranged as pyramids. Urine leaves the tip of each pyramid (the <strong>papilla</strong>) and runs: minor calyx → major calyx → renal pelvis → ureter → bladder.</p>
+
+<h3 id="ch02-the-nephron">The nephron</h3>
+<p>The <strong>nephron</strong> is the working unit. There are about 1 million in each kidney. It begins with the <strong>glomerulus</strong>, a tuft of capillaries inside <strong>Bowman's capsule</strong>. Blood enters the tuft through the <strong>afferent arteriole</strong> and leaves through the <strong>efferent arteriole</strong>. Sitting between two arterioles keeps the pressure in these capillaries high, and that pressure drives filtration. The capillaries are wrapped by <strong>podocytes</strong>, the inner layer of the capsule.</p>
+<figure><img src="figs/nephron2.webp" width="1800" height="1668" loading="lazy" alt="Two kinds of nephron. The superficial (cortical) nephron on the right has a short loop. The juxtamedullary nephron on the left has a long loop that reaches the inner medulla." style="max-width:82%"><figcaption><b>Two kinds of nephron.</b> The superficial (cortical) nephron on the right has a short loop. The juxtamedullary nephron on the left has a long loop that reaches the inner medulla.</figcaption></figure>
+<div class="tw"><table>
+<thead><tr><th>Segment</th><th>Where</th><th>Main job</th></tr></thead>
+<tbody>
+<tr><td>Proximal tubule</td><td>Cortex</td><td>Bulk reabsorption: ⅔ of the filtered water and Na⁺, and all the glucose and amino acids</td></tr>
+<tr><td>Thin descending limb</td><td>Medulla</td><td>Water leaves. Salt cannot.</td></tr>
+<tr><td>Thin and thick ascending limb</td><td>Medulla, back up to cortex</td><td>Salt leaves. Water cannot. This dilutes the fluid.</td></tr>
+<tr><td>Distal convoluted tubule</td><td>Cortex</td><td>More salt out, still no water. Ca²⁺ reabsorption is controlled here.</td></tr>
+<tr><td>Late distal tubule and collecting duct</td><td>Cortex down to papilla</td><td>Fine-tuning by hormones: Na⁺, K⁺, H⁺ (aldosterone) and water (<abbr title="antidiuretic hormone (vasopressin)">ADH</abbr>)</td></tr>
+</tbody>
+</table></div>
+<p>Proximal tubule cells are built for bulk work. A <strong>brush border</strong> of microvilli gives a huge surface, and many mitochondria feed the Na⁺/K⁺ pump.</p>
+<p><strong>Cortical nephrons</strong> are 7 of every 8. Their loops are short and stop in the outer medulla. <strong>Juxtamedullary nephrons</strong> are 1 of every 8. Their glomeruli sit at the border of cortex and medulla, and their long loops reach the inner medulla. They also have larger glomeruli, so each one filters more. Long loops are what let the kidney make concentrated urine <a class="x" href="#gradient">Ch 9</a>.</p>
+
+<h3 id="ch02-blood-supply">Blood supply</h3>
+<p>Renal artery → interlobar → arcuate → interlobular arteries → afferent arteriole → <strong>glomerular capillaries</strong> → efferent arteriole → <strong>peritubular capillaries</strong> → veins with the same names → renal vein.</p>
+<p>So there are two capillary beds in a row. The first (glomerular) is at high pressure and filters. The second (peritubular) is at low pressure and takes up the fluid the tubule reabsorbs. In juxtamedullary nephrons the efferent arteriole instead forms the <strong>vasa recta</strong>, long hairpin capillaries that run beside the loops deep into the medulla <a class="x" href="#vasa-recta">Ch 9</a>.</p>
+
+<h3 id="jga">The juxtaglomerular apparatus</h3>
+<p>The end of the thick ascending limb passes between the afferent and efferent arterioles of its own glomerulus. Three cell types meet at this spot.</p>
+<div class="tw"><table>
+<thead><tr><th>Cell</th><th>Where</th><th>Job</th></tr></thead>
+<tbody>
+<tr><td>Macula densa</td><td>Wall of the tubule</td><td>Senses how much NaCl is flowing past</td></tr>
+<tr><td>Juxtaglomerular (granular) cells</td><td>Wall of the afferent arteriole</td><td>Release renin</td></tr>
+<tr><td>Lacis cells (extraglomerular mesangial cells)</td><td>In the angle between the two arterioles</td><td>Function unknown</td></tr>
+</tbody>
+</table></div>
+<figure><img src="figs/jga.webp" width="1800" height="1776" loading="lazy" alt="The macula densa (green, bottom) is tubule. The granular cells that make renin sit in the wall of the afferent arteriole. Lacis cells fill the angle between the arterioles." style="max-width:60%"><figcaption>The macula densa (green, bottom) is tubule. The granular cells that make renin sit in the wall of the afferent arteriole. Lacis cells fill the angle between the arterioles.</figcaption></figure>
+
+<h3 id="processes">The four processes</h3>
+<p><strong>Filtration</strong> moves fluid from the glomerular capillary into Bowman's space. The filtrate is plasma without cells or protein. <strong>Reabsorption</strong> moves a substance from the tubule back into the peritubular capillary. <strong>Secretion</strong> moves a substance from the peritubular capillary into the tubule. <strong>Excretion</strong> is what finally leaves in the urine.</p>
+<div class="box eq"><div class="lab">Equation</div><p class="f">Excreted = filtered − reabsorbed + secreted</p></div>
+<figure><img src="figs/processes.webp" width="1173" height="1245" loading="lazy" alt="Everything the kidney does to a substance is some mix of these four arrows." style="max-width:50%"><figcaption>Everything the kidney does to a substance is some mix of these four arrows.</figcaption></figure>
+<div class="box trap"><div class="lab">Don't confuse</div><p><strong>Juxtaglomerular cells</strong> make renin and sit in the afferent arteriole. <strong>Juxtamedullary nephrons</strong> are the nephrons with long loops. The names are close but they are unrelated.</p></div>
+
+</section>
+<section class="chap" id="ch03" style="--c:#1d4fbf">
+<div class="chead"><span class="num">3</span><h2>Glomerular filtration and renal blood flow</h2></div>
+<p class="lead">The glomerulus sits between two arterioles. The pressure trapped between them pushes fluid through a filter, and the tone of each arteriole decides how much blood flows and how much is filtered.</p>
+
+<h3 id="barrier">The filter</h3>
+<p>Fluid passes three layers on its way from capillary blood to Bowman's space.</p>
+<div class="tw"><table>
+<thead><tr><th>Layer</th><th>Detail</th><th>What it stops</th></tr></thead>
+<tbody>
+<tr><td>Fenestrated endothelium</td><td>Pores 70–100 nm</td><td>Blood cells only</td></tr>
+<tr><td>Basement membrane</td><td>Three layers: lamina rara interna, lamina densa, lamina rara externa</td><td>Plasma protein (the main barrier)</td></tr>
+<tr><td>Podocyte foot processes</td><td>Filtration slits about 40 nm, bridged by a slit diaphragm (nephrin, podocin)</td><td>Protein that got past the membrane</td></tr>
+</tbody>
+</table></div>
+<p>The filter sorts by <strong>size and charge</strong>. A neutral molecule under 4 nm passes freely. Nothing over 8 nm passes. In between, charge decides. All three layers carry fixed <strong>negative charges</strong>, which repel negative molecules. So at any given size, positive molecules filter best and negative ones worst. Small ions (Na⁺, K⁺, Cl⁻, HCO₃⁻) are far below pore size and filter freely whatever their charge. Albumin is large and negative, so it is held back twice.</p>
+<p><strong>Microalbuminuria</strong> is 30–300 mg of albumin in the urine per day. It is the first sign of diabetic kidney damage, and it appears because the filter loses its negative charge. A routine dipstick cannot detect so little, so a diabetic with a normal urinalysis still needs a urine microalbumin test. Treatment is a drug that blocks angiotensin II: an <span class="drug"><abbr title="angiotensin-converting enzyme">ACE</abbr> inhibitor</span> or an <span class="drug">ARB</span> (angiotensin receptor blocker). It dilates the efferent arteriole, which lowers the pressure in the glomerulus, so less protein is pushed through. These drugs slow the kidney damage of diabetes and hypertension, the two main causes of chronic kidney disease.</p>
+
+<h3 id="starling">Starling forces: what pushes fluid through</h3>
+<div class="box eq"><div class="lab">Equation</div>
+<p class="w">In words: filtration rate = how leaky the filter is × the net pressure pushing fluid out.</p>
+<p class="f"><abbr title="glomerular filtration rate">GFR</abbr> = K<sub>f</sub> × [ P<sub>GC</sub> − P<sub>BS</sub> − π<sub>GC</sub> ]</p>
+<p class="sym"><strong>GFR</strong> = glomerular filtration rate. <strong>K<sub>f</sub></strong> = filtration coefficient (water permeability × surface area). <strong>P<sub>GC</sub></strong> = blood pressure inside the glomerular capillary, 45 mm Hg; it pushes fluid out. <strong>P<sub>BS</sub></strong> = fluid pressure in Bowman's space, 10 mm Hg; it pushes back. <strong>π<sub>GC</sub></strong> = oncotic pressure, the pull of plasma protein that holds water in the capillary. Bowman's space has no protein, so its oncotic pressure is 0 and drops out.</p>
+</div>
+<figure><img src="figs/starling.webp" width="1797" height="2607" loading="lazy" alt="Top: at the start of the capillary the net pressure is +16 mm Hg. Bottom: by the end, πGC has risen to 35 and the net pressure is 0." style="max-width:72%"><figcaption><b>Top:</b> at the start of the capillary the net pressure is +16 mm Hg. <b>Bottom:</b> by the end, π<sub>GC</sub> has risen to 35 and the net pressure is 0.</figcaption></figure>
+<p>At the <strong>start</strong> of the capillary: 45 − 10 − 19 = <strong>+16 mm Hg</strong>, so fluid filters. As protein-free fluid leaves, the protein left behind gets more concentrated, so π<sub>GC</sub> climbs. It is the only force that changes along the capillary. At the <strong>end</strong>: 45 − 10 − 35 = <strong>0</strong>. Filtration stops. This point is called <strong>filtration equilibrium</strong>.</p>
+<p>K<sub>f</sub> in the glomerulus is more than 100 times that of ordinary capillaries, which is why 180 L is filtered each day. An ordinary capillary filters at its arterial end and takes fluid back at its venous end. A glomerular capillary only filters.</p>
+<div class="box solve"><div class="lab">How to solve <em>what happens to GFR?</em></div>
+<p><strong>The problem gives you</strong> a change in the body (a blocked ureter, low plasma protein, a drug) or a set of pressures.</p>
+<ol>
+<li>Decide which term changed: P<sub>GC</sub>, P<sub>BS</sub>, π<sub>GC</sub> or K<sub>f</sub>.</li>
+<li>P<sub>GC</sub> and K<sub>f</sub> move GFR in the same direction. P<sub>BS</sub> and π<sub>GC</sub> move it in the opposite direction.</li>
+<li>If pressures are given, net pressure = P<sub>GC</sub> − P<sub>BS</sub> − π<sub>GC</sub>.</li>
+</ol>
+<div class="tw"><table class="plain">
+<thead><tr><th>Change</th><th>Term</th><th>GFR</th></tr></thead>
+<tbody>
+<tr><td>Kidney stone or other blockage of the ureter</td><td>P<sub>BS</sub> <span class="up">↑</span></td><td><span class="down">↓</span></td></tr>
+<tr><td>High plasma protein</td><td>π<sub>GC</sub> <span class="up">↑</span></td><td><span class="down">↓</span></td></tr>
+<tr><td>Low plasma protein</td><td>π<sub>GC</sub> <span class="down">↓</span></td><td><span class="up">↑</span></td></tr>
+<tr><td>Afferent arteriole dilates, or efferent constricts</td><td>P<sub>GC</sub> <span class="up">↑</span></td><td><span class="up">↑</span></td></tr>
+<tr><td>Fewer working glomeruli or a thickened filter</td><td>K<sub>f</sub> <span class="down">↓</span></td><td><span class="down">↓</span></td></tr>
+</tbody>
+</table></div>
+</div>
+
+<h3 id="arterioles">Afferent versus efferent arteriole</h3>
+<p>Think of a hose with two clamps and a leaky stretch between them. Tightening <em>either</em> clamp cuts the flow through the hose. But the pressure in the leaky stretch depends on which clamp you tighten.</p>
+<p><strong>Constrict the afferent arteriole</strong> (the clamp before the glomerulus): less blood gets in, so P<sub>GC</sub> falls and <abbr title="glomerular filtration rate">GFR</abbr> falls. Plasma flow and GFR fall together, so their ratio, the filtration fraction <a class="x" href="#rbf-ff">Ch 4</a>, does not change.</p>
+<p><strong>Constrict the efferent arteriole</strong> (the clamp after it): blood is dammed up in the glomerulus, so P<sub>GC</sub> rises and GFR rises, while plasma flow falls. GFR up with flow down means the <strong>filtration fraction rises</strong>.</p>
+<figure><img src="figs/affeff.webp" width="1800" height="2264" loading="lazy" alt="Either constriction lowers renal plasma flow (RPF). Only efferent constriction raises PGC and GFR." style="max-width:62%"><figcaption>Either constriction lowers renal plasma flow (RPF). Only efferent constriction raises P<sub>GC</sub> and GFR.</figcaption></figure>
+<div class="tw"><table class="c">
+<thead><tr><th>Change</th><th>Renal plasma flow</th><th>GFR</th><th>Filtration fraction</th></tr></thead>
+<tbody>
+<tr><td>Constrict afferent</td><td><span class="down">↓</span></td><td><span class="down">↓</span></td><td>no change</td></tr>
+<tr><td>Dilate afferent</td><td><span class="up">↑</span></td><td><span class="up">↑</span></td><td>no change</td></tr>
+<tr><td>Constrict efferent</td><td><span class="down">↓</span></td><td><span class="up">↑</span></td><td><span class="up">↑</span></td></tr>
+<tr><td>Dilate efferent</td><td><span class="up">↑</span></td><td><span class="down">↓</span></td><td><span class="down">↓</span></td></tr>
+<tr><td>High plasma protein, or blocked ureter</td><td>no change</td><td><span class="down">↓</span></td><td><span class="down">↓</span></td></tr>
+</tbody>
+</table></div>
+
+<h3 id="rbf-control">Renal blood flow and what controls the arterioles</h3>
+<p>The kidneys receive about <strong>25% of cardiac output</strong>, roughly 1.25 L/min, although they are under 1% of body weight. Per gram this is the highest flow of any major organ (420 mL/min per 100 g, against 84 for the heart and 54 for the brain). The flow is there for filtering, not for oxygen: the kidneys take so little oxygen out of each liter that they have the smallest arteriovenous O₂ difference of any organ.</p>
+<p>Flow = pressure difference ÷ resistance (Q = ΔP/R). The resistance is in the arterioles. The afferent and efferent arterioles are in series, so their resistances add.</p>
+<div class="tw"><table>
+<thead><tr><th>Signal</th><th>Action on the arterioles</th><th>Flow</th><th>GFR</th></tr></thead>
+<tbody>
+<tr><td>Sympathetic nerves (α₁ receptors)</td><td>Constrict afferent more than efferent</td><td><span class="down">↓</span></td><td><span class="down">↓</span></td></tr>
+<tr><td>Angiotensin II, usual levels</td><td>Constricts efferent more than afferent</td><td><span class="down">↓</span></td><td>kept up</td></tr>
+<tr><td>Angiotensin II, very high (hemorrhage)</td><td>Constricts both</td><td><span class="down">↓</span></td><td><span class="down">↓</span></td></tr>
+<tr><td>Prostaglandins (PGE₂, PGI₂)</td><td>Dilate both, afferent more</td><td><span class="up">↑</span></td><td><span class="up">↑</span></td></tr>
+<tr><td><abbr title="atrial natriuretic peptide">ANP</abbr> (atrial natriuretic peptide)</td><td>Dilates afferent, constricts efferent</td><td><span class="up">↑</span></td><td><span class="up">↑</span></td></tr>
+<tr><td>Dopamine, low dose</td><td>Dilates renal vessels</td><td><span class="up">↑</span></td><td><span class="up">↑</span></td></tr>
+</tbody>
+</table></div>
+<p>In hemorrhage the body raises sympathetic tone and angiotensin II to hold blood pressure up, at the kidney's expense. The same signals make the kidney release <strong>prostaglandins</strong>, which dilate the afferent arteriole and protect its blood flow. <span class="drug"><abbr title="nonsteroidal anti-inflammatory drugs">NSAIDs</abbr></span> block prostaglandin synthesis. The constriction is then unopposed, and flow and <abbr title="glomerular filtration rate">GFR</abbr> fall.</p>
+<div class="box ex"><div class="lab">Worked example</div><p>An elderly man with diabetes and hypertension starts high-dose <span class="drug">ibuprofen</span> and his creatinine rises. The cause is <strong>afferent arteriole constriction</strong> from lost prostaglandins. The constrictors did not increase. The dilator was removed.</p></div>
+<p>Other constrictors: endothelin, circulating catecholamines. Other dilators: nitric oxide, bradykinin. β receptors do nothing to renal vessels (β₁ only releases renin). <span class="drug">Dopamine</span> depends on dose: low dilates renal vessels, medium stimulates the heart (β₁), high constricts vessels (α₁). Low-dose dopamine does <em>not</em> protect the kidneys from injury.</p>
+
+<h3 id="autoreg">Autoregulation</h3>
+<p>Renal blood flow and <abbr title="glomerular filtration rate">GFR</abbr> stay almost constant while arterial pressure moves between about <strong>80 and 200 mm Hg</strong>. Below 80 they fall with pressure. The kidney does this by changing <strong>afferent</strong> resistance in step with pressure: if pressure and resistance rise together, flow stays the same. It needs no nerves or hormones, so a transplanted kidney autoregulates normally. Urine output is <em>not</em> autoregulated. It keeps rising as pressure rises.</p>
+<figure><img src="figs/autoreg.webp" width="1403" height="919" loading="lazy" alt="Flow and GFR are flat between about 80 and 200 mm Hg." style="max-width:52%"><figcaption>Flow and GFR are flat between about 80 and 200 mm Hg.</figcaption></figure>
+<p>Two mechanisms do it.</p>
+<p><strong>Myogenic.</strong> Higher pressure stretches the afferent arteriole wall. Stretch opens Ca²⁺ channels in its smooth muscle, Ca²⁺ enters, and the muscle contracts. Resistance rises and flow returns to normal.</p>
+<p><strong>Tubuloglomerular feedback.</strong> Higher pressure raises GFR, so more NaCl reaches the end of the thick ascending limb. The <strong>macula densa</strong> senses the extra NaCl and releases <strong>adenosine</strong>, which constricts the afferent arteriole. Flow and GFR come back down. A fall in pressure does the reverse.</p>
+<figure><img src="figs/tgf.webp" width="1800" height="1660" loading="lazy" alt="Tubuloglomerular feedback, step by step." style="max-width:70%"><figcaption>Tubuloglomerular feedback, step by step.</figcaption></figure>
+<div class="box trap"><div class="lab">Don't confuse</div><p>Sympathetic nerves constrict mainly the <strong>afferent</strong> arteriole, so GFR falls. Angiotensin II constricts mainly the <strong>efferent</strong> arteriole, so GFR is kept up. Constricting either one lowers blood flow.</p></div>
+
+</section>
+<section class="chap" id="ch04" style="--c:#1d4fbf">
+<div class="chead"><span class="num">4</span><h2>Clearance and the kidney equations</h2></div>
+<p class="lead">Almost every kidney calculation is built from the same three measurements. Learn what each combination means and the equations stop being separate things to memorize.</p>
+
+<h3 id="load">Three measurements, three amounts</h3>
+<div class="tw"><table>
+<thead><tr><th>Symbol</th><th>Meaning</th><th>Usual units</th></tr></thead>
+<tbody>
+<tr><td>P<sub>x</sub></td><td>Plasma concentration of substance x</td><td>mg/mL, mg/dL or mEq/L</td></tr>
+<tr><td>U<sub>x</sub></td><td>Urine concentration of x</td><td>same as P</td></tr>
+<tr><td><span class="vd">V</span></td><td>Urine flow rate (the dot means "per minute")</td><td>mL/min</td></tr>
+</tbody>
+</table></div>
+<p>The glomeruli filter about 120 mL of plasma each minute, which is 180 L a day. This is the <strong><abbr title="glomerular filtration rate">GFR</abbr></strong> (glomerular filtration rate). A substance is <strong>freely filtered</strong> if it crosses the filter as easily as water, so the filtrate holds it at its plasma concentration. Water, Na⁺, K⁺, Cl⁻, HCO₃⁻, glucose, urea, inulin, <abbr title="para-aminohippuric acid">PAH</abbr> and myoglobin are freely filtered. Albumin and the hormone-binding globulins are not, and neither is any drug or hormone while it is bound to them (though the tubule can still secrete it). Filtration uses no carrier, so it never saturates.</p>
+<div class="box eq"><div class="lab">Equation</div>
+<p class="w">Amount entering the tubule each minute:</p>
+<p class="f">Filtered load = GFR × P<sub>x</sub></p>
+<p class="w">Amount leaving in the urine each minute:</p>
+<p class="f">Excretion rate = U<sub>x</sub> × <span class="vd">V</span></p>
+<p class="w">What the tubule did in between:</p>
+<p class="f">Reabsorbed or secreted = filtered load − excretion rate</p>
+<p class="sym">A positive answer means net <strong>reabsorption</strong> (less came out than went in). A negative answer means net <strong>secretion</strong> (the tubule added more).</p>
+</div>
+<div class="box solve"><div class="lab">How to solve <em>is it reabsorbed or secreted, and how much?</em></div>
+<p><strong>The problem gives you</strong> GFR (or inulin clearance), a plasma concentration, a urine concentration and a urine flow. If it says only "creatinine clearance is normal", that is your cue to use GFR = 120 mL/min.</p>
+<ol>
+<li><strong>Fix the units first.</strong> GFR is in mL/min, so the concentration must be per mL. mg/dL ÷ 100 = mg/mL. mEq/L ÷ 1,000 = mEq/mL (or change GFR to L/min instead: 120 mL/min = 0.12 L/min).</li>
+<li>Filtered load = GFR × P.</li>
+<li>Excretion rate = U × <span class="vd">V</span>.</li>
+<li>Subtract. Filtered bigger: reabsorbed. Excreted bigger: secreted.</li>
+</ol>
+<p class="calc"><strong>Worked.</strong> GFR 120 mL/min. Plasma X = 200 mg per 100 mL. Urine flow 4 mL/min. Urine X = 50 mg per 10 mL.<br>Units: P = 200 ÷ 100 = 2 mg/mL. U = 50 ÷ 10 = 5 mg/mL.<br>Filtered = 120 × 2 = <strong>240 mg/min</strong>. Excreted = 5 × 4 = <strong>20 mg/min</strong>. 240 − 20 = +220, so <strong>220 mg/min is reabsorbed</strong>.</p>
+<p class="calc"><strong>Worked, the other way.</strong> A drug has P = 0.1 mg/mL, GFR is 100 mL/min and the urine carries 20 mg/min. Filtered = 10 mg/min. 10 − 20 = −10, so 10 mg/min is <strong>secreted</strong>. The drug behaves like PAH.</p>
+<p><b class="t">Trap:</b> skipping the unit step. Plasma K⁺ 4 mEq/L with GFR 120 mL/min is 4 × 0.12 = 0.48 mEq/min, not 480.</p>
+</div>
+
+<h3 id="clearance">Clearance</h3>
+<p><strong>Clearance</strong> is the volume of plasma that is completely emptied of a substance each minute. It is a volume per minute (mL/min). It is not an amount.</p>
+<div class="box eq"><div class="lab">Equation</div>
+<p class="w">In words: clearance = excretion rate ÷ plasma concentration.</p>
+<p class="f">C<sub>x</sub> = <span class="fr"><span>U<sub>x</sub> × <span class="vd">V</span></span><span>P<sub>x</sub></span></span></p>
+<p class="sym">Why it works: U × <span class="vd">V</span> is the amount in the urine each minute. Dividing by P asks "how many mL of plasma held that amount?"</p>
+</div>
+<div class="box solve"><div class="lab">How to solve <em>calculate a clearance</em></div>
+<p><strong>The problem gives you</strong> U, P and either <span class="vd">V</span> or a urine volume collected over a time.</p>
+<ol>
+<li>Get <span class="vd">V</span> in mL/min. A 24-hour urine of 1,440 mL is 1,440 ÷ 1,440 min = 1 mL/min.</li>
+<li>Check that U and P are in the same units. They cancel, so any unit works as long as it is the same.</li>
+<li>C = U × <span class="vd">V</span> ÷ P. The answer is in mL/min.</li>
+</ol>
+<p class="calc"><strong>Worked</strong> (same patient as above). U = 5 mg/mL, <span class="vd">V</span> = 4 mL/min, P = 2 mg/mL. C = 5 × 4 ÷ 2 = <strong>10 mL/min</strong>.</p>
+<p><b class="t">Trap:</b> the <abbr title="glomerular filtration rate">GFR</abbr> of 120 was given but is not needed for a clearance. Extra numbers are often bait.</p>
+</div>
+
+<h3 id="inulin">Inulin clearance is the GFR</h3>
+<p><strong>Inulin</strong> is freely filtered and then left alone: not reabsorbed, not secreted. Every molecule filtered ends up in the urine. So the plasma cleared of inulin each minute is exactly the plasma filtered each minute.</p>
+<div class="box eq"><div class="lab">Equation</div><p class="f"><abbr title="glomerular filtration rate">GFR</abbr> = C<sub>inulin</sub> = <span class="fr"><span>U<sub>inulin</sub> × <span class="vd">V</span></span><span>P<sub>inulin</sub></span></span></p></div>
+<p>The body does not make inulin. It has to be infused, so it is the research standard, not a clinic test.</p>
+<p>Two things do <em>not</em> change inulin clearance, even though the formula makes it look as if they should. <strong>Urine flow:</strong> if a water load raises <span class="vd">V</span> five-fold, the urine is five times more dilute, so U falls five-fold and U × <span class="vd">V</span> is unchanged (100 × 1 and 20 × 5 both give 100). <strong>Plasma inulin:</strong> if P doubles, twice as much is filtered and excreted, so the top and bottom of the fraction double together.</p>
+
+<h3 id="clr-ratio">Compare any clearance with inulin</h3>
+<p>Inulin shows what filtering alone does. Any difference from it is the tubule's work.</p>
+<div class="box eq"><div class="lab">Equation</div>
+<p class="f">Clearance ratio = <span class="fr"><span>C<sub>x</sub></span><span>C<sub>inulin</sub></span></span></p>
+<p class="sym">It is also called the <strong>fractional excretion</strong>: the fraction of the filtered x that reaches the urine. <strong>= 1</strong> filtered only. <strong>&lt; 1</strong> net reabsorption (or not freely filtered). <strong>&gt; 1</strong> net secretion.</p>
+</div>
+<p class="calc">For substance X above: 10 ÷ 120 = 0.08. Only 8% of what was filtered is excreted, so 92% was reabsorbed. That matches 20 ÷ 240.</p>
+<p>An exam can ask "reabsorbed or secreted?" in three ways. They are the same question.</p>
+<div class="tw"><table>
+<thead><tr><th>The clue you are given</th><th>Net reabsorption</th><th>Net secretion</th></tr></thead>
+<tbody>
+<tr><td>Excretion rate and filtered load</td><td>Excreted &lt; filtered</td><td>Excreted &gt; filtered</td></tr>
+<tr><td>Clearance</td><td>Below inulin clearance</td><td>Above inulin clearance</td></tr>
+<tr><td><abbr title="tubular fluid concentration ÷ plasma concentration">TF/P</abbr> along the tubule <a class="x" href="#tfp">Ch 5</a></td><td>Below the inulin line</td><td>Above the inulin line</td></tr>
+</tbody>
+</table></div>
+<div class="tw"><table>
+<thead><tr><th>Substance</th><th>What the kidney does</th><th>Clearance</th></tr></thead>
+<tbody>
+<tr><td><abbr title="para-aminohippuric acid">PAH</abbr></td><td>Filtered and almost all the rest secreted</td><td>Highest: equals renal plasma flow</td></tr>
+<tr><td>Creatinine</td><td>Filtered, slightly secreted</td><td>Slightly above <abbr title="glomerular filtration rate">GFR</abbr></td></tr>
+<tr><td>Inulin</td><td>Filtered only</td><td>= GFR</td></tr>
+<tr><td>Na⁺, urea</td><td>Filtered, partly reabsorbed</td><td>Below GFR</td></tr>
+<tr><td>Glucose, amino acids</td><td>Filtered, all reabsorbed</td><td>0</td></tr>
+<tr><td>Albumin</td><td>Not filtered</td><td>About 0</td></tr>
+</tbody>
+</table></div>
+
+<h3 id="creatinine">Creatinine: the GFR marker used in patients</h3>
+<p>Muscle releases <strong>creatinine</strong> at a steady rate, so nothing has to be infused. It is freely filtered and not reabsorbed. A small amount is also <strong>secreted</strong>, so creatinine clearance <strong>overestimates <abbr title="glomerular filtration rate">GFR</abbr> slightly</strong> (by about 10%).</p>
+<p>When GFR falls, less creatinine is filtered, so it builds up in blood. A rising serum creatinine (and <abbr title="blood urea nitrogen">BUN</abbr>, blood urea nitrogen) means a falling GFR. <span class="drug">Cimetidine</span> and <span class="drug">trimethoprim</span> block creatinine secretion, so they raise serum creatinine without any fall in GFR.</p>
+
+<h3 id="pah">PAH clearance is the renal plasma flow</h3>
+<p><strong><abbr title="para-aminohippuric acid">PAH</abbr></strong> (para-aminohippuric acid) is filtered, and the proximal tubule secretes nearly all of what was not filtered. So almost every PAH molecule that enters the kidney leaves in the urine in a single pass, and the renal vein carries almost none. The plasma cleared of PAH each minute is therefore all the plasma that arrived.</p>
+<div class="box eq"><div class="lab">Equation</div>
+<p class="f"><abbr title="renal plasma flow">RPF</abbr> ≈ C<sub>PAH</sub> = <span class="fr"><span>U<sub>PAH</sub> × <span class="vd">V</span></span><span>P<sub>PAH</sub></span></span></p>
+<p class="sym"><strong>RPF</strong> = renal plasma flow, normally about 600 mL/min.</p>
+</div>
+<figure><img src="figs/fick.webp" width="1324" height="1162" loading="lazy" alt="What goes in by the renal artery must come out by the renal vein or the urine. For PAH the renal vein carries almost nothing, so the urine accounts for all of it." style="max-width:50%"><figcaption>What goes in by the renal artery must come out by the renal vein or the urine. For PAH the renal vein carries almost nothing, so the urine accounts for all of it.</figcaption></figure>
+<p>This rests on the <strong>Fick principle</strong>: amount in = amount out. The exact version is RPF = U<sub>PAH</sub> × <span class="vd">V</span> ÷ (renal artery PAH − renal vein PAH). The clearance formula takes renal vein PAH as 0 and uses any peripheral vein for the arterial value, because no other organ removes PAH.</p>
+<p>Renal vein PAH is not quite 0. About 10% of renal plasma flow feeds tissue that cannot secrete PAH (capsule, fat, connective tissue). So C<sub>PAH</sub> is called the <strong>effective</strong> renal plasma flow and <strong>underestimates the true flow by about 10%</strong>.</p>
+
+<h3 id="rbf-ff">Renal blood flow and filtration fraction</h3>
+<div class="box eq"><div class="lab">Equation</div>
+<p class="w">Blood is plasma plus red cells. Hematocrit (<abbr title="hematocrit: the fraction of blood that is red cells">Hct</abbr>) is the red-cell fraction, so 1 − Hct is the plasma fraction.</p>
+<p class="f"><abbr title="renal blood flow">RBF</abbr> = <span class="fr"><span><abbr title="renal plasma flow">RPF</abbr></span><span>1 − Hct</span></span></p>
+<p class="w">Filtration fraction is the share of arriving plasma that gets filtered, normally about 20%.</p>
+<p class="f"><abbr title="filtration fraction = GFR ÷ RPF">FF</abbr> = <span class="fr"><span><abbr title="glomerular filtration rate">GFR</abbr></span><span>RPF</span></span> = <span class="fr"><span>C<sub>inulin</sub></span><span>C<sub><abbr title="para-aminohippuric acid">PAH</abbr></sub></span></span></p>
+</div>
+<div class="box solve"><div class="lab">How to solve <em>GFR, plasma flow, blood flow and filtration fraction from one table of data</em></div>
+<p><strong>The problem gives you</strong> urine flow, urine and plasma inulin, urine and plasma PAH, and a hematocrit.</p>
+<ol>
+<li>GFR = inulin clearance.</li>
+<li>RPF = PAH clearance.</li>
+<li>RBF = RPF ÷ (1 − Hct). Divide, do not multiply: blood flow must come out bigger than plasma flow.</li>
+<li>FF = GFR ÷ RPF.</li>
+</ol>
+<p class="calc"><strong>Worked.</strong> <span class="vd">V</span> = 1 mL/min. Inulin: U 120, P 1 mg/mL. PAH: U 6, P 0.01 mg/mL. Hct 0.5.<br>GFR = 120 × 1 ÷ 1 = <strong>120 mL/min</strong>. RPF = 6 × 1 ÷ 0.01 = <strong>600 mL/min</strong>. RBF = 600 ÷ 0.5 = <strong>1,200 mL/min</strong>. FF = 120 ÷ 600 = <strong>0.20</strong>.</p>
+</div>
+<p>The 80% of plasma that is not filtered leaves by the efferent arteriole with all the protein. A higher filtration fraction leaves that blood richer in protein, which matters for reabsorption downstream <a class="x" href="#gt-balance">Ch 6</a>.</p>
+<div class="box trap"><div class="lab">Don't confuse</div><p>Clearance is a <strong>volume</strong> per minute (mL/min). Excretion rate is an <strong>amount</strong> per minute (mg/min). Creatinine clearance slightly <strong>over</strong>estimates GFR. PAH clearance slightly <strong>under</strong>estimates renal plasma flow.</p></div>
+
+</section>
+<section class="chap" id="ch05" style="--c:#1d4fbf">
+<div class="chead"><span class="num">5</span><h2>How the tubule handles a solute</h2></div>
+<p class="lead">Filtering is the same for every small molecule. What differs is what the tubule does next. Three patterns cover almost everything: carriers that can fill up, diffusion that depends on charge, and concentrations that change as water leaves.</p>
+
+<h3 id="glucose-tm">Glucose: reabsorption with a ceiling</h3>
+<p>Glucose is reabsorbed in the proximal tubule in two steps.</p>
+<ol>
+<li><strong>Lumen side.</strong> A sodium–glucose cotransporter (<strong><abbr title="sodium–glucose cotransporter">SGLT</abbr></strong>) carries Na⁺ into the cell down its gradient and drags glucose in with it, uphill.</li>
+<li><strong>Blood side.</strong> Glucose leaves the cell downhill through a <strong><abbr title="glucose transporter (facilitated diffusion)">GLUT</abbr></strong> carrier. No energy is needed.</li>
+</ol>
+<p>The Na⁺ gradient exists only because the Na⁺/K⁺ pump on the blood side keeps cell Na⁺ low. The pump spends the ATP, not SGLT. Using a gradient that a pump built is called <strong>secondary active transport</strong>. Insulin plays no part.</p>
+<div class="tw"><table>
+<thead><tr><th>Where</th><th>Lumen side</th><th>Blood side</th><th>Built for</th></tr></thead>
+<tbody>
+<tr><td>Early proximal tubule</td><td>SGLT2 (1 Na⁺ per glucose)</td><td>GLUT2</td><td>Bulk: weak grip, high capacity. Takes about 90%.</td></tr>
+<tr><td>Late proximal tubule</td><td>SGLT1 (2 Na⁺ per glucose)</td><td>GLUT1</td><td>Clean-up: strong grip, low capacity. Takes the last 10%.</td></tr>
+<tr><td>Small intestine (same design)</td><td>SGLT1</td><td>GLUT2</td><td>—</td></tr>
+</tbody>
+</table></div>
+<p>There is a fixed number of carriers, so there is a most they can move per minute: the <strong>transport maximum (<abbr title="transport maximum: the most the carriers can move per minute">Tm</abbr>)</strong>, about 375 mg/min for glucose.</p>
+<figure><img src="figs/glucose_tm.webp" width="1403" height="1247" loading="lazy" alt="Glucose titration curve. Read one line at a time against plasma glucose on the bottom axis." style="max-width:62%"><figcaption><b>Glucose titration curve.</b> Read one line at a time against plasma glucose on the bottom axis.</figcaption></figure>
+<p><strong>Filtered</strong> is a straight line, because filtration never saturates. <strong>Reabsorbed</strong> follows the filtered line at first (everything filtered is taken back), then bends and goes flat at Tm. <strong>Excreted</strong> is zero until the <strong>threshold</strong>, a plasma glucose of about 200 mg/dL, where glucose first shows in the urine. Above about 350 mg/dL every carrier is busy, and excretion rises in step with filtration.</p>
+<p>The curved part between threshold and Tm is called <strong>splay</strong>. Glucose spills before the carriers are completely full because nephrons differ (some reach their own maximum early) and because the carrier's grip on glucose is weak.</p>
+<div class="box solve"><div class="lab">How to solve <em>how much glucose is in the urine?</em></div>
+<p><strong>The problem gives you</strong> a plasma glucose and a <abbr title="glomerular filtration rate">GFR</abbr> (and expects you to know Tm ≈ 375 mg/min).</p>
+<ol>
+<li>Convert plasma glucose to mg/mL (÷ 100).</li>
+<li>Filtered load = GFR × P.</li>
+<li>If the filtered load is below Tm, all is reabsorbed and none is excreted. If it is above Tm, reabsorbed = Tm and excreted = filtered − Tm.</li>
+</ol>
+<p class="calc"><strong>Worked.</strong> Glucose 500 mg/dL, GFR 120 mL/min. Filtered = 5 × 120 = 600 mg/min. Reabsorbed = 375. Excreted = 600 − 375 = <strong>225 mg/min</strong>.</p>
+</div>
+<p>When glucose spills into the urine, the carrier working at its maximum is <strong>SGLT2</strong>, because it meets the full load first.</p>
+<p>The glucose left in the tubule holds water with it (an <strong>osmotic diuresis</strong>), which is why uncontrolled diabetes causes heavy urination and thirst. Glucose in the urine has three possible causes: plasma glucose above threshold (diabetes mellitus), a higher filtered load from a raised GFR (pregnancy), or a faulty SGLT, where glucose spills at a normal plasma level.</p>
+
+<h3 id="pah-tm">PAH: secretion with a ceiling</h3>
+<p><abbr title="para-aminohippuric acid">PAH</abbr> is filtered and also secreted by the proximal tubule, so excretion = filtered + secreted. A carrier on the blood side brings PAH into the cell, and another on the lumen side releases it. Carriers saturate, so secretion has a <abbr title="transport maximum: the most the carriers can move per minute">Tm</abbr> as well.</p>
+<figure><img src="figs/pah_tm.webp" width="1407" height="1252" loading="lazy" alt="PAH titration curve. Below Tm, excretion climbs steeply because filtration and secretion both rise. Above Tm, secretion is flat and excretion runs parallel to filtration." style="max-width:55%"><figcaption><b>PAH titration curve.</b> Below Tm, excretion climbs steeply because filtration and secretion both rise. Above Tm, secretion is flat and excretion runs parallel to filtration.</figcaption></figure>
+<p>This is why PAH measures renal plasma flow only at <em>low</em> plasma levels: above Tm the carriers cannot clear it all <a class="x" href="#pah">Ch 4</a>.</p>
+<p>The same organic-acid carrier secretes penicillin and uric acid. <span class="drug">Probenecid</span> blocks it, which keeps penicillin in the blood longer. A separate carrier for organic bases is the one that secretes a little creatinine.</p>
+
+<h3 id="weak-acids">Weak acids and bases: urine pH decides</h3>
+<p>A weak acid or base exists in two forms, charged and uncharged. Only the <strong>uncharged</strong> form can diffuse through the tubule wall back into blood. The charged form is stuck in the urine and is excreted.</p>
+<div class="tw"><table>
+<thead><tr><th></th><th>Charged (trapped) in</th><th>To excrete it faster</th></tr></thead>
+<tbody>
+<tr><td>Weak acid (aspirin)</td><td>Alkaline urine</td><td>Make the urine alkaline</td></tr>
+<tr><td>Weak base</td><td>Acidic urine</td><td>Make the urine acidic</td></tr>
+</tbody>
+</table></div>
+<div class="box ex"><div class="lab">Worked example</div><p>After a suicide attempt a patient is breathing fast and is confused, with ringing in the ears, low serum HCO₃⁻ and a normal ECG. This is <strong>aspirin</strong> overdose. Giving <span class="drug">bicarbonate</span> makes the urine alkaline, so more of the drug is in its charged form. The treatment works by <strong>decreasing reabsorption of a weak acid</strong>. It does not increase filtration or secretion.</p></div>
+
+<h3 id="tfp">TF/P: following a solute along the tubule</h3>
+<p><strong><abbr title="tubular fluid concentration ÷ plasma concentration">TF/P</abbr></strong> is the concentration of a solute in tubular fluid divided by its concentration in plasma. Plasma does not change, so TF/P tracks what is happening in the tubule. In Bowman's space it is 1.0 for anything freely filtered. From there, compare each solute with water.</p>
+<div class="tw"><table>
+<thead><tr><th>TF/P</th><th>Meaning</th><th>Example in the proximal tubule</th></tr></thead>
+<tbody>
+<tr><td>Stays at 1</td><td>Reabsorbed in step with water</td><td>Na⁺, total osmolarity</td></tr>
+<tr><td>Falls below 1</td><td>Reabsorbed faster than water</td><td>Glucose and amino acids (fall to 0), HCO₃⁻</td></tr>
+<tr><td>Rises above 1</td><td>Reabsorbed more slowly than water, or secreted</td><td>Cl⁻; inulin (reaches 3); creatinine (just above inulin); <abbr title="para-aminohippuric acid">PAH</abbr> (far above: secreted)</td></tr>
+<tr><td>0 from the start</td><td>Never filtered</td><td>Albumin</td></tr>
+</tbody>
+</table></div>
+<figure><img src="figs/tfp.webp" width="1411" height="1315" loading="lazy" alt="TF/P along the proximal tubule. Inulin climbs only because water leaves." style="max-width:58%"><figcaption>TF/P along the proximal tubule. Inulin climbs only because water leaves.</figcaption></figure>
+<p><strong>Inulin is the water marker.</strong> Nothing happens to inulin, so its concentration rises only as water is removed.</p>
+<div class="box eq"><div class="lab">Equation</div>
+<p class="f">Fraction of filtered water reabsorbed = 1 − <span class="fr"><span>1</span><span>TF/P<sub>inulin</sub></span></span></p>
+<p class="f">Fraction of filtered x still in the tubule = <span class="fr"><span>TF/P<sub>x</sub></span><span>TF/P<sub>inulin</sub></span></span></p>
+</div>
+<div class="box solve"><div class="lab">How to solve <em>read a TF/P value</em></div>
+<p><strong>The problem gives you</strong> TF/P for inulin and for another solute at some point in the nephron.</p>
+<ol>
+<li>Water reabsorbed so far = 1 − 1 ÷ TF/P<sub>inulin</sub>.</li>
+<li>Divide the solute's TF/P by inulin's. That is the fraction of the solute left.</li>
+<li>1 minus that is the fraction reabsorbed.</li>
+</ol>
+<p class="calc"><strong>Worked.</strong> At the end of the proximal tubule TF/P<sub>inulin</sub> = 3. Water reabsorbed = 1 − ⅓ = <strong>⅔</strong>. Na⁺ has TF/P = 1, so the fraction left = 1 ÷ 3, and <strong>⅔ of the Na⁺ was reabsorbed</strong>.</p>
+<p><b class="t">Trap:</b> TF/P = 1 does not mean "not reabsorbed". It means reabsorbed exactly as fast as water.</p>
+</div>
+<p>If a graph gives unlabeled curves, find inulin first: it is the straight line that ends at 3. The line far above it is PAH. The flat line at 1 is Na⁺. The one that drops to 0 in the first quarter of the tubule is glucose or an amino acid (such as lysine).</p>
+
+</section>
+<section class="chap" id="ch06" style="--c:#b45309">
+<div class="chead"><span class="num">6</span><h2>Sodium and diuretics</h2></div>
+<p class="lead">Na⁺ is the main solute of the extracellular fluid. Water follows it, so the amount of Na⁺ in the body sets the extracellular volume, the blood volume and the blood pressure.</p>
+
+<h3 id="na-segments">The plan of the nephron</h3>
+<p>Na⁺ intake must equal Na⁺ excretion. Keep too much and the <abbr title="extracellular fluid (outside cells)">ECF</abbr> expands (edema, hypertension). Lose too much and it contracts (low blood pressure). Note the difference: the <em>amount</em> of Na⁺ sets ECF volume. The <em>concentration</em> of Na⁺ in plasma is a water problem <a class="x" href="#adh">Ch 9</a>.</p>
+<p>Na⁺ is freely filtered and more than 99% is reabsorbed. Every tubule cell works the same way on the blood side: the <strong>Na⁺/K⁺ pump</strong> (Na⁺/K⁺-ATPase) throws 3 Na⁺ out and brings 2 K⁺ in, which keeps cell Na⁺ low. Na⁺ then flows in from the lumen, downhill. Running this pump is the kidney's biggest use of energy. The segments differ only in the <strong>door</strong> Na⁺ uses on the lumen side, and each diuretic blocks one door.</p>
+<div class="tw"><table>
+<thead><tr><th>Segment</th><th>Share of filtered Na⁺</th><th>Door on the lumen side</th><th>Lumen voltage</th><th>Does water follow?</th><th>Blocked by</th></tr></thead>
+<tbody>
+<tr><td>Early proximal tubule</td><td rowspan="2">67%</td><td>Cotransport with glucose, amino acids, phosphate, lactate; Na⁺/H⁺ exchanger</td><td>−4 mV</td><td rowspan="2">Yes</td><td><span class="drug">Acetazolamide</span> (indirectly)</td></tr>
+<tr><td>Late proximal tubule</td><td>Na⁺/H⁺ exchanger working with a Cl⁻–formate exchanger; NaCl also passes between cells</td><td>+4 mV</td><td>—</td></tr>
+<tr><td>Thick ascending limb (<abbr title="thick ascending limb of the loop of Henle">TAL</abbr>)</td><td>25%</td><td>Na⁺-K⁺-2Cl⁻ cotransporter</td><td>+7 mV</td><td>No</td><td><span class="drug">Loop diuretics</span></td></tr>
+<tr><td>Early distal tubule</td><td>5%</td><td>Na⁺-Cl⁻ cotransporter</td><td>−10 mV</td><td>No</td><td><span class="drug">Thiazides</span></td></tr>
+<tr><td>Late distal tubule and collecting duct (principal cells)</td><td>3%</td><td>Na⁺ channel (<abbr title="epithelial sodium channel">ENaC</abbr>)</td><td>−50 mV</td><td>Only with <abbr title="antidiuretic hormone (vasopressin)">ADH</abbr></td><td><span class="drug">K⁺-sparing diuretics</span></td></tr>
+</tbody>
+</table></div>
+<p>A pattern in the doors: the proximal tubule, TAL and early distal tubule use carriers driven by the Na⁺ gradient. Principal cells have only channels. α-Intercalated cells have only ATP-driven pumps.</p>
+
+<h3 id="ch06-proximal-tubule-two-thirds-with-water">Proximal tubule: two-thirds, with water</h3>
+<p><strong>Early part.</strong> Na⁺ comes in with the nutrients (glucose, amino acids, phosphate, lactate, citrate) and in exchange for H⁺. The Na⁺/H⁺ exchanger is also how filtered HCO₃⁻ is reclaimed <a class="x" href="#hco3-reabs">Ch 11</a>. By the middle of the proximal tubule all the glucose and amino acids and most of the HCO₃⁻ are gone.</p>
+<figure><img src="figs/early_pt.webp" width="1800" height="1403" loading="lazy" alt="Early proximal tubule: Na⁺ enters with nutrients or in exchange for H⁺. Each one leaves on the blood side by its own carrier." style="max-width:80%"><figcaption>Early proximal tubule: Na⁺ enters with nutrients or in exchange for H⁺. Each one leaves on the blood side by its own carrier.</figcaption></figure>
+<p><strong>Late part.</strong> The fluid left is rich in Cl⁻, which stayed behind while HCO₃⁻ was taken. So here Na⁺ is reabsorbed with <strong>Cl⁻</strong>. A Cl⁻–formate exchanger works beside the Na⁺/H⁺ exchanger to bring NaCl into the cell ("for<em>mate</em> in the <em>late</em> tubule"), and Cl⁻ also diffuses between the cells. That movement of Cl⁻ makes the lumen slightly positive, which pulls Na⁺ along.</p>
+<figure><img src="figs/late_pt.webp" width="1800" height="1127" loading="lazy" alt="Late proximal tubule: Na⁺ enters with Cl⁻, through the cell and between the cells (dashed line)." style="max-width:58%"><figcaption>Late proximal tubule: Na⁺ enters with Cl⁻, through the cell and between the cells (dashed line).</figcaption></figure>
+<p><strong>Reabsorption is isosmotic.</strong> Solute moves first and water follows it by osmosis, never the other way round. Two-thirds of the Na⁺ and two-thirds of the water leave together, so the fluid stays at plasma osmolarity.</p>
+
+<h3 id="gt-balance">Glomerulotubular balance</h3>
+<p>The proximal tubule reabsorbs a constant <strong>fraction</strong> (about 67%) of whatever is filtered, not a constant amount. Filter more and it reabsorbs more. This is <strong>glomerulotubular balance</strong>. It protects the body from losing a flood of fluid whenever <abbr title="glomerular filtration rate">GFR</abbr> rises.</p>
+<p>The link is the peritubular capillary, which picks up the reabsorbed fluid. Its blood has just left the glomerulus.</p>
+<ol>
+<li>GFR rises, so a larger share of the plasma is filtered (higher filtration fraction).</li>
+<li>The blood that leaves the glomerulus has lost more water, so its protein is more concentrated.</li>
+<li>Higher protein means a higher oncotic pressure (π<sub>c</sub>) in the peritubular capillary.</li>
+<li>That stronger pull draws more fluid out of the spaces around the proximal tubule cells into the capillary. Reabsorption rises.</li>
+</ol>
+<div class="box ex"><div class="lab">Worked example</div><p>The main force taking reabsorbed fluid into the peritubular capillary is <strong>the capillary's oncotic pressure</strong>. It is not a difference in osmolarity, because proximal fluid is isosmotic.</p></div>
+<p><strong><abbr title="extracellular fluid (outside cells)">ECF</abbr> volume uses the same forces.</strong> In ECF contraction (vomiting, diarrhea, bleeding), plasma protein is concentrated and capillary pressure is low, so proximal reabsorption goes up. In ECF expansion (a saline infusion), protein is diluted and capillary pressure is high, so reabsorption goes down and more is excreted.</p>
+<figure><img src="figs/ecf_starling.webp" width="1800" height="787" loading="lazy" alt="A, volume expansion: πc falls, less is reabsorbed. B, volume contraction: πc rises, more is reabsorbed." style="max-width:82%"><figcaption><b>A,</b> volume expansion: π<sub>c</sub> falls, less is reabsorbed. <b>B,</b> volume contraction: π<sub>c</sub> rises, more is reabsorbed.</figcaption></figure>
+
+<h3 id="ch06-thick-ascending-limb-and-early-distal-tubule-salt-without-water">Thick ascending limb and early distal tubule: salt without water</h3>
+<p><strong>Thick ascending limb.</strong> The Na⁺-K⁺-2Cl⁻ cotransporter carries all four ions in. Some of the K⁺ leaks straight back into the lumen, which leaves the lumen <strong>positive</strong>. That positive voltage pushes Ca²⁺ and Mg²⁺ out between the cells <a class="x" href="#calcium">Ch 8</a>. The wall is <strong>waterproof</strong>, so salt leaves and water stays, and the fluid becomes dilute. This is the <strong>diluting segment</strong>.</p>
+<p>These later segments are <strong>load-dependent</strong>: deliver more Na⁺ and they reabsorb more. That explains diuretic strength. A drug that acts in the proximal tubule is weak, because the loop catches most of the Na⁺ it lets go. <span class="drug">Loop diuretics</span> such as <span class="drug">furosemide</span> are the strongest, because the small segments after the loop cannot catch 25% of the filtered Na⁺.</p>
+<p><strong>Early distal tubule.</strong> The Na⁺-Cl⁻ cotransporter is the door, and <span class="drug">thiazides</span> block it. It is also waterproof, so it is called the cortical diluting segment.</p>
+<div class="pair">
+<figure><img src="figs/tal.webp" width="1800" height="1100" loading="lazy" alt="Thick ascending limb. Furosemide blocks the cotransporter."><figcaption>Thick ascending limb. Furosemide blocks the cotransporter.</figcaption></figure>
+<figure><img src="figs/early_dt.webp" width="1800" height="1100" loading="lazy" alt="Early distal tubule. Thiazides block the cotransporter."><figcaption>Early distal tubule. Thiazides block the cotransporter.</figcaption></figure>
+</div>
+
+<h3 id="aldosterone">Late distal tubule and collecting duct: the final adjustment</h3>
+<p>Only 3% of the Na⁺ is handled here, but it is the last word, so hormones control it. Two cell types sit side by side.</p>
+<p><strong>Principal cells</strong> reabsorb Na⁺ through a channel, <strong><abbr title="epithelial sodium channel">ENaC</abbr></strong>. Positive charge leaves the lumen, so the lumen becomes strongly negative (−50 mV). That negative lumen is what drives K⁺ out of the cell into the urine <a class="x" href="#k-secretion">Ch 7</a>. These cells reabsorb water only when <abbr title="antidiuretic hormone (vasopressin)">ADH</abbr> is present <a class="x" href="#adh">Ch 9</a>.</p>
+<p><strong>α-Intercalated cells</strong> secrete H⁺ <a class="x" href="#new-hco3">Ch 11</a> and reabsorb K⁺.</p>
+<figure><img src="figs/principal_na.webp" width="1800" height="1100" loading="lazy" alt="Principal cell. K⁺-sparing diuretics block Na⁺ entry." style="max-width:58%"><figcaption>Principal cell. K⁺-sparing diuretics block Na⁺ entry.</figcaption></figure>
+<p><strong>Aldosterone</strong> is a steroid from the adrenal cortex (zona glomerulosa). It enters the principal cell, binds its receptor and switches on genes for more ENaC and more Na⁺/K⁺ pumps. The result is <strong>more Na⁺ reabsorbed, more K⁺ secreted and more H⁺ secreted</strong>.</p>
+<p>Two kinds of drug oppose it. <span class="drug">Spironolactone</span> blocks the aldosterone receptor. <span class="drug">Amiloride</span> and <span class="drug">triamterene</span> block ENaC itself. Both are weak diuretics, and both keep K⁺ in the body.</p>
+
+<h3 id="ecf-control">How the body controls ECF volume</h3>
+<p>The kidney responds to the <strong>effective arterial blood volume</strong>, the part of the <abbr title="extracellular fluid (outside cells)">ECF</abbr> that is in the arteries and perfusing tissues. When it falls, the juxtaglomerular cells release <strong>renin</strong>. Three things trigger renin: low pressure in the afferent arteriole, sympathetic nerves acting on β₁ receptors, and less NaCl reaching the macula densa.</p>
+<p>Renin cuts angiotensinogen (from the liver) into angiotensin I. Angiotensin-converting enzyme (<abbr title="angiotensin-converting enzyme">ACE</abbr>), mainly in the lungs, turns that into <strong>angiotensin II</strong>. Angiotensin II constricts arterioles, stimulates the Na⁺/H⁺ exchanger in the proximal tubule, and releases aldosterone. The whole chain is the renin–angiotensin–aldosterone system.</p>
+<p><strong><abbr title="atrial natriuretic peptide">ANP</abbr></strong> (atrial natriuretic peptide) works the other way. Stretched atria release it when volume is high.</p>
+<div class="tw"><table>
+<thead><tr><th>Signal</th><th>Too much Na⁺ (volume high)</th><th>Too little Na⁺ (volume low)</th></tr></thead>
+<tbody>
+<tr><td>Sympathetic nerves</td><td><span class="down">↓</span>. Afferent arteriole dilates, <abbr title="glomerular filtration rate">GFR</abbr> <span class="up">↑</span>, proximal reabsorption <span class="down">↓</span></td><td><span class="up">↑</span>. Afferent constricts, GFR <span class="down">↓</span>, proximal reabsorption <span class="up">↑</span></td></tr>
+<tr><td>Renin, angiotensin II, aldosterone</td><td><span class="down">↓</span>. Less reabsorbed in proximal tubule and collecting duct</td><td><span class="up">↑</span>. More reabsorbed in both</td></tr>
+<tr><td>ANP</td><td><span class="up">↑</span>. Afferent dilates, efferent constricts (GFR <span class="up">↑</span>). Collecting duct reabsorbs less</td><td><span class="down">↓</span></td></tr>
+<tr><td>Peritubular oncotic pressure</td><td><span class="down">↓</span>. Proximal reabsorption <span class="down">↓</span></td><td><span class="up">↑</span>. Proximal reabsorption <span class="up">↑</span></td></tr>
+<tr><td>Result</td><td>Na⁺ excretion <span class="up">↑</span></td><td>Na⁺ excretion <span class="down">↓</span></td></tr>
+</tbody>
+</table></div>
+
+<h3 id="diuretics">Diuretics in one table</h3>
+<div class="tw"><table>
+<thead><tr><th>Class and drugs</th><th>Where and what it blocks</th><th>Na⁺ lost</th><th>Plasma K⁺</th><th>Urine Ca²⁺</th><th>Acid–base</th></tr></thead>
+<tbody>
+<tr><td><span class="drug">Carbonic anhydrase inhibitor</span>: acetazolamide</td><td>Proximal tubule. Blocks HCO₃⁻ reabsorption, so NaHCO₃ is lost</td><td>Small</td><td><span class="down">↓</span></td><td>—</td><td>Metabolic acidosis</td></tr>
+<tr><td><span class="drug">Osmotic</span>: mannitol (and glucose in diabetes)</td><td>Proximal tubule. A solute that is not reabsorbed holds water in the tubule</td><td>Small, mostly water</td><td><span class="down">↓</span></td><td>—</td><td>—</td></tr>
+<tr><td><span class="drug">Loop</span>: furosemide, bumetanide, ethacrynic acid</td><td><abbr title="thick ascending limb of the loop of Henle">TAL</abbr>. Na⁺-K⁺-2Cl⁻ cotransporter</td><td>Up to 25%</td><td><span class="down">↓</span></td><td><span class="up">↑</span></td><td>Metabolic alkalosis</td></tr>
+<tr><td><span class="drug">Thiazide</span>: hydrochlorothiazide, chlorothiazide, metolazone</td><td>Early distal tubule. Na⁺-Cl⁻ cotransporter</td><td>About 5%</td><td><span class="down">↓</span></td><td><span class="down">↓</span></td><td>Metabolic alkalosis</td></tr>
+<tr><td><span class="drug">K⁺-sparing</span>: spironolactone; amiloride, triamterene</td><td>Principal cells. Aldosterone receptor; <abbr title="epithelial sodium channel">ENaC</abbr></td><td>1–3%</td><td><span class="up">↑</span></td><td>—</td><td>Metabolic acidosis</td></tr>
+</tbody>
+</table></div>
+<p>You do not need to memorize the last three columns. Three rules give them.</p>
+<ol>
+<li><strong>K⁺.</strong> Any diuretic that acts <em>before</em> the principal cells sends them more Na⁺ and more flow, and they secrete more K⁺. A diuretic that acts <em>on</em> the principal cells stops K⁺ secretion. <a class="x" href="#k-secretion">Why</a></li>
+<li><strong>Ca²⁺.</strong> Loop diuretics remove the positive voltage that drives Ca²⁺ reabsorption, so urine Ca²⁺ rises. Thiazides do the opposite. <a class="x" href="#calcium">Why</a></li>
+<li><strong>Acid–base.</strong> Loop and thiazide diuretics shrink the <abbr title="extracellular fluid (outside cells)">ECF</abbr>, which causes an alkalosis. Acetazolamide dumps HCO₃⁻. K⁺-sparing drugs block H⁺ secretion along with K⁺ secretion. <a class="x" href="#contraction-alk">Why</a></li>
+</ol>
+<p><strong>Uses.</strong> Furosemide: moderate to severe edema (lung, heart, liver) and to lower a high blood Ca²⁺. Thiazides: mild hypertension and edema, and to prevent calcium kidney stones. Mannitol: brain swelling. Spironolactone: added to another diuretic to hold on to K⁺.</p>
+<div class="box trap"><div class="lab">Don't confuse</div><p>Spironolactone blocks the <strong>receptor</strong>. Amiloride and triamterene block the <strong>channel</strong>. Glomerulotubular balance keeps the <strong>fraction</strong> reabsorbed constant, not the amount.</p></div>
+
+</section>
+<section class="chap" id="ch07" style="--c:#b45309">
+<div class="chead"><span class="num">7</span><h2>Potassium</h2></div>
+<p class="lead">Plasma K⁺ depends on two things: how K⁺ is split between the cells and the fluid outside them, and whether the kidney excretes exactly what is eaten.</p>
+
+<h3 id="ch07-where-k-is-and-why-the-number-matters">Where K⁺ is, and why the number matters</h3>
+<p>98% of the body's K⁺ is inside cells, at about 150 mEq/L. Only 2% is outside, at <strong>3.5–5 mEq/L</strong>. Because nearly all of it is inside, a small shift in or out changes plasma K⁺ a lot.</p>
+<p>The K⁺ gradient sets the resting voltage of nerve and muscle. So both high K⁺ (<strong>hyperkalemia</strong>) and low K⁺ (<strong>hypokalemia</strong>) cause muscle weakness and abnormal heart rhythms.</p>
+<div class="tw"><table>
+<thead><tr><th>Plasma K⁺</th><th>What happens</th></tr></thead>
+<tbody>
+<tr><td>Below 3.5</td><td>Weakness. ECG: flat T wave, then a U wave. The kidney also stops responding to <abbr title="antidiuretic hormone (vasopressin)">ADH</abbr> <a class="x" href="#siadh-di">Ch 9</a>.</td></tr>
+<tr><td>6</td><td>Tingling, weakness. ECG: tall peaked T wave.</td></tr>
+<tr><td>8</td><td>Severe arrhythmia. ECG: long PR, wide QRS.</td></tr>
+<tr><td>10</td><td>Ventricular fibrillation, cardiac arrest.</td></tr>
+</tbody>
+</table></div>
+<p>Hyperkalemia most often comes from poor kidney function or from tissue injury.</p>
+
+<h3 id="k-shifts">Internal balance: K⁺ moving in and out of cells</h3>
+<p>One rule covers most of it: <strong>anything that speeds up the Na⁺/K⁺ pump moves K⁺ into cells and lowers plasma K⁺.</strong></p>
+<figure><img src="figs/k_internal.webp" width="1329" height="1253" loading="lazy" alt="Arrows pointing in lower plasma K⁺. Arrows pointing out raise it." style="max-width:44%"><figcaption>Arrows pointing in lower plasma K⁺. Arrows pointing out raise it.</figcaption></figure>
+<div class="tw"><table>
+<thead><tr><th>Factor</th><th>K⁺ into cells (plasma K⁺ <span class="down">↓</span>)</th><th>K⁺ out of cells (plasma K⁺ <span class="up">↑</span>)</th></tr></thead>
+<tbody>
+<tr><td>Insulin</td><td>Insulin given</td><td>Lack of insulin (diabetes, ketoacidosis)</td></tr>
+<tr><td>β₂ receptor</td><td>β₂-agonists</td><td>β-blockers</td></tr>
+<tr><td>α₁ receptor</td><td>α₁-blockers</td><td>α₁-agonists</td></tr>
+<tr><td>Acid–base</td><td>Alkalosis</td><td>Acidosis</td></tr>
+<tr><td>Osmolarity</td><td>Low (hyposmolarity)</td><td>High (hyperosmolarity)</td></tr>
+<tr><td>Cells</td><td>Rapid building of new cells</td><td>Cell lysis; exercise; Na⁺/K⁺ pump inhibitors (<span class="drug">digoxin</span>)</td></tr>
+</tbody>
+</table></div>
+<p><strong>Insulin</strong> speeds up the pump. This is how the K⁺ of a meal is put away. It does not carry K⁺ in with glucose.</p>
+<p><strong>Acid–base.</strong> Cells soak up extra H⁺, and each H⁺ that enters trades places with a K⁺ that leaves. So acidosis raises plasma K⁺ and alkalosis lowers it. The shift is small in respiratory disorders and in acidosis from organic acids (lactic acid, ketoacids), because there the acid's own anion enters the cell with the H⁺ and no K⁺ needs to leave.</p>
+<p><strong>Hyperosmolarity</strong> pulls water out of cells. The K⁺ left inside is more concentrated, so it diffuses out.</p>
+<p><strong>Cell lysis</strong> spills cell K⁺ into the blood: hemolysis, muscle breakdown (rhabdomyolysis), burns, or tumor cells killed by chemotherapy. <strong>Exercise</strong> releases K⁺ from working muscle. The rise is small and reverses with rest, and the K⁺ dilates local arterioles, which brings the muscle more blood. In a patient whose kidneys have failed, exercise can cause real hyperkalemia.</p>
+<p><strong>Rapid cell building</strong> uses K⁺ up. When B12 or folate deficiency is treated, the marrow makes cells so fast that plasma K⁺ falls.</p>
+<div class="box solve"><div class="lab">How to solve <em>which way does plasma K⁺ go?</em></div>
+<p><strong>The problem gives you</strong> a list of drugs and conditions.</p>
+<ol>
+<li>Take each item in turn and mark it "in" or "out" from the table.</li>
+<li>Add any effect on the kidney (a loop or thiazide diuretic loses K⁺; a K⁺-sparing drug keeps it).</li>
+<li>Add them up.</li>
+</ol>
+<p><strong>Worked.</strong> A woman takes a β₂-agonist for asthma, an α₁-blocker and a loop diuretic. Her plasma osmolarity is 270 (low). She is weak, with an abnormal rhythm. β₂-agonist: in. α₁-blocker: in. Hyposmolarity: in. Loop diuretic: K⁺ lost in urine. All four point the same way: <strong>hypokalemia</strong>.</p>
+</div>
+<div class="box ex"><div class="lab">Worked example</div>
+<p><strong>Missed dialysis, K⁺ 7.</strong> The kidneys cannot excrete it, so the K⁺ has to be pushed into cells. Give <strong>insulin</strong> (with dextrose only to prevent low blood sugar) or a <strong>β₂-agonist</strong>. Both work by speeding the Na⁺/K⁺ pump. Hypertonic saline, a β-blocker or spironolactone would make it worse.</p>
+<p><strong>Lymphoma just treated, uric acid rising fast.</strong> This is tumor lysis. <strong>Hyperkalemia</strong> is what kills first.</p>
+</div>
+
+<h3 id="ch07-external-balance-k-along-the-nephron">External balance: K⁺ along the nephron</h3>
+<p>Urine K⁺ must match intake, which varies widely. So K⁺ excretion ranges from 1% to 110% of the filtered load.</p>
+<div class="tw"><table>
+<thead><tr><th>Segment</th><th>What it does</th></tr></thead>
+<tbody>
+<tr><td>Glomerulus</td><td>Freely filtered (K⁺ is not bound to protein)</td></tr>
+<tr><td>Proximal tubule</td><td>Reabsorbs 67%. Constant.</td></tr>
+<tr><td>Thick ascending limb</td><td>Reabsorbs 20% on the Na⁺-K⁺-2Cl⁻ cotransporter. Constant.</td></tr>
+<tr><td>Late distal tubule and collecting duct</td><td>The adjustable part. <strong>α-Intercalated cells reabsorb</strong> K⁺. <strong>Principal cells secrete</strong> it.</td></tr>
+</tbody>
+</table></div>
+<p><strong>α-Intercalated cells</strong> have an H⁺–K⁺ pump (an ATPase) on the lumen side. It pumps H⁺ out into the urine and K⁺ in. A low-K⁺ diet turns it up, so almost no K⁺ is lost.</p>
+
+<h3 id="k-secretion">Principal cells: how K⁺ is secreted</h3>
+<ol>
+<li>The Na⁺/K⁺ pump on the blood side loads the cell with K⁺.</li>
+<li>Na⁺ enters from the lumen through <abbr title="epithelial sodium channel">ENaC</abbr>. Positive charge has left the lumen, so the lumen is very negative (about −50 mV).</li>
+<li>K⁺ leaves through K⁺ channels on the lumen side. Two forces push it: the high K⁺ inside the cell, and the negative lumen pulling on a positive ion.</li>
+</ol>
+<div class="pair">
+<figure><img src="figs/k_principal.webp" width="1800" height="1009" loading="lazy" alt="Principal cell: K⁺ leaves through a channel."><figcaption>Principal cell: K⁺ leaves through a channel.</figcaption></figure>
+<figure><img src="figs/k_alpha_ic.webp" width="1800" height="1009" loading="lazy" alt="α-Intercalated cell: the H⁺–K⁺ pump takes K⁺ back."><figcaption>α-Intercalated cell: the H⁺–K⁺ pump takes K⁺ back.</figcaption></figure>
+</div>
+<p>So secretion rises with anything that <strong>raises cell K⁺, lowers lumen K⁺, or makes the lumen more negative</strong>. Every factor below is one of those three.</p>
+<div class="tw"><table>
+<thead><tr><th>Factor</th><th>K⁺ secretion</th><th>Why</th></tr></thead>
+<tbody>
+<tr><td>High-K⁺ diet</td><td><span class="up">↑</span></td><td>Cell K⁺ rises. Diet is the biggest factor.</td></tr>
+<tr><td>Aldosterone</td><td><span class="up">↑</span></td><td>More Na⁺ channels, more pumps, more K⁺ channels</td></tr>
+<tr><td>More Na⁺ arriving (loop or thiazide diuretic, high-Na⁺ diet)</td><td><span class="up">↑</span></td><td>More Na⁺ enters, so more K⁺ is pumped in and the lumen is more negative</td></tr>
+<tr><td>Fast urine flow (any diuretic acting upstream)</td><td><span class="up">↑</span></td><td>Secreted K⁺ is washed away, so lumen K⁺ stays low</td></tr>
+<tr><td>Alkalosis</td><td><span class="up">↑</span></td><td>H⁺ leaves the cell and K⁺ enters it, so cell K⁺ rises</td></tr>
+<tr><td>Anions the tubule cannot reabsorb (sulfate, HCO₃⁻)</td><td><span class="up">↑</span></td><td>They make the lumen more negative</td></tr>
+<tr><td>Low Mg²⁺</td><td><span class="up">↑</span></td><td>Mg²⁺ normally holds the K⁺ channel shut</td></tr>
+<tr><td>Acidosis; low-K⁺ diet</td><td><span class="down">↓</span></td><td>Cell K⁺ falls</td></tr>
+<tr><td>K⁺-sparing diuretics</td><td><span class="down">↓</span></td><td>No Na⁺ entry (amiloride, triamterene) or no aldosterone effect (spironolactone)</td></tr>
+</tbody>
+</table></div>
+<p>Notice that acid–base hits plasma K⁺ twice in the same direction. Acidosis shifts K⁺ out of cells <em>and</em> slows its secretion. Alkalosis shifts it in <em>and</em> speeds its secretion.</p>
+<p><span class="drug">Loop diuretics</span> lose the most K⁺, because they also block the K⁺ reabsorbed on the Na⁺-K⁺-2Cl⁻ cotransporter. K⁺-sparing drugs are often paired with a loop or thiazide diuretic to cancel the K⁺ loss.</p>
+<div class="box ex"><div class="lab">Worked example</div>
+<p><strong>Hypertension, muscle weakness, metabolic alkalosis, adrenal tumor.</strong> Too much aldosterone: Na⁺ is kept, K⁺ and H⁺ are lost. Expect <strong>hypokalemia</strong>.</p>
+<p><strong>Choosing a diuretic.</strong> A patient already on an <span class="drug"><abbr title="angiotensin-converting enzyme">ACE</abbr> inhibitor</span> and a β₁-blocker makes less aldosterone (both drugs lower it), so K⁺ runs high. <strong>Avoid spironolactone.</strong> A patient with edema and a low K⁺ should get <strong>amiloride</strong>, because every other class loses more K⁺.</p>
+</div>
+<div class="box trap"><div class="lab">Don't confuse</div><p>β-<strong>blockers</strong> raise K⁺. α₁-<strong>blockers</strong> lower it. In the collecting duct, <strong>principal</strong> cells secrete K⁺ and <strong>α-intercalated</strong> cells reabsorb it.</p></div>
+
+</section>
+<section class="chap" id="ch08" style="--c:#b45309">
+<div class="chead"><span class="num">8</span><h2>Phosphate, calcium and magnesium</h2></div>
+<p class="lead">Most of the body's phosphate, calcium and magnesium is stored in bone. The kidney sets their plasma levels by how much of the filtered amount it takes back.</p>
+<div class="tw"><table>
+<thead><tr><th></th><th>Phosphate</th><th>Ca²⁺</th><th>Mg²⁺</th></tr></thead>
+<tbody>
+<tr><td>Stored in bone</td><td>85%</td><td>99%</td><td>60%</td></tr>
+<tr><td>Bound to plasma protein (not filtered)</td><td>10%</td><td>40%</td><td>20%</td></tr>
+<tr><td>Proximal tubule reabsorbs</td><td><strong>85%</strong></td><td>67%</td><td>30%</td></tr>
+<tr><td>Thick ascending limb reabsorbs</td><td>0</td><td>25%</td><td><strong>60%</strong></td></tr>
+<tr><td>Distal tubule reabsorbs</td><td>0</td><td>8% <strong>(the controlled part)</strong></td><td>5%</td></tr>
+<tr><td>Excreted</td><td>15%</td><td>Under 1%</td><td>5%</td></tr>
+</tbody>
+</table></div>
+<div class="trio">
+<figure><img src="figs/phos_nephron.webp" width="1137" height="2002" loading="lazy" alt=""></figure>
+<figure><img src="figs/ca_nephron.webp" width="1219" height="1989" loading="lazy" alt=""></figure>
+<figure><img src="figs/mg_nephron.webp" width="1142" height="1989" loading="lazy" alt=""></figure>
+</div>
+
+<h3 id="phosphate">Phosphate</h3>
+<p>Phosphate builds bone, is part of DNA and ATP, and buffers acid in the urine.</p>
+<p>It is reabsorbed only in the proximal tubule, by <strong>Na⁺–phosphate cotransporters</strong> on the lumen side. They saturate, so there is a transport maximum, as with glucose <a class="x" href="#glucose-tm">Ch 5</a>. Phosphate that is not taken back there is never taken back. About 15% is always left in the urine, and this leftover has a job: it carries H⁺ out of the body as <strong>titratable acid</strong> <a class="x" href="#new-hco3">Ch 11</a>. That is why phosphate is not 100% reabsorbed.</p>
+<p><strong><abbr title="parathyroid hormone">PTH</abbr></strong> (parathyroid hormone) binds a receptor on the blood side of the proximal cell. The signal runs through a G protein and adenylyl cyclase to make <strong><abbr title="cyclic AMP, a second messenger">cAMP</abbr></strong>, and cAMP shuts down the Na⁺–phosphate cotransporters. More phosphate is lost in the urine (<strong>phosphaturia</strong>). Some of the cAMP leaks into the urine too.</p>
+<div class="box ex"><div class="lab">Worked example</div>
+<p><strong>Urine has high phosphate and high cAMP.</strong> The receptor being stimulated is the <strong>PTH receptor</strong>. <abbr title="antidiuretic hormone (vasopressin)">ADH</abbr> also works through cAMP, but it does not cause phosphaturia.</p>
+<p><strong>Pseudohypoparathyroidism.</strong> The receptor, G protein or cyclase is broken. PTH is high, yet urine phosphate and urine cAMP stay low.</p>
+</div>
+
+<h3 id="calcium">Calcium</h3>
+<p>In plasma, 40% of Ca²⁺ is bound to protein, 10% is bound to small anions, and 50% is free (ionized). Only the 60% not on protein is filtered, so filtered load = <abbr title="glomerular filtration rate">GFR</abbr> × plasma Ca²⁺ × 0.6.</p>
+<p><strong>pH changes the free Ca²⁺, not the total.</strong> Albumin has sites that hold either H⁺ or Ca²⁺. In acidemia, H⁺ takes the sites and pushes Ca²⁺ off, so free Ca²⁺ rises. In alkalemia, H⁺ leaves and more Ca²⁺ is bound, so free Ca²⁺ falls. Low free Ca²⁺ makes nerves fire too easily: tingling, numbness around the mouth, muscle spasm (tetany). A person hyperventilating in a panic attack gets exactly this.</p>
+<p>Ca²⁺ takes a different route in each segment. Early on it goes <em>between</em> the cells. In the distal tubule it must go <em>through</em> them.</p>
+<div class="tw"><table>
+<thead><tr><th>Segment</th><th>Route and driving force</th><th>What changes it</th></tr></thead>
+<tbody>
+<tr><td>Proximal tubule (67%)</td><td>Between cells, carried along with Na⁺ and water</td><td>Follows Na⁺</td></tr>
+<tr><td>Thick ascending limb (25%)</td><td>Between cells, pushed by the <strong>positive lumen voltage</strong></td><td><span class="drug">Loop diuretics</span> remove the voltage</td></tr>
+<tr><td>Distal tubule (8%)</td><td>Through the cell only (the lumen is negative here). In by a Ca²⁺ channel, out by a Na⁺/Ca²⁺ exchanger and a Ca²⁺ pump</td><td><strong><abbr title="parathyroid hormone">PTH</abbr></strong> opens the channel. <span class="drug">Thiazides</span> speed the exchanger.</td></tr>
+</tbody>
+</table></div>
+<figure><img src="figs/tal_mg.webp" width="1800" height="1521" loading="lazy" alt="Thick ascending limb. K⁺ leaking back makes the lumen positive, and that voltage pushes Ca²⁺ and Mg²⁺ between the cells. Furosemide removes the voltage." style="max-width:62%"><figcaption>Thick ascending limb. K⁺ leaking back makes the lumen positive, and that voltage pushes Ca²⁺ and Mg²⁺ between the cells. Furosemide removes the voltage.</figcaption></figure>
+<div class="box solve"><div class="lab">How to solve <em>what does this diuretic do to urine Ca²⁺?</em></div>
+<p><strong>Loop diuretic.</strong></p>
+<ol>
+<li>The Na⁺-K⁺-2Cl⁻ cotransporter is blocked.</li>
+<li>No K⁺ leaks back, so the positive voltage disappears.</li>
+<li>Nothing pushes Ca²⁺ (or Mg²⁺) between the cells.</li>
+<li>The distal tubule cannot rescue it, because it is busy with the extra Na⁺ that arrived as well.</li>
+<li>Urine Ca²⁺ <strong>rises</strong>. Used to treat a high blood Ca²⁺.</li>
+</ol>
+<p><strong>Thiazide.</strong></p>
+<ol>
+<li>The Na⁺-Cl⁻ cotransporter is blocked, so Na⁺ inside the distal cell falls.</li>
+<li>The Na⁺/Ca²⁺ exchanger on the blood side runs faster (a steeper Na⁺ gradient), pulling Ca²⁺ out of the cell.</li>
+<li>More Ca²⁺ enters from the lumen to replace it.</li>
+<li>Urine Ca²⁺ <strong>falls</strong>. Used to prevent calcium kidney stones. Over years it can raise blood Ca²⁺.</li>
+</ol>
+</div>
+<p>A high blood Ca²⁺ acts like a loop diuretic on its own. A Ca²⁺ sensor on the thick ascending limb switches off the cotransporter, the voltage falls, and more Ca²⁺ and Mg²⁺ are lost.</p>
+<p><strong>PTH on the kidney: lose phosphate, keep calcium.</strong> It blocks phosphate reabsorption in the proximal tubule and raises Ca²⁺ reabsorption in the distal tubule. It also stimulates the kidney to make active vitamin D.</p>
+<div class="box ex"><div class="lab">Worked example</div>
+<p><strong>Parathyroids removed by accident during thyroid surgery.</strong> No PTH: Ca²⁺ is lost in urine and phosphate is kept. Low Ca²⁺ and high phosphate.</p>
+<p><strong>End-stage kidney failure.</strong> Also low Ca²⁺ and high phosphate, for different reasons. Ca²⁺ is low because the kidney no longer makes active vitamin D, so the gut absorbs less. Phosphate is high because the kidney cannot excrete it. Both keep PTH high (<strong>secondary hyperparathyroidism</strong>), and PTH dissolves bone. The high phosphate is treated with binders taken by mouth (<span class="drug">calcium carbonate</span>, <span class="drug">calcium acetate</span>, <span class="drug">sevelamer</span>, <span class="drug">lanthanum</span>).</p>
+</div>
+
+<h3 id="magnesium">Magnesium</h3>
+<p>Mg²⁺ is a helper for hundreds of enzymes, including all that use ATP. It is needed for <abbr title="parathyroid hormone">PTH</abbr> release, so low Mg²⁺ causes low PTH and then low Ca²⁺. It also holds the kidney's K⁺ channels shut, so low Mg²⁺ wastes K⁺ <a class="x" href="#k-secretion">Ch 7</a>.</p>
+<p>Its main site is the thick ascending limb, where the same positive voltage pushes it between the cells (through tight-junction proteins called claudins). So <span class="drug">loop diuretics</span> cause large Mg²⁺ losses and <strong>hypomagnesemia</strong>: nerve symptoms, tetany, arrhythmia.</p>
+<div class="box trap"><div class="lab">Don't confuse</div><p>Loop diuretics <strong>raise</strong> urine Ca²⁺. Thiazides <strong>lower</strong> it. PTH lowers urine Ca²⁺ but raises urine phosphate. Acidemia raises free Ca²⁺ and alkalemia lowers it.</p></div>
+
+</section>
+<section class="chap" id="ch09" style="--c:#0e7490">
+<div class="chead"><span class="num">9</span><h2>Water, ADH and urine concentration</h2></div>
+<p class="lead">The kidney holds plasma osmolarity near 290 mOsm/L by changing how much water it keeps. <abbr title="antidiuretic hormone (vasopressin)">ADH</abbr> is the signal. The salty medulla supplies the pull.</p>
+
+<h3 id="adh">ADH: the signal</h3>
+<p><strong>Too little water.</strong> Plasma osmolarity rises. <strong>Osmoreceptors</strong> in the anterior hypothalamus sense it and do two things: release <strong><abbr title="antidiuretic hormone (vasopressin)">ADH</abbr></strong> (antidiuretic hormone) and cause thirst. ADH makes the late distal tubule and collecting duct let water through. Water is reabsorbed, the urine becomes small in volume and concentrated, and plasma osmolarity comes back down.</p>
+<p><strong>Too much water.</strong> The reverse. ADH and thirst switch off, the ducts stay waterproof, and a large volume of dilute urine carries the extra water out.</p>
+<p>ADH is also called <strong>vasopressin</strong>. Neurons of the hypothalamus make it (mainly the supraoptic nucleus; the paraventricular nucleus mainly makes oxytocin). It travels down their axons and is released from the <strong>posterior pituitary</strong>.</p>
+<div class="tw"><table>
+<thead><tr><th>Trigger</th><th>How sensitive</th><th>How strong</th></tr></thead>
+<tbody>
+<tr><td>Rise in plasma osmolarity</td><td>Very: a 1% change is enough. ADH starts near 280 mOsm/L and climbs in a straight line.</td><td>Moderate</td></tr>
+<tr><td>Fall in blood volume or pressure</td><td>Poor: needs about a 10% loss</td><td>Very strong once it starts</td></tr>
+</tbody>
+</table></div>
+<figure><img src="figs/adh_thirst.webp" width="1800" height="1586" loading="lazy" alt="ADH release begins at point a. Thirst begins at point b, a little higher. ADH handles small changes and thirst is the backup." style="max-width:50%"><figcaption>ADH release begins at point a. Thirst begins at point b, a little higher. ADH handles small changes and thirst is the backup.</figcaption></figure>
+<p>ADH has two receptors. <strong>V2</strong> on principal cells keeps water. <strong>V1</strong> on blood vessels constricts them. Alcohol blocks ADH release, which is why it causes a large dilute urine.</p>
+<div class="box ex"><div class="lab">Worked example</div><p>Drinking 1 L of water raises urine flow about fifteen-fold within an hour. Drinking 1 L of salt solution barely changes it. Water dilutes the plasma, so ADH shuts off. Salt water does not change osmolarity, so ADH stays on.</p></div>
+
+<h3 id="ch09-how-adh-opens-the-collecting-duct">How ADH opens the collecting duct</h3>
+<p><abbr title="antidiuretic hormone (vasopressin)">ADH</abbr> binds the V2 receptor on the blood side of the principal cell. The signal runs through a G protein and adenylyl cyclase to <strong><abbr title="cyclic AMP, a second messenger">cAMP</abbr></strong>, then protein kinase A. Vesicles holding water channels, <strong>aquaporin 2 (<abbr title="aquaporin 2, the water channel ADH inserts">AQP2</abbr>)</strong>, are inserted into the lumen membrane. Water now crosses the cell and leaves on the blood side through other aquaporins that are always there.</p>
+<figure><img src="figs/adh_cell.webp" width="1316" height="1254" loading="lazy" alt="Steps 1 to 6: receptor, G protein, cAMP, kinase, then AQP2 channels move to the lumen membrane." style="max-width:48%"><figcaption>Steps 1 to 6: receptor, G protein, cAMP, kinase, then AQP2 channels move to the lumen membrane.</figcaption></figure>
+<p>Water is never pumped. It only moves by osmosis toward the saltier side. ADH just opens the door, and the medulla must be salty for water to leave.</p>
+<p>ADH does three things in the kidney: opens water channels (the main one), strengthens the Na⁺-K⁺-2Cl⁻ cotransporter of the thick ascending limb, and switches on urea transport in the inner medullary collecting duct.</p>
+<div class="box ex"><div class="lab">Worked example</div><p>A dehydrated runner has very high ADH. Where is most water reabsorbed? Still the <strong>proximal tubule</strong>, which takes 67% with or without ADH. ADH only decides what happens to part of the remaining third.</p></div>
+
+<h3 id="gradient">The salty medulla: countercurrent multiplication</h3>
+<p>The fluid around the tubules is 300 mOsm/L in the cortex and rises steadily to <strong>1,200 at the tip of the papilla</strong>. Two things build this gradient: NaCl from the loop of Henle, and urea from the collecting duct.</p>
+<p>The loop works because its two limbs are opposites.</p>
+<div class="tw"><table>
+<thead><tr><th>Limb</th><th>Water</th><th>Salt</th><th>So the fluid inside…</th></tr></thead>
+<tbody>
+<tr><td>Descending</td><td>Leaves freely</td><td>Cannot leave</td><td>gets concentrated on the way down (to 1,200)</td></tr>
+<tr><td>Ascending</td><td>Cannot leave</td><td>Pumped out</td><td>gets diluted on the way up (to 100)</td></tr>
+</tbody>
+</table></div>
+<p>Start with everything at 300 and repeat two steps.</p>
+<ol>
+<li><strong>Single effect.</strong> The thick ascending limb pumps NaCl into the surrounding fluid. Water cannot follow. The pump can hold a difference of 200: ascending fluid falls to 200 and the surroundings rise to 400. Water then leaves the descending limb until it is 400 too.</li>
+<li><strong>Flow.</strong> New 300 fluid enters from the proximal tubule and pushes the 400 fluid down toward the bend.</li>
+</ol>
+<figure><img src="figs/countercurrent.webp" width="1800" height="1245" loading="lazy" alt="Each round of &quot;single effect, then flow&quot; traps more salt at the bottom."><figcaption>Each round of "single effect, then flow" traps more salt at the bottom.</figcaption></figure>
+<p>Each repeat moves concentrated fluid deeper, where the pump adds another 200 on top. A side-to-side difference of 200 is multiplied into a top-to-bottom gradient of 300 to 1,200. In the end the descending limb and surroundings read 300, 700, 1,000, 1,200 going down. The ascending limb is 200 lower at every level and delivers fluid at 100.</p>
+<p>The gradient is bigger with longer loops, a stronger pump (<abbr title="antidiuretic hormone (vasopressin)">ADH</abbr>) and more urea. It is smaller when flow through the loop or the vasa recta is fast, because the salt is washed away. <span class="drug">Loop diuretics</span> block the pump, so the kidney can then make neither concentrated nor fully dilute urine.</p>
+
+<h3 id="urea">Urea</h3>
+<p>Urea is the waste product of protein. It is freely filtered and after that moves only passively. So <strong>urea follows water</strong>: wherever water is reabsorbed, the urea left behind gets more concentrated and diffuses out after it.</p>
+<div class="tw"><table>
+<thead><tr><th>Segment</th><th>What happens to urea</th><th>Filtered urea still in the tubule</th></tr></thead>
+<tbody>
+<tr><td>Proximal tubule</td><td>Half is reabsorbed, following water</td><td>50%</td></tr>
+<tr><td>Thin descending limb</td><td>Urea is <em>secreted</em> into it from the urea-rich medulla</td><td>110% at the bend</td></tr>
+<tr><td>Thick ascending limb, distal tubule, cortical collecting duct</td><td>No urea crosses. With <abbr title="antidiuretic hormone (vasopressin)">ADH</abbr> water leaves, so urea concentration climbs</td><td>110%</td></tr>
+<tr><td>Inner medullary collecting duct</td><td>ADH switches on a urea transporter (UT1). Urea diffuses out into the medulla</td><td>40% is excreted</td></tr>
+</tbody>
+</table></div>
+<figure><img src="figs/urea_nephron.webp" width="1478" height="1990" loading="lazy" alt="Urea along the nephron when ADH is present." style="max-width:55%"><figcaption>Urea along the nephron when ADH is present.</figcaption></figure>
+<p>The urea that leaves the collecting duct makes up about half the osmolarity of the inner medulla. Some of it re-enters the thin limb and goes round again. This is <strong>urea recycling</strong>. Without ADH, less urea is reabsorbed and more is excreted. On a low-protein diet there is less urea, so the kidney concentrates urine less well.</p>
+<div class="box ex"><div class="lab">Worked example</div><p>In dehydration, ADH sends a lot of water into the medulla. What keeps that water from washing out the gradient? <strong>The urea transporter</strong>: urea follows the water in.</p></div>
+<div class="box solve"><div class="lab">How to solve <em>high BUN: dehydration or failing kidneys?</em></div>
+<p><strong>The problem gives you</strong> a <abbr title="blood urea nitrogen">BUN</abbr> (normal 7–20 mg/dL) and a creatinine (normal 0.7–1.2 mg/dL).</p>
+<ol>
+<li>Divide BUN by creatinine.</li>
+<li><strong>Ratio above 20, creatinine normal or nearly so: dehydration.</strong> Urea is reabsorbed and creatinine is not. A shrunken <abbr title="extracellular fluid (outside cells)">ECF</abbr> raises proximal reabsorption, and high ADH adds the urea transporter. So BUN climbs alone.</li>
+<li><strong>Both high, ratio normal: the kidney itself.</strong> A fall in <abbr title="glomerular filtration rate">GFR</abbr> raises both together.</li>
+</ol>
+<p class="calc"><strong>Worked.</strong> Diarrhea, fever, weak fast pulse. BUN 60, creatinine 1.2. Ratio = 60 ÷ 1.2 = 50. <strong>Dehydration.</strong></p>
+<p>A <em>low</em> BUN fits a poorly nourished person who drinks freely: little protein, so little urea.</p>
+</div>
+<p>When the kidneys fail, urea builds up (<strong>uremia</strong>). Dialysis runs blood past a salt solution across a thin membrane. Small molecules such as urea diffuse out and proteins and cells stay.</p>
+
+<h3 id="vasa-recta">Vasa recta: keeping the gradient</h3>
+<p>The vasa recta are hairpin capillaries that follow the loops. If ordinary straight capillaries ran through the medulla they would carry its salt away. The hairpin shape prevents that. Going down, blood picks up salt and loses water. Coming back up, it gives the salt back and takes water. It enters at 300 and leaves at only 325. This passive process is <strong>countercurrent exchange</strong>.</p>
+<p>Multiplication (the loop, active) <strong>builds</strong> the gradient. Exchange (the vasa recta, passive) <strong>keeps</strong> it.</p>
+
+<h3 id="conc-dilute">Concentrated or dilute urine</h3>
+<p>The first part is the same either way. The proximal tubule leaves the fluid at 300. The thick ascending limb and early distal tubule remove salt without water, so fluid reaching the late distal tubule is always dilute. <abbr title="antidiuretic hormone (vasopressin)">ADH</abbr> decides what happens next.</p>
+<div class="tw"><table class="c">
+<thead><tr><th>Osmolarity (mOsm/L)</th><th>ADH high</th><th>No ADH</th></tr></thead>
+<tbody>
+<tr><td>End of proximal tubule</td><td>300</td><td>300</td></tr>
+<tr><td>Bend of the loop</td><td>1,200</td><td>600</td></tr>
+<tr><td>End of thick ascending limb</td><td>100</td><td>120</td></tr>
+<tr><td>Late distal tubule</td><td>300</td><td>about 100</td></tr>
+<tr><td>Final urine</td><td>1,200, small volume</td><td>75, large volume</td></tr>
+</tbody>
+</table></div>
+<div class="pair">
+<figure><img src="figs/hyperosmotic.webp" width="1238" height="1978" loading="lazy" alt="With ADH."><figcaption>With ADH.</figcaption></figure>
+<figure><img src="figs/hyposmotic.webp" width="1246" height="1969" loading="lazy" alt="Without ADH."><figcaption>Without ADH.</figcaption></figure>
+</div>
+<p>With ADH, the fluid in the collecting duct comes into balance with the fluid around it, so the most concentrated the urine can be is the osmolarity at the papilla tip. Without ADH the ducts stay waterproof and keep removing a little salt, so the urine ends up even more dilute than it started. The gradient itself is also weaker without ADH (600 at the tip).</p>
+
+<h3 id="free-water">Free-water clearance</h3>
+<p><strong>Free water</strong> is water with no solute in it. Free-water clearance asks: compared with urine that matches plasma, is the kidney getting rid of extra water or holding water back?</p>
+<div class="box eq"><div class="lab">Equation</div>
+<p class="w">First find how much urine would be needed to carry the solutes at plasma concentration (the osmolar clearance):</p>
+<p class="f">C<sub>osm</sub> = <span class="fr"><span>U<sub>osm</sub> × <span class="vd">V</span></span><span>P<sub>osm</sub></span></span></p>
+<p class="w">Whatever urine flow is left over is free water:</p>
+<p class="f">C<sub>H₂O</sub> = <span class="vd">V</span> − C<sub>osm</sub></p>
+<p class="sym">U<sub>osm</sub> and P<sub>osm</sub> = urine and plasma osmolarity. <span class="vd">V</span> = urine flow.</p>
+</div>
+<div class="box solve"><div class="lab">How to solve <em>free-water clearance, and what it says about ADH</em></div>
+<p><strong>The problem gives you</strong> urine osmolarity, plasma osmolarity, and sometimes urine flow.</p>
+<ol>
+<li><strong>Get the sign first, with no arithmetic.</strong> Urine more dilute than plasma: positive. Urine more concentrated than plasma: negative. Equal: zero.</li>
+<li>Read the sign. <strong>Positive</strong> = free water is being excreted = <abbr title="antidiuretic hormone (vasopressin)">ADH</abbr> is low or not working. <strong>Negative</strong> = water is being kept = ADH is acting.</li>
+<li>If a number is asked: C<sub>osm</sub> = U<sub>osm</sub> × <span class="vd">V</span> ÷ P<sub>osm</sub>, then subtract it from <span class="vd">V</span>.</li>
+</ol>
+<p class="calc"><strong>Worked.</strong> <span class="vd">V</span> 10 mL/min, urine 100, plasma 290. Urine is more dilute, so the answer must be positive. C<sub>osm</sub> = 100 × 10 ÷ 290 = 3.45. C<sub>H₂O</sub> = 10 − 3.45 = <strong>+6.55 mL/min</strong>.</p>
+<p class="calc"><strong>Worked.</strong> Plasma 250, urine 450. Plasma is low, so ADH should be off and urine dilute. But urine is more concentrated than plasma: free-water clearance is <strong>negative</strong>, so ADH is acting when it should not. That is <abbr title="syndrome of inappropriate ADH: too much ADH">SIADH</abbr>.</p>
+</div>
+<p>A loop diuretic gives a free-water clearance of zero, because the diluting segment is blocked and no free water is made.</p>
+
+<h3 id="siadh-di">Too much ADH, too little ADH</h3>
+<div class="tw"><table class="c">
+<thead><tr><th></th><th>ADH</th><th>Plasma osmolarity</th><th>Urine</th><th>Urine volume</th><th>Free-water clearance</th></tr></thead>
+<tbody>
+<tr><td>Water deprivation</td><td><span class="up">↑</span></td><td>high-normal</td><td>concentrated</td><td>low</td><td>negative</td></tr>
+<tr><td>Water drinking</td><td><span class="down">↓</span></td><td>low-normal</td><td>dilute</td><td>high</td><td>positive</td></tr>
+<tr><td><abbr title="syndrome of inappropriate ADH: too much ADH">SIADH</abbr></td><td><span class="up">↑</span><span class="up">↑</span></td><td>low</td><td>concentrated</td><td>low</td><td>negative</td></tr>
+<tr><td>Central diabetes insipidus</td><td><span class="down">↓</span><span class="down">↓</span></td><td>high</td><td>dilute</td><td>high</td><td>positive</td></tr>
+<tr><td>Nephrogenic diabetes insipidus</td><td><span class="up">↑</span></td><td>high</td><td>dilute</td><td>high</td><td>positive</td></tr>
+</tbody>
+</table></div>
+<p><strong>SIADH</strong> (syndrome of inappropriate <abbr title="antidiuretic hormone (vasopressin)">ADH</abbr>). ADH is released even though plasma is already dilute. Causes: head injury, lung disease, drugs, and tumors that make ADH (classically small cell, or "oat cell", lung cancer). Water is kept, so plasma osmolarity and plasma Na⁺ fall. The giveaway is urine that is concentrated and still contains plenty of Na⁺ while the plasma is dilute. Treatment blocks ADH's action on the principal cell (<span class="drug">demeclocycline</span>), so fewer aquaporins are inserted.</p>
+<p><strong>Diabetes insipidus.</strong> There is too little ADH effect, so huge volumes of dilute urine are passed and the patient drinks constantly. If drinking falls behind, plasma Na⁺ rises dangerously.</p>
+<div class="tw"><table>
+<thead><tr><th></th><th>Central</th><th>Nephrogenic</th></tr></thead>
+<tbody>
+<tr><td>Problem</td><td>The brain makes no ADH</td><td>The kidney ignores ADH</td></tr>
+<tr><td>Causes</td><td>Head trauma, tumor, lack of oxygen</td><td><span class="drug">Lithium</span>, high Ca²⁺, low K⁺, chronic kidney disease</td></tr>
+<tr><td>ADH level</td><td>Low</td><td>High</td></tr>
+<tr><td>Give <span class="drug">desmopressin</span> (an ADH copy)</td><td>Urine concentrates</td><td>No change</td></tr>
+<tr><td>Treatment</td><td>Desmopressin</td><td>Remove the cause; <span class="drug">thiazide</span></td></tr>
+</tbody>
+</table></div>
+<p><strong>Why a diuretic helps nephrogenic diabetes insipidus.</strong> A thiazide blocks salt removal in the early distal tubule, a diluting segment, so less free water is made. It also shrinks the <abbr title="extracellular fluid (outside cells)">ECF</abbr> a little, which lowers <abbr title="glomerular filtration rate">GFR</abbr> and raises proximal reabsorption, so less fluid reaches the collecting duct.</p>
+<p>A head injury can cause either SIADH or central diabetes insipidus. Compare urine with plasma osmolarity to tell which.</p>
+<p>An abnormal plasma Na⁺, high or low, causes brain symptoms only: confusion, lethargy, stupor, coma.</p>
+
+</section>
+<section class="chap" id="ch10" style="--c:#b4233c">
+<div class="chead"><span class="num">10</span><h2>pH and buffers</h2></div>
+<p class="lead">The body makes acid all day. Three defenses deal with it, in order of speed: buffers act in seconds, the lungs in minutes, the kidneys over hours to days.</p>
+
+<h3 id="ch10-ph-and-h">pH and H⁺</h3>
+<p><strong>pH</strong> is a way of writing the hydrogen ion (H⁺) concentration: pH = −log [H⁺]. Normal arterial blood has 40 nEq/L of H⁺, which is <strong>pH 7.40</strong> (range 7.37–7.42). More H⁺ means a <em>lower</em> pH.</p>
+<p>Below 7.40 is <strong>acidemia</strong> and above is <strong>alkalemia</strong>. The process causing it is called acidosis or alkalosis.</p>
+<figure><img src="figs/h_ph.webp" width="1407" height="1272" loading="lazy" alt="The scale is not a straight line. From 7.4 down to 7.2 adds 23 nEq/L of H⁺. From 7.4 up to 7.6 removes only 15." style="max-width:46%"><figcaption>The scale is not a straight line. From 7.4 down to 7.2 adds 23 nEq/L of H⁺. From 7.4 up to 7.6 removes only 15.</figcaption></figure>
+<p>Each whole pH unit is a ten-fold change in H⁺. For comparison, stomach juice is pH 1–2 and pancreatic juice is pH 8.</p>
+<p>An <strong>acid</strong> gives up H⁺. A <strong>base</strong> accepts H⁺. A strong acid (HCl) gives up all its H⁺ at once. A weak acid (carbonic acid) gives up only some.</p>
+
+<h3 id="ch10-where-the-acid-comes-from">Where the acid comes from</h3>
+<div class="tw"><table>
+<thead><tr><th></th><th>Volatile acid</th><th>Fixed acid</th></tr></thead>
+<tbody>
+<tr><td>What it is</td><td>CO₂</td><td>Every other acid</td></tr>
+<tr><td>Source</td><td>Normal aerobic metabolism. A huge amount.</td><td>About 50 mmol/day, from protein and phospholipid in the diet</td></tr>
+<tr><td>Normal examples</td><td>—</td><td>Sulfuric acid (from methionine, cysteine); hydrochloric acid (from lysine, arginine); phosphoric acid (from phospholipids)</td></tr>
+<tr><td>Removed by</td><td>Lungs, breathed out</td><td>Buffered first, then excreted by the kidney</td></tr>
+</tbody>
+</table></div>
+<p>CO₂ is not an acid itself, but it becomes one in water. The enzyme <strong>carbonic anhydrase</strong> speeds this reaction in both directions:</p>
+<div class="box eq"><div class="lab">Equation</div><p class="f">CO₂ + H₂O ⇌ H₂CO₃ ⇌ H⁺ + HCO₃⁻</p>
+<p class="sym">Add CO₂ and the reaction runs to the right: more H⁺, lower pH. Remove CO₂ and it runs to the left.</p></div>
+<p><strong>How blood carries CO₂.</strong> In the tissues CO₂ enters red cells, where carbonic anhydrase turns it into H⁺ and HCO₃⁻. The HCO₃⁻ leaves the cell in exchange for Cl⁻, and about 90% of CO₂ travels this way. Hemoglobin soaks up the H⁺. A little CO₂ binds hemoglobin directly as <strong>carbaminohemoglobin</strong>. (Carboxyhemoglobin is something else: hemoglobin carrying carbon monoxide.)</p>
+<p><strong>Abnormal fixed acids</strong> appear in disease or poisoning.</p>
+<div class="tw"><table>
+<thead><tr><th>Acid</th><th>Comes from</th></tr></thead>
+<tbody>
+<tr><td>Ketoacids (β-hydroxybutyric, acetoacetic)</td><td>Uncontrolled diabetes</td></tr>
+<tr><td>Lactic acid</td><td>Tissue without enough oxygen: hard exercise, shock, sepsis</td></tr>
+<tr><td>Salicylic acid</td><td>Aspirin overdose</td></tr>
+<tr><td>Formic acid</td><td>Methanol</td></tr>
+<tr><td>Glycolic and oxalic acid</td><td>Ethylene glycol (antifreeze)</td></tr>
+</tbody>
+</table></div>
+<div class="box ex"><div class="lab">Worked example</div><p>A patient with end-stage kidney disease misses dialysis for two weeks. The diet keeps making fixed acid and only the kidney can remove it. The result is <strong>metabolic acidosis</strong>.</p></div>
+
+<h3 id="buffers">Buffers</h3>
+<p>A <strong>buffer</strong> is a weak acid (written HA) together with its base form (A⁻). If H⁺ is added, A⁻ picks it up. If H⁺ is removed, HA releases some. Either way pH barely moves.</p>
+<p>The <strong>pK</strong> of a buffer is the pH at which it is half HA and half A⁻. A buffer works well only within about 1 pH unit of its pK. So the ideal blood buffer is a weak acid with a pK near 7.4.</p>
+<figure><img src="figs/titration.webp" width="1403" height="1262" loading="lazy" alt="Each curve is steepest in the middle, at its pK (the dots). There, a lot of H⁺ can be added or removed with little change in pH." style="max-width:50%"><figcaption>Each curve is steepest in the middle, at its pK (the dots). There, a lot of H⁺ can be added or removed with little change in pH.</figcaption></figure>
+<div class="tw"><table>
+<thead><tr><th>Buffer</th><th>Acid / base form</th><th>pK</th><th>Verdict</th></tr></thead>
+<tbody>
+<tr><td>Bicarbonate (outside cells)</td><td>CO₂ / HCO₃⁻</td><td>6.1</td><td><strong>The most important</strong>, even though its pK is far from 7.4. There is a lot of it (24 mEq/L), and its acid form, CO₂, can be breathed out.</td></tr>
+<tr><td>Phosphate (outside cells)</td><td>H₂PO₄⁻ / HPO₄²⁻</td><td>6.8</td><td>Better pK but very little in blood. It matters most in the urine.</td></tr>
+<tr><td>Hemoglobin (inside red cells)</td><td>—</td><td>6.7 with oxygen, 7.9 without</td><td>After it gives up oxygen in the tissues it becomes a better buffer, exactly where CO₂ is adding H⁺. So venous pH (7.37) is almost the same as arterial.</td></tr>
+<tr><td>Organic phosphates (inside cells)</td><td>—</td><td>—</td><td>ATP, ADP, AMP, 2,3-DPG</td></tr>
+</tbody>
+</table></div>
+<p>Plasma albumin also buffers H⁺, on the same sites that hold Ca²⁺. That is why pH changes free Ca²⁺ <a class="x" href="#calcium">Ch 8</a>. Cells buffer H⁺ too, swapping it for K⁺, which is why pH changes plasma K⁺ <a class="x" href="#k-shifts">Ch 7</a>.</p>
+
+<h3 id="hh">The Henderson–Hasselbalch equation</h3>
+<div class="box eq"><div class="lab">Equation</div>
+<p class="w">In words: pH = the buffer's pK + the log of (base form ÷ acid form).</p>
+<p class="f">pH = 6.1 + log <span class="fr"><span>HCO₃⁻</span><span>0.03 × PCO₂</span></span></p>
+<p class="sym"><strong>HCO₃⁻</strong> in mEq/L (normal 24). <strong>PCO₂</strong> = the pressure of CO₂ in arterial blood, in mm Hg (normal 40). Multiplying by <strong>0.03</strong> turns that pressure into the amount of CO₂ dissolved. Normal: 24 ÷ (0.03 × 40) = 24 ÷ 1.2 = 20, and log 20 = 1.3, so pH = 6.1 + 1.3 = 7.4.</p>
+</div>
+<p>The point of the equation is that <strong>pH depends on the ratio of HCO₃⁻ to CO₂</strong>, not on either one alone. HCO₃⁻ is under the kidney's control and CO₂ is under the lungs' control. Whenever the ratio is 20 to 1, pH is 7.4. A PCO₂ of 60 with HCO₃⁻ 36 gives 7.4. So does 20 with 12. This is how compensation works <a class="x" href="#compensation">Ch 12</a>.</p>
+<div class="box solve"><div class="lab">How to solve <em>find or predict the pH</em></div>
+<p><strong>The problem gives you</strong> HCO₃⁻ and PCO₂.</p>
+<ol>
+<li>Dissolved CO₂ = 0.03 × PCO₂.</li>
+<li>Ratio = HCO₃⁻ ÷ dissolved CO₂.</li>
+<li>pH = 6.1 + log(ratio). Useful logs: log 10 = 1.0, log 16 = 1.2, log 20 = 1.3, log 25 = 1.4.</li>
+<li>No calculator? Compare the ratio with 20. Below 20 is acid, above 20 is alkaline.</li>
+</ol>
+<p class="calc"><strong>Worked.</strong> A long seizure adds 12 mmol/L of lactic acid. Bicarbonate buffers it at once: HCO₃⁻ falls from 24 to 12. With PCO₂ still 40, ratio = 12 ÷ 1.2 = 10, pH = 6.1 + 1.0 = <strong>7.10</strong>.<br>Within minutes the acid drives faster breathing and PCO₂ falls to 24. Ratio = 12 ÷ 0.72 = 16.7, pH = 6.1 + 1.22 = <strong>7.32</strong>. HCO₃⁻ did not recover. Lowering CO₂ repaired the ratio.</p>
+</div>
+<div class="box ex"><div class="lab">Worked example</div><p>A patient with stable <abbr title="chronic obstructive pulmonary disease">COPD</abbr> has a PCO₂ of 70. His pH is about <strong>7.35</strong>, not 7.15, because over months the kidneys raised his HCO₃⁻ and brought the ratio back toward 20.</p></div>
+
+</section>
+<section class="chap" id="ch11" style="--c:#b4233c">
+<div class="chead"><span class="num">11</span><h2>How the kidney handles acid</h2></div>
+<p class="lead">The kidney has two acid–base jobs. First, take back all the HCO₃⁻ that was filtered. Second, excrete the day's fixed acid, and in doing so make new HCO₃⁻ to replace what the acid used up.</p>
+
+<h3 id="hco3-reabs">Job 1: taking back filtered HCO₃⁻</h3>
+<p>Each day 180 L × 24 mEq/L = 4,320 mEq of HCO₃⁻ is filtered, and <strong>99.9%</strong> is reabsorbed. About 85% of that happens in the proximal tubule. HCO₃⁻ cannot cross the lumen membrane directly, so the cell takes it apart and rebuilds it.</p>
+<ol>
+<li>The <strong>Na⁺/H⁺ exchanger</strong> on the lumen side lets Na⁺ in and pushes H⁺ out into the lumen.</li>
+<li>In the lumen, that H⁺ joins a filtered HCO₃⁻ to make H₂CO₃. <strong>Carbonic anhydrase</strong> on the brush border splits it into CO₂ and water.</li>
+<li>CO₂ and water diffuse into the cell. Carbonic anhydrase inside the cell turns them back into H⁺ and HCO₃⁻.</li>
+<li>The HCO₃⁻ leaves on the blood side. The H⁺ goes back out on the exchanger to catch the next HCO₃⁻.</li>
+</ol>
+<figure><img src="figs/hco3_reabs.webp" width="1800" height="1150" loading="lazy" alt="The filtered HCO₃⁻ is turned into CO₂ in the lumen and rebuilt inside the cell. The same H⁺ is used again and again." style="max-width:86%"><figcaption>The filtered HCO₃⁻ is turned into CO₂ in the lumen and rebuilt inside the cell. The same H⁺ is used again and again.</figcaption></figure>
+<p>The H⁺ only goes round in a circle. So this job <strong>excretes no acid</strong>, and the pH of the tubular fluid hardly changes. The net result is one Na⁺ and one HCO₃⁻ returned to blood. <span class="drug">Acetazolamide</span> blocks carbonic anhydrase, so HCO₃⁻ stays in the urine.</p>
+<div class="tw"><table>
+<thead><tr><th>Change</th><th>Effect on HCO₃⁻ reabsorption</th><th>Why</th></tr></thead>
+<tbody>
+<tr><td>Plasma HCO₃⁻ above 40 mEq/L</td><td>Extra is excreted</td><td>The mechanism is saturated. This is how a metabolic alkalosis corrects itself.</td></tr>
+<tr><td>PCO₂ <span class="up">↑</span></td><td><span class="up">↑</span></td><td>More CO₂ in the cell makes more H⁺ to secrete</td></tr>
+<tr><td>PCO₂ <span class="down">↓</span></td><td><span class="down">↓</span></td><td>Less H⁺ to secrete</td></tr>
+<tr><td><abbr title="extracellular fluid (outside cells)">ECF</abbr> volume contraction</td><td><span class="up">↑</span></td><td>Angiotensin II stimulates the Na⁺/H⁺ exchanger</td></tr>
+<tr><td>ECF volume expansion</td><td><span class="down">↓</span></td><td>Less proximal reabsorption overall</td></tr>
+</tbody>
+</table></div>
+<p>The two PCO₂ rows are the <strong>kidney's compensation for breathing disorders</strong>. If CO₂ is retained, the kidney keeps more HCO₃⁻. If CO₂ is blown off, it lets HCO₃⁻ go. This takes days.</p>
+<p id="contraction-alk">The volume row explains <strong>contraction alkalosis</strong>. When the ECF shrinks (vomiting, loop or thiazide diuretics), angiotensin II rises and drives the Na⁺/H⁺ exchanger. The kidney is trying to keep Na⁺, but every Na⁺ taken this way brings back an HCO₃⁻. Plasma HCO₃⁻ rises. The cure is to restore volume with saline.</p>
+
+<h3 id="new-hco3">Job 2: excreting acid and making new HCO₃⁻</h3>
+<p>The 50 mmol of fixed acid made each day uses up 50 mmol of HCO₃⁻ in buffering. The kidney must excrete that H⁺ and give the HCO₃⁻ back.</p>
+<p>The <strong>α-intercalated cell</strong> of the late distal tubule and collecting duct does this. Inside it, carbonic anhydrase makes H⁺ and HCO₃⁻ from CO₂ and water. The H⁺ is pumped into the urine by an <strong>H⁺ pump</strong> (H⁺-ATPase, turned up by aldosterone) and by the H⁺–K⁺ pump. The HCO₃⁻ goes to the blood. Because this HCO₃⁻ was never filtered, it is <strong>new</strong>.</p>
+<p>There is one problem. The pump cannot push urine pH below <strong>4.4</strong>, and at that pH free H⁺ amounts to almost nothing. So the H⁺ must leave attached to a buffer. There are two.</p>
+<div class="tw"><table>
+<thead><tr><th></th><th>Titratable acid</th><th>Ammonium (NH₄⁺)</th></tr></thead>
+<tbody>
+<tr><td>Buffer</td><td>Filtered phosphate: HPO₄²⁻ + H⁺ → H₂PO₄⁻</td><td>Ammonia made by the kidney: NH₃ + H⁺ → NH₄⁺</td></tr>
+<tr><td>Amount per day</td><td>20 mmol (40%)</td><td>30 mmol (60%)</td></tr>
+<tr><td>Can it increase?</td><td>Hardly. Limited by how much phosphate is filtered (the 15% not reabsorbed)</td><td><strong>Yes.</strong> The kidney makes more NH₃ when acid builds up</td></tr>
+</tbody>
+</table></div>
+<figure><img src="figs/titratable.webp" width="1800" height="1088" loading="lazy" alt="Secreted H⁺ is carried out on phosphate. The matching HCO₃⁻ that goes to blood is new." style="max-width:86%"><figcaption>Secreted H⁺ is carried out on phosphate. The matching HCO₃⁻ that goes to blood is new.</figcaption></figure>
+<p>Phosphate suits the job because its pK is 6.8. At the pH of filtrate (7.4), most of it is in the HPO₄²⁻ form, ready to accept H⁺.</p>
+<p><strong>How NH₄⁺ is excreted.</strong></p>
+<ol>
+<li>Proximal tubule cells make NH₃ from the amino acid glutamine. The leftover carbon skeleton becomes new HCO₃⁻.</li>
+<li>NH₄⁺ enters the tubule. The thick ascending limb reabsorbs some (it rides in K⁺'s place on the Na⁺-K⁺-2Cl⁻ cotransporter), which builds up ammonia in the medulla.</li>
+<li>Uncharged NH₃ diffuses from the medulla into the collecting duct. There it meets secreted H⁺ and becomes NH₄⁺. The charged form cannot diffuse back, so it is trapped and excreted.</li>
+</ol>
+<figure><img src="figs/nh4.webp" width="1800" height="2251" loading="lazy" alt="Top: the proximal cell makes NH₃ from glutamine. Bottom: in the collecting duct NH₃ picks up H⁺ and is trapped as NH₄⁺." style="max-width:70%"><figcaption><b>Top:</b> the proximal cell makes NH₃ from glutamine. <b>Bottom:</b> in the collecting duct NH₃ picks up H⁺ and is trapped as NH₄⁺.</figcaption></figure>
+<p>The more acid the urine, the more NH₃ is converted and trapped, so more keeps diffusing in.</p>
+<div class="tw"><table class="c">
+<thead><tr><th>mmol per day</th><th>Fixed acid made</th><th>Titratable acid</th><th>NH₄⁺</th><th>Why</th></tr></thead>
+<tbody>
+<tr><td>Normal</td><td>50</td><td>20</td><td>30</td><td style="text-align:left">—</td></tr>
+<tr><td>Diabetic ketoacidosis</td><td>500</td><td>100</td><td>400</td><td style="text-align:left">Acidosis switches on NH₃ production</td></tr>
+<tr><td>Chronic kidney failure</td><td>50</td><td>10</td><td>5</td><td style="text-align:left">Too few nephrons to make NH₃ or filter phosphate, so acid is retained</td></tr>
+</tbody>
+</table></div>
+<p><strong>K⁺ changes NH₃ production.</strong> High plasma K⁺ suppresses it, so less acid is excreted. Low plasma K⁺ stimulates it.</p>
+<p><strong>Aldosterone</strong> drives both cell types of the collecting duct: principal cells reabsorb Na⁺ and secrete K⁺, and α-intercalated cells secrete H⁺. Too much aldosterone therefore gives <strong>metabolic alkalosis with low K⁺</strong>. Too little gives acidosis with high K⁺.</p>
+<div class="box trap"><div class="lab">Don't confuse</div><p>Taking back filtered HCO₃⁻ (proximal) excretes <strong>no</strong> acid. Only H⁺ that leaves as H₂PO₄⁻ or NH₄⁺ makes <strong>new</strong> HCO₃⁻. A urine pH of 4.4 is a limit, not a measure of how much acid is leaving: the buffers carry the load.</p></div>
+
+</section>
+<section class="chap" id="ch12" style="--c:#b4233c">
+<div class="chead"><span class="num">12</span><h2>Acid–base disorders</h2></div>
+<p class="lead">Every blood gas problem is solved the same way: name the disorder, check the compensation, find the cause.</p>
+
+<h3 id="compensation">The four disorders and their compensation</h3>
+<p>Normal arterial values: <strong>pH 7.40, PCO₂ 40 mm Hg, HCO₃⁻ 24 mEq/L</strong>.</p>
+<p>A <strong>metabolic</strong> disorder starts with a change in HCO₃⁻. A <strong>respiratory</strong> disorder starts with a change in PCO₂.</p>
+<p>pH depends on the ratio of HCO₃⁻ to PCO₂ <a class="x" href="#hh">Ch 10</a>. So when one of them changes, the body moves the <em>other one in the same direction</em>, which pulls the ratio back toward normal. That is <strong>compensation</strong>. The lungs compensate for metabolic disorders within minutes. The kidneys compensate for respiratory disorders over days. Compensation brings pH toward 7.40 but never all the way and never past it.</p>
+<div class="tw"><table>
+<thead><tr><th>Disorder</th><th>Starts with</th><th>pH</th><th>Compensation</th><th>How much to expect</th></tr></thead>
+<tbody>
+<tr><td>Metabolic acidosis</td><td>HCO₃⁻ <span class="down">↓</span></td><td><span class="down">↓</span></td><td>Breathe faster: PCO₂ <span class="down">↓</span></td><td>PCO₂ falls 1.3 for each 1 fall in HCO₃⁻</td></tr>
+<tr><td>Metabolic alkalosis</td><td>HCO₃⁻ <span class="up">↑</span></td><td><span class="up">↑</span></td><td>Breathe slower: PCO₂ <span class="up">↑</span></td><td>PCO₂ rises 0.7 for each 1 rise in HCO₃⁻</td></tr>
+<tr><td>Respiratory acidosis</td><td>PCO₂ <span class="up">↑</span></td><td><span class="down">↓</span></td><td>Kidney keeps HCO₃⁻: HCO₃⁻ <span class="up">↑</span></td><td>For each 1 rise in PCO₂: HCO₃⁻ +0.1 if acute, +0.4 if chronic</td></tr>
+<tr><td>Respiratory alkalosis</td><td>PCO₂ <span class="down">↓</span></td><td><span class="up">↑</span></td><td>Kidney excretes HCO₃⁻: HCO₃⁻ <span class="down">↓</span></td><td>For each 1 fall in PCO₂: HCO₃⁻ −0.2 if acute, −0.4 if chronic</td></tr>
+</tbody>
+</table></div>
+<p><strong>A fast way to tell them apart.</strong> Look at the arrows in a row. In a metabolic disorder pH, HCO₃⁻ and PCO₂ all move the <em>same</em> way. In a respiratory disorder pH moves the <em>opposite</em> way to the other two.</p>
+<p>The pH itself has side effects. Acidemia raises plasma K⁺ and free Ca²⁺. Alkalemia lowers both <a class="x" href="#k-shifts">Ch 7</a> <a class="x" href="#calcium">Ch 8</a>.</p>
+
+<h3 id="gas-steps">Reading a blood gas</h3>
+<div class="box solve"><div class="lab">How to solve <em>any blood gas</em></div>
+<p><strong>The problem gives you</strong> pH, PCO₂ and HCO₃⁻, and sometimes Na⁺ and Cl⁻.</p>
+<ol>
+<li><strong>pH.</strong> Below 7.40 is acidemia. Above is alkalemia.</li>
+<li><strong>Metabolic or respiratory?</strong> If all three values moved the same way as pH, it is metabolic. If PCO₂ moved opposite to pH, it is respiratory. The value that did not cause the problem is the compensation.</li>
+<li><strong>Is the compensation the right size?</strong> Use the table. If it matches, there is one disorder. If not, there are two. In a respiratory disorder this step also tells acute from chronic.</li>
+<li><strong>If it is a metabolic acidosis,</strong> calculate the anion gap (below).</li>
+<li><strong>If the gap is high and a poison is possible,</strong> calculate the osmolar gap (below).</li>
+</ol>
+<p class="calc"><strong>Worked: heart attack.</strong> pH 7.22, PCO₂ 25, HCO₃⁻ 10, anion gap 30.<br><b class="n">1.</b> Acidemia.<br><b class="n">2.</b> All three are down: metabolic acidosis.<br><b class="n">3.</b> HCO₃⁻ fell 24 − 10 = 14, so PCO₂ should fall 14 × 1.3 = 18, to about 22. Actual 25 is close: one disorder.<br><b class="n">4.</b> The gap is high, so acid was added. Tissue short of oxygen makes <strong>lactic acid</strong>.</p>
+<p class="calc"><strong>Worked: long-time smoker, chronic cough.</strong> pH 7.34, PCO₂ 62, HCO₃⁻ 33.<br><b class="n">1.</b> Acidemia.<br><b class="n">2.</b> PCO₂ is up, opposite to pH: respiratory acidosis.<br><b class="n">3.</b> PCO₂ rose 62 − 40 = 22. If chronic, HCO₃⁻ should rise 22 × 0.4 = 9, to about 33. It matches: <strong>chronic respiratory acidosis (<abbr title="chronic obstructive pulmonary disease">COPD</abbr>)</strong>, with the kidneys compensating. (If it were acute, HCO₃⁻ would be only 24 + 2 = 26.)</p>
+<p class="calc"><strong>Worked: anxiety for several days.</strong> Choose between 7.51 / 20 / 24 and 7.44 / 25 / 16. Both are respiratory alkalosis. "Several days" means the kidneys have had time to excrete HCO₃⁻, so HCO₃⁻ is low and pH is nearly normal: <strong>7.44 / 25 / 16</strong>. The first is the picture in the first minutes, with HCO₃⁻ still 24.</p>
+<p><b class="t">Trap:</b> a low PCO₂ in a metabolic acidosis is compensation, not a second disease. And breathing fast does not prove PCO₂ is low: the rapid shallow breaths of COPD do not clear CO₂.</p>
+</div>
+
+<h3 id="anion-gap">Metabolic acidosis and the anion gap</h3>
+<p>HCO₃⁻ is low. Either acid was added and used it up, or HCO₃⁻ itself was lost, or the kidney failed to excrete the daily acid. The fall in pH stimulates chemoreceptors (mainly the carotid bodies), which drive faster, deeper breathing.</p>
+<div class="box eq"><div class="lab">Equation</div>
+<p class="f">Anion gap = Na⁺ − (Cl⁻ + HCO₃⁻)</p>
+<p class="sym">Normal is about <strong>6–12 mEq/L</strong>. Positive and negative charges in plasma are always equal. Na⁺ is larger than Cl⁻ + HCO₃⁻ only because some negative ions are not measured: albumin, phosphate, sulfate, citrate. The gap is those unmeasured ions.</p>
+</div>
+<figure><img src="figs/anion_gap.webp" width="1090" height="1259" loading="lazy" alt="The two columns are always the same height. If HCO₃⁻ shrinks, either the gap or Cl⁻ must grow to fill the space." style="max-width:40%"><figcaption>The two columns are always the same height. If HCO₃⁻ shrinks, either the gap or Cl⁻ must grow to fill the space.</figcaption></figure>
+<p>When HCO₃⁻ falls, another negative ion has to take its place. Which one tells you the cause.</p>
+<div class="tw"><table>
+<thead><tr><th></th><th>High gap</th><th>Normal gap</th></tr></thead>
+<tbody>
+<tr><td>What happened</td><td>An <strong>acid was added</strong>. Its H⁺ used up HCO₃⁻ and its own negative ion stays as an unmeasured anion.</td><td><strong>HCO₃⁻ was lost</strong>. The kidney keeps Cl⁻ in its place, so Cl⁻ is high.</td></tr>
+<tr><td>Example numbers (Na⁺ / Cl⁻ / HCO₃⁻)</td><td>140 / 108 / 15: gap 17</td><td>140 / 118 / 12: gap 10</td></tr>
+<tr><td>Causes</td><td>Diabetic ketoacidosis; lactic acidosis; aspirin; methanol; ethylene glycol; chronic kidney failure</td><td>Diarrhea; renal tubular acidosis</td></tr>
+</tbody>
+</table></div>
+<div class="tw"><table>
+<thead><tr><th>Cause</th><th>Mechanism and clues</th></tr></thead>
+<tbody>
+<tr><td>Diabetic ketoacidosis</td><td>No insulin, so fat is burned instead of glucose and ketoacids pile up</td></tr>
+<tr><td>Lactic acidosis</td><td>Tissue without enough oxygen: shock, sepsis, low blood pressure, heart attack, seizure, hard exercise</td></tr>
+<tr><td>Methanol</td><td>Alcohol dehydrogenase turns it into formaldehyde, then formic acid. Damages the retina (blindness).</td></tr>
+<tr><td>Ethylene glycol (antifreeze)</td><td>Turned into glycolic and <strong>oxalic acid</strong>. Calcium oxalate crystals in urine, low Ca²⁺.</td></tr>
+<tr><td>Aspirin (salicylate)</td><td>Poisons mitochondria, so lactic acid builds up. See below.</td></tr>
+<tr><td>Chronic kidney failure</td><td>Cannot excrete the daily fixed acid or make NH₄⁺</td></tr>
+<tr><td>Diarrhea</td><td>The colon secretes HCO₃⁻, so HCO₃⁻ and K⁺ are lost</td></tr>
+<tr><td>Renal tubular acidosis (<abbr title="renal tubular acidosis">RTA</abbr>)</td><td>Type 2 (proximal): cannot reabsorb HCO₃⁻. Type 1 (distal): cannot secrete H⁺. Type 4: too little aldosterone, so K⁺ is high and NH₃ production is suppressed.</td></tr>
+</tbody>
+</table></div>
+<p>For methanol and ethylene glycol, <span class="drug">fomepizole</span> blocks alcohol dehydrogenase so the toxic acids are never made, and dialysis removes the alcohol.</p>
+<p><strong>Aspirin causes two disorders.</strong> It stimulates the breathing center directly, giving a respiratory alkalosis. This comes first, within hours. It also causes the metabolic acidosis above, which in an adult may take a day to appear. Ringing in the ears is the clue. Treatment is to make the urine alkaline <a class="x" href="#weak-acids">Ch 5</a>.</p>
+<div class="box ex"><div class="lab">Worked example</div>
+<p><strong>Fever, low blood pressure, fast breathing.</strong> Na⁺ 140, Cl⁻ 106, HCO₃⁻ 14. Gap = 140 − 120 = 20, high. Acid was added: lactic acidosis from <strong>septic shock</strong>.</p>
+<p><strong>Same symptoms.</strong> Na⁺ 136, Cl⁻ 118, HCO₃⁻ 12. Gap = 136 − 130 = 6, normal, with a high Cl⁻. HCO₃⁻ was lost: <strong>diarrhea</strong>.</p>
+</div>
+
+<h3 id="osm-gap">The osmolar gap</h3>
+<div class="box eq"><div class="lab">Equation</div>
+<p class="f">Osmolar gap = measured osmolarity − calculated osmolarity</p>
+<p class="sym">Calculated = 2 × Na⁺ + glucose/18 + BUN/2.8 <a class="x" href="#osm">Ch 1</a>. The formula counts nearly every normal solute, so the gap is normally small.</p>
+</div>
+<p>A large gap means a small foreign molecule is in the blood in large amounts: <strong>methanol or ethylene glycol</strong>. Calculated 280 and measured 380 leave 100 mOsm/L unexplained. A high anion gap <em>plus</em> a high osmolar gap points to a toxic alcohol.</p>
+
+<h3 id="met-alk">Metabolic alkalosis</h3>
+<p>HCO₃⁻ is high. Causes: <strong>vomiting</strong>, loop and thiazide diuretics, too much aldosterone or cortisol (Cushing syndrome), Bartter syndrome (an inherited defect that acts like a loop diuretic), swallowing a lot of antacid or bicarbonate, and low K⁺.</p>
+<p>Vomiting shows the two stages every metabolic alkalosis needs.</p>
+<ol>
+<li><strong>Something starts it.</strong> For each H⁺ the stomach secretes, one HCO₃⁻ enters the blood. Normally that acid reaches the duodenum and the pancreas secretes HCO₃⁻ to match. Vomiting removes the acid, so the HCO₃⁻ stays in the blood.</li>
+<li><strong>Something keeps it going.</strong> The kidney could simply excrete the extra HCO₃⁻. It does not, because fluid was lost. Angiotensin II drives HCO₃⁻ reabsorption <a class="x" href="#contraction-alk">contraction alkalosis</a>, and aldosterone drives H⁺ and K⁺ secretion.</li>
+</ol>
+<figure><img src="figs/vomiting.webp" width="1800" height="1255" loading="lazy" alt="Loss of stomach acid starts the alkalosis. Volume contraction maintains it and adds hypokalemia." style="max-width:74%"><figcaption>Loss of stomach acid starts the alkalosis. Volume contraction maintains it and adds hypokalemia.</figcaption></figure>
+<p>The alkalosis also shifts K⁺ into cells, so vomiting causes <strong>low K⁺</strong> by two routes. Treatment is saline and K⁺.</p>
+<div class="box ex"><div class="lab">Worked example</div><p>A young woman with self-induced vomiting has pH 7.46, PCO₂ 54, HCO₃⁻ 36. All three are up: metabolic alkalosis with the lungs compensating. If it continues, the danger is an <strong>arrhythmia from hypokalemia</strong>.</p></div>
+
+<h3 id="ch12-respiratory-acidosis-and-alkalosis">Respiratory acidosis and alkalosis</h3>
+<div class="tw"><table>
+<thead><tr><th>Respiratory acidosis: breathing too little, CO₂ kept</th><th>Respiratory alkalosis: breathing too much, CO₂ lost</th></tr></thead>
+<tbody>
+<tr><td style="font-weight:400"><strong>Breathing center slowed:</strong> opiates, barbiturates, anesthetics, central sleep apnea</td><td><strong>Breathing center stimulated:</strong> anxiety, pain, fever, aspirin, gram-negative sepsis</td></tr>
+<tr><td style="font-weight:400"><strong>Weak nerves or muscles:</strong> Guillain–Barré, polio, ALS, multiple sclerosis</td><td><strong>Low oxygen:</strong> high altitude, pneumonia, pulmonary embolism, severe anemia</td></tr>
+<tr><td style="font-weight:400"><strong>Blocked airway:</strong> aspiration, obstructive sleep apnea</td><td><strong>Ventilator</strong> set too high</td></tr>
+<tr><td style="font-weight:400"><strong>Poor gas exchange:</strong> <abbr title="chronic obstructive pulmonary disease">COPD</abbr>, pneumonia, pulmonary edema</td><td>Also the normal compensation for a metabolic acidosis</td></tr>
+</tbody>
+</table></div>
+<p>The lungs cannot compensate for their own disorder. Only the kidneys can, which is why acute and chronic respiratory disorders look different.</p>
+<div class="box ex"><div class="lab">Worked example</div><p>After a day of intestinal bleeding a patient has a hematocrit of 15 with normal blood pressure. Severe anemia makes him breathe fast: <strong>respiratory alkalosis</strong>. Blood pressure is normal, so there is no shock and no lactic acidosis yet.</p></div>
+<div class="box trap"><div class="lab">Don't confuse</div><p>A normal anion gap acidosis still has a cause: look for a <strong>high Cl⁻</strong>. If PCO₂ is lower than the compensation rule predicts, there is a second disorder, a respiratory alkalosis (think aspirin).</p></div>
+
+</section>
+<section class="chap" id="ch13" style="--c:#4b5563">
+<div class="chead"><span class="num">13</span><h2>Every equation in one place</h2></div>
+<p class="lead">A lookup table. Each row links to the place where the equation is explained and worked.</p>
+<div class="tw"><table class="plain">
+<thead><tr><th>You want</th><th>Equation</th><th>Explained in</th></tr></thead>
+<tbody>
+<tr><td>Volume of a fluid compartment</td><td>amount of marker ÷ plasma concentration</td><td><a class="x" href="#dilution">Ch 1</a></td></tr>
+<tr><td>Blood volume</td><td>plasma volume ÷ (1 − <abbr title="hematocrit: the fraction of blood that is red cells">Hct</abbr>)</td><td><a class="x" href="#dilution">Ch 1</a></td></tr>
+<tr><td>Plasma osmolarity</td><td>2 × Na⁺ + glucose/18 + BUN/2.8</td><td><a class="x" href="#osm">Ch 1</a></td></tr>
+<tr><td>Net filtration pressure</td><td>P<sub>GC</sub> − P<sub>BS</sub> − π<sub>GC</sub></td><td><a class="x" href="#starling">Ch 3</a></td></tr>
+<tr><td>Filtered load</td><td><abbr title="glomerular filtration rate">GFR</abbr> × P</td><td><a class="x" href="#load">Ch 4</a></td></tr>
+<tr><td>Excretion rate</td><td>U × <span class="vd">V</span></td><td><a class="x" href="#load">Ch 4</a></td></tr>
+<tr><td>Reabsorbed (+) or secreted (−)</td><td>filtered load − excretion rate</td><td><a class="x" href="#load">Ch 4</a></td></tr>
+<tr><td>Clearance</td><td>U × <span class="vd">V</span> ÷ P</td><td><a class="x" href="#clearance">Ch 4</a></td></tr>
+<tr><td>GFR</td><td>inulin clearance (creatinine clearance in patients)</td><td><a class="x" href="#inulin">Ch 4</a></td></tr>
+<tr><td>Fraction of filtered x excreted</td><td>C<sub>x</sub> ÷ C<sub>inulin</sub></td><td><a class="x" href="#clr-ratio">Ch 4</a></td></tr>
+<tr><td>Renal plasma flow</td><td><abbr title="para-aminohippuric acid">PAH</abbr> clearance</td><td><a class="x" href="#pah">Ch 4</a></td></tr>
+<tr><td>Renal blood flow</td><td><abbr title="renal plasma flow">RPF</abbr> ÷ (1 − Hct)</td><td><a class="x" href="#rbf-ff">Ch 4</a></td></tr>
+<tr><td>Filtration fraction</td><td>GFR ÷ RPF</td><td><a class="x" href="#rbf-ff">Ch 4</a></td></tr>
+<tr><td>Glucose excreted</td><td>filtered load − <abbr title="transport maximum: the most the carriers can move per minute">Tm</abbr> (when the load is above Tm)</td><td><a class="x" href="#glucose-tm">Ch 5</a></td></tr>
+<tr><td>Fraction of water reabsorbed</td><td>1 − 1 ÷ <abbr title="tubular fluid concentration ÷ plasma concentration">TF/P</abbr><sub>inulin</sub></td><td><a class="x" href="#tfp">Ch 5</a></td></tr>
+<tr><td>Fraction of filtered x left in the tubule</td><td>TF/P<sub>x</sub> ÷ TF/P<sub>inulin</sub></td><td><a class="x" href="#tfp">Ch 5</a></td></tr>
+<tr><td>Filtered Ca²⁺</td><td>GFR × plasma Ca²⁺ × 0.6</td><td><a class="x" href="#calcium">Ch 8</a></td></tr>
+<tr><td><abbr title="blood urea nitrogen">BUN</abbr>-to-creatinine ratio</td><td>BUN ÷ creatinine (above 20 = dehydration)</td><td><a class="x" href="#urea">Ch 9</a></td></tr>
+<tr><td>Osmolar clearance</td><td>U<sub>osm</sub> × <span class="vd">V</span> ÷ P<sub>osm</sub></td><td><a class="x" href="#free-water">Ch 9</a></td></tr>
+<tr><td>Free-water clearance</td><td><span class="vd">V</span> − C<sub>osm</sub></td><td><a class="x" href="#free-water">Ch 9</a></td></tr>
+<tr><td>pH</td><td>6.1 + log [ HCO₃⁻ ÷ (0.03 × PCO₂) ]</td><td><a class="x" href="#hh">Ch 10</a></td></tr>
+<tr><td>Expected compensation</td><td>Metabolic acidosis: PCO₂ falls 1.3 per 1 HCO₃⁻. Metabolic alkalosis: rises 0.7. Respiratory: HCO₃⁻ moves 0.1–0.2 (acute) or 0.4 (chronic) per 1 PCO₂</td><td><a class="x" href="#compensation">Ch 12</a></td></tr>
+<tr><td>Anion gap</td><td>Na⁺ − (Cl⁻ + HCO₃⁻)</td><td><a class="x" href="#anion-gap">Ch 12</a></td></tr>
+<tr><td>Osmolar gap</td><td>measured − calculated osmolarity</td><td><a class="x" href="#osm-gap">Ch 12</a></td></tr>
+</tbody>
+</table></div>
+<h3 id="ch13-numbers-worth-knowing">Numbers worth knowing</h3>
+<div class="tw"><table class="plain">
+<thead><tr><th>Value</th><th>Normal</th><th>Value</th><th>Normal</th></tr></thead>
+<tbody>
+<tr><td><abbr title="glomerular filtration rate">GFR</abbr></td><td>120 mL/min (180 L/day)</td><td>Arterial pH</td><td>7.40</td></tr>
+<tr><td>Renal plasma flow</td><td>600 mL/min</td><td>PCO₂</td><td>40 mm Hg</td></tr>
+<tr><td>Renal blood flow</td><td>1,200 mL/min (25% of cardiac output)</td><td>HCO₃⁻</td><td>24 mEq/L</td></tr>
+<tr><td>Filtration fraction</td><td>20%</td><td>Anion gap</td><td>6–12 mEq/L</td></tr>
+<tr><td>Plasma osmolarity</td><td>290 mOsm/L</td><td>Plasma K⁺</td><td>3.5–5 mEq/L</td></tr>
+<tr><td>Urine osmolarity</td><td>50 to 1,200 mOsm/L</td><td>Plasma Na⁺</td><td>140 mEq/L</td></tr>
+<tr><td>Glucose threshold; <abbr title="transport maximum: the most the carriers can move per minute">Tm</abbr></td><td>200 mg/dL; 375 mg/min</td><td><abbr title="blood urea nitrogen">BUN</abbr>; creatinine</td><td>7–20; 0.7–1.2 mg/dL</td></tr>
+</tbody>
+</table></div>
+
+</section>
+<footer>Tap any picture to enlarge it.</footer>
+</main>
+</div>
+<button class="menu" id="menu" type="button">Chapters</button>
+<div id="lb" role="dialog" aria-label="Enlarged picture"><img alt=""></div>
+<script>
+(function () {
+  var toc = document.getElementById('toc'), menu = document.getElementById('menu');
+  menu.addEventListener('click', function () { toc.classList.toggle('open'); });
+  toc.addEventListener('click', function (e) { if (e.target.closest('a')) toc.classList.remove('open'); });
+
+  // Enlarge a picture
+  var lb = document.getElementById('lb'), lbi = lb.querySelector('img');
+  document.addEventListener('click', function (e) {
+    var im = e.target.closest('figure img');
+    if (im) { lbi.src = im.currentSrc || im.src; lbi.alt = im.alt; lb.classList.add('on'); return; }
+    if (e.target.closest('#lb')) lb.classList.remove('on');
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { lb.classList.remove('on'); toc.classList.remove('open'); } });
+
+  // Mark where the reader is in the chapter list
+  var heads = [].slice.call(document.querySelectorAll('section.chap, section.chap h3[id]'));
+  var links = {};
+  [].forEach.call(toc.querySelectorAll('a[href^="#"]'), function (a) { links[a.getAttribute('href').slice(1)] = a; });
+  var ticking = false;
+  function mark() {
+    ticking = false;
+    var y = 90, cur = null, curCh = null;
+    for (var i = 0; i < heads.length; i++) {
+      var h = heads[i];
+      if (h.getBoundingClientRect().top <= y) { if (h.tagName === 'SECTION') { curCh = h; cur = null; } else cur = h; } else break;
+    }
+    [].forEach.call(toc.querySelectorAll('.on'), function (n) { n.classList.remove('on'); });
+    if (curCh) {
+      var a = links[curCh.id]; if (a) { a.classList.add('on'); var s = a.nextElementSibling; if (s && s.classList.contains('subs')) s.classList.add('on'); }
+      if (cur && links[cur.id]) links[cur.id].classList.add('on');
+      if (a && window.innerWidth > 980) { var r = a.getBoundingClientRect(); if (r.top < 60 || r.bottom > window.innerHeight - 60) a.scrollIntoView({ block: 'center' }); }
+    }
+  }
+  window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(mark); } }, { passive: true });
+  mark();
+})();
+</script>
+</body>
+</html>
